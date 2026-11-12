@@ -86,20 +86,23 @@
       '<path d="M0 30 C-8 18 -9 0 -2 -14 C3 -22 12 -27 21 -25 C17 -21 13 -15 11 -8 C7 6 6 18 0 30 Z"/><path d="M0 30 C0 44 -2 56 0 70"/>' +
       '<path d="M0 54 C-10 46 -20 44 -28 46 C-20 52 -10 56 0 56"/></g>';
   }
-  function envelopeClosed() {
-    return '<svg class="art env-closed" viewBox="0 0 300 200" aria-hidden="true">' +
-      '<rect x="1" y="1" width="298" height="198" rx="4" fill="url(#gEnv)" stroke="#dcd1c1"/>' +
-      '<path d="M1 199 L136 100 M299 199 L164 100" stroke="#d9cebd" stroke-width="1.2" fill="none"/>' +
-      '<path d="M1 2 L150 120 L299 2 Z" fill="#efe8dd" stroke="#d8cdbc" filter="url(#fSoft)"/>' +
-      emboss(150, 30, 0.75) + '</svg>';
-  }
+  // Phong bì gồm 4 lớp xếp chồng trong một khung vuông 300×300 (thân phong bì ở y 120–300):
+  // mặt sau, nắp (2 mặt), ảnh bên trong, túi trước. Bìa thiệp và phần mở thiệp dùng chung các lớp này.
   function envelopeBack() {
-    return '<svg class="art env-back" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true">' +
+    return '<svg class="art" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true">' +
       '<rect x="1" y="120" width="298" height="179" fill="url(#gEnvBack)" stroke="#d8cdbc"/></svg>';
   }
-  function envelopeFlap() {
-    return '<svg class="art env-flap" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">' +
-      '<path d="M1 119 L150 4 L299 119 Z" fill="#f2ebe1" stroke="#d8cdbc"/>' + emboss(150, 40, 0.7) + '</svg>';
+  // Mặt trong của nắp: thấy khi nắp đã mở (đỉnh hướng lên)
+  function envelopeFlapIn() {
+    return '<svg class="art" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M1 119 L150 4 L299 119 Z" fill="#f4eee6" stroke="#d8cdbc"/>' +
+      '<path d="M26 112 L150 18 L274 112" fill="none" stroke="#e6dccd" stroke-width="1"/></svg>';
+  }
+  // Mặt ngoài của nắp: thấy khi phong bì còn đóng (đỉnh hướng xuống), có hoa rum dập nổi
+  function envelopeFlapOut() {
+    return '<svg class="art" viewBox="0 0 300 120" preserveAspectRatio="none" aria-hidden="true">' +
+      '<path d="M1 1 L150 114 L299 1 Z" fill="#efe8dd" stroke="#d8cdbc" filter="url(#fSoft)"/>' +
+      emboss(150, 22, 0.62) + '</svg>';
   }
   function envelopeFront() {
     return '<svg class="art env-front" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true">' +
@@ -151,7 +154,7 @@
 
   window.ART = {
     installDefs: installDefs, bouquet: bouquet, stemSprig: stemSprig, waxSeal: waxSeal,
-    envelopeClosed: envelopeClosed, envelopeBack: envelopeBack, envelopeFlap: envelopeFlap, envelopeFront: envelopeFront,
+    envelopeBack: envelopeBack, envelopeFlapIn: envelopeFlapIn, envelopeFlapOut: envelopeFlapOut, envelopeFront: envelopeFront,
     monogram: monogram, heart: heart, HEART: HEART, icon: icon, NS: NS,
   };
 })();

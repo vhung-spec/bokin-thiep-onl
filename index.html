@@ -24,8 +24,7 @@
     <div class="intro-col">
       <p class="script tap" data-text="intro.tap"></p>
       <div class="intro-env">
-        <div class="env-c" data-art="envelopeClosed"></div>
-        <div class="seal seal-c" data-art="seal"></div>
+        <div class="env" id="introEnv"></div>
         <figure class="polaroid intro-photo"><img data-src="intro.photo" alt=""></figure>
         <div class="bq bq-tl" data-art="bouquet0"></div>
         <div class="bq bq-br" data-art="bouquet1"></div>
@@ -42,12 +41,12 @@
       <section class="hero" id="hero">
         <p class="script save" data-text="intro.saveTheDate"></p>
         <div class="env-open">
-          <div class="env-layer back" data-art="envelopeBack"></div>
-          <div class="env-layer flap" data-art="envelopeFlap"></div>
-          <figure class="polaroid rise p1"><img data-src="intro.photos.0" alt="Ảnh cưới"><figcaption class="script" id="capNames"></figcaption></figure>
-          <figure class="polaroid rise p2"><img data-src="intro.photos.1" alt="Ảnh cưới"><figcaption class="cap-date" id="capDate"></figcaption></figure>
-          <div class="env-layer front" data-art="envelopeFront"></div>
-          <div class="seal seal-o" data-art="seal"></div>
+          <div class="env" id="heroEnv">
+            <div class="photos">
+              <figure class="polaroid rise p1"><img data-src="intro.photos.0" alt="Ảnh cưới"><figcaption class="script" id="capNames"></figcaption></figure>
+              <figure class="polaroid rise p2"><img data-src="intro.photos.1" alt="Ảnh cưới"><figcaption class="cap-date" id="capDate"></figcaption></figure>
+            </div>
+          </div>
           <div class="bq bq-o1" data-art="bouquet0"></div>
           <div class="bq bq-o2" data-art="bouquet1"></div>
         </div>
