@@ -2,89 +2,171 @@
  * ============================================================
  *  THÔNG TIN THIỆP CƯỚI — chỉ cần sửa file này
  * ============================================================
- *  Mẹo: giữ nguyên dấu nháy '...' và dấu phẩy cuối mỗi dòng.
- *  Mời riêng từng khách: thêm ?to=Tên vào cuối link,
- *  ví dụ  https://.../?to=Ngọc%20Anh
+ *  • Giữ nguyên dấu nháy '...' và dấu phẩy cuối mỗi dòng.
+ *  • Ngày giờ viết dạng 'năm-tháng-ngàyTgiờ:phút', ví dụ '2027-03-07T07:00'.
+ *  • Ngày âm lịch và thứ trong tuần được tính tự động.
+ *  • Ảnh: thay các file trong thư mục assets/anh bằng ảnh của bạn (giữ nguyên tên file),
+ *    hoặc sửa đường dẫn bên dưới.
+ *  • Mời riêng: thêm ?to=Tên vào link. Thêm &nha=trai để mở sẵn tab nhà trai.
+ *      ví dụ  .../?to=Anh%20Thắng%20và%20người%20thương&nha=trai
  */
 window.WEDDING = {
-  groom: 'Minh Khang',
-  bride: 'Thảo Vy',
-
-  // Ngày giờ cưới (năm-tháng-ngàyTgiờ:phút)
-  date: '2027-08-15T17:00',
-
-  // Lời trên bìa thiệp
-  cover: {
-    kicker: 'Trân trọng kính mời',
-    defaultGuest: 'bạn và người thương', // hiện khi link không có ?to=
-    hint: 'Chạm để mở thiệp',
+  groom: {
+    name: 'Minh Khang',      // tên đầy đủ hiển thị
+    short: 'Khang',          // tên gọi ngắn (chú thích ảnh, chữ lồng)
+    photo: 'assets/anh/chu-re.jpg',
   },
+  bride: {
+    name: 'Thảo Vy',
+    short: 'Vy',
+    photo: 'assets/anh/co-dau.jpg',
+  },
+
+  // Ngày chính: dùng cho lịch tháng, đếm ngược và bìa thiệp
+  date: '2027-03-07T10:00',
+
+  intro: {
+    tap: 'Nhấp để mở',
+    label: 'Thiệp Mời',
+    photo: 'assets/anh/bia.jpg',
+    saveTheDate: 'Save our date!',
+    tagline: 'We can’t wait to celebrate with you',
+    photos: ['assets/anh/bia.jpg', 'assets/anh/bia-2.jpg'], // 2 ảnh bay ra từ phong bì
+  },
+
+  calendar: {
+    photo: 'assets/anh/lich.jpg',
+    countdownLabel: 'Happily ever after starts in...',
+  },
+
+  mainPhoto: 'assets/anh/chinh.jpg',
 
   invitation: {
-    message:
-      'Với tất cả niềm vui và chút hồi hộp, chúng mình muốn mời bạn cùng chia sẻ một trong những ngày ý nghĩa và diệu kỳ nhất của đời mình: ngày cưới của chúng mình!',
-    headline: 'Chúng mình cưới nhau!',
+    kicker: 'Trân trọng thân mời',
+    defaultGuest: 'Quý vị & Gia đình', // hiện khi link không có ?to=
+    line: 'Đến chung vui trong lễ cưới của chúng tôi',
   },
 
-  venue: {
-    name: 'White Palace',
-    address: '194 Hoàng Văn Thụ, Phú Nhuận, TP. Hồ Chí Minh',
-    mapUrl: 'https://maps.google.com/?q=White+Palace+194+Hoang+Van+Thu+Phu+Nhuan',
-    mapButton: 'Mở bản đồ',
+  // Hai bên gia đình và các lễ. Có thể thêm/bớt lễ trong mảng events.
+  families: {
+    gai: {
+      label: 'Nhà gái',
+      parents: ['Ông Trần Văn Hùng', 'Bà Lê Thị Hoa'],
+      events: [
+        {
+          title: 'Lễ Vu Quy',
+          time: '2027-03-07T07:00',
+          place: 'Tư gia nhà gái',
+          address: 'Số 22, đường Hoa Sữa, TP. Hưng Yên',
+          map: 'https://maps.google.com/?q=Hung+Yen',
+        },
+        {
+          title: 'Tiệc Cưới',
+          time: '2027-03-06T17:00',
+          place: 'Tư gia nhà gái',
+          address: 'Số 22, đường Hoa Sữa, TP. Hưng Yên',
+          map: 'https://maps.google.com/?q=Hung+Yen',
+        },
+      ],
+    },
+    trai: {
+      label: 'Nhà trai',
+      parents: ['Ông Nguyễn Văn An', 'Bà Phạm Thị Bình'],
+      events: [
+        {
+          title: 'Lễ Thành Hôn',
+          time: '2027-03-07T10:00',
+          place: 'Tư gia nhà trai',
+          address: 'Ngõ 56, phố Hoa Mai, Hà Nội',
+          map: 'https://maps.google.com/?q=Ha+Noi',
+        },
+        {
+          title: 'Tiệc Cưới',
+          time: '2027-03-06T18:00',
+          place: 'Tư gia nhà trai',
+          address: 'Ngõ 56, phố Hoa Mai, Hà Nội',
+          map: 'https://maps.google.com/?q=Ha+Noi',
+        },
+      ],
+    },
   },
+  firstTab: 'gai', // tab mở sẵn: 'gai' hoặc 'trai'
 
   schedule: {
-    title: 'Chương trình',
+    title: 'Lịch Trình',
     items: [
-      { time: '17:00', label: 'đón khách' },
-      { time: '18:00', label: 'làm lễ' },
-      { time: '18:30', label: 'khai tiệc' },
-      { time: '21:30', label: 'tiễn khách' },
+      { time: '05:00', label: 'Xuất phát từ nhà trai' },
+      { time: '07:00', label: 'Đến nhà cô dâu' },
+      { time: '07:50', label: 'Bắt đầu về nhà trai' },
+      { time: '10:00', label: 'Lễ thành hôn' },
+      { time: '11:00', label: 'Chụp ảnh kỷ niệm' },
+      { time: '11:30', label: 'Dự tiệc' },
     ],
   },
 
   dressCode: {
     title: 'Dress code',
-    text: 'Chúng mình sẽ rất vui nếu trang phục của bạn hợp với bảng màu của ngày cưới:',
-    colors: ['#EADFCC', '#8A4B33', '#9DAA78', '#69792C'],
+    colors: ['#FFFFFF', '#E6D3CF', '#7D1630'],
   },
 
-  gift: {
-    title: 'Quà mừng',
-    text: 'Bạn đến chung vui là món quà quý nhất. Nếu muốn gửi thêm, một phong bì nhỏ cho tổ ấm mới của chúng mình là đủ đầy.',
-    // Tuỳ chọn: hiện nút xem mã QR mừng cưới. Để trống '' nếu không dùng.
-    qrImage: '',          // ví dụ 'assets/qr-mung-cuoi.png'
-    qrButton: 'Xem mã QR mừng cưới',
-  },
-
-  flowers: {
-    title: 'Hoa',
-    text: 'Bạn đừng mang hoa nhé, vì chúng mình sẽ không kịp ngắm hết vẻ đẹp của chúng.',
-  },
-
-  contact: {
-    title: 'Liên hệ',
-    name: 'Mai',
-    text: 'Mai, người điều phối tiệc cưới của chúng mình, sẽ rất vui được trả lời mọi điều bạn cần.',
-    button: 'Nhắn cho Mai',
-    // Link khi bấm nút: Zalo (https://zalo.me/0901234567), Messenger hoặc tel:0901234567
-    url: 'https://zalo.me/0901234567',
+  album: {
+    title: 'Album Hình Cưới',
+    text: 'Những khung hình nhỏ giữ lại hành trình của chúng tôi — từ ánh mắt đầu tiên đến ngày cùng nhau về chung một nhà. Mời bạn lật từng trang và cùng chúng tôi cất giữ những khoảnh khắc thật bình yên này.',
+    photos: [
+      'assets/anh/album-01.jpg', 'assets/anh/album-02.jpg',
+      'assets/anh/album-03.jpg', 'assets/anh/album-04.jpg',
+      'assets/anh/album-05.jpg', 'assets/anh/album-06.jpg',
+      'assets/anh/album-07.jpg', 'assets/anh/album-08.jpg',
+    ],
   },
 
   rsvp: {
-    title: 'Hồi âm',
-    deadline: '01.08',
-    maxGuests: 5,
-    // Dán link Google Apps Script (xem README) để hồi âm được lưu vào Google Sheets.
-    // Để trống thì form chạy ở chế độ xem thử, không gửi đi đâu cả.
-    endpoint: '',
+    title: 'Xác Nhận Tham Dự',
+    text: 'Sự có mặt của quý khách là niềm vui lớn của gia đình chúng tôi. Xin dành chút thời gian xác nhận để chúng tôi chuẩn bị đón tiếp thật chu đáo. Trân trọng!',
+    maxGuests: 10,
   },
 
-  // Nhạc nền: đặt file mp3 vào thư mục assets rồi ghi đường dẫn ở đây.
-  // Để trống '' hoặc file không tồn tại thì nút nhạc tự ẩn.
+  guestbook: {
+    title: 'Sổ Lưu Bút',
+    text: 'Một chữ ký, vài dòng thương mến — trang sổ này sẽ theo chúng tôi suốt chặng đường phía trước. Cảm ơn bạn đã ghé qua và để lại dấu yêu.',
+    photo: 'assets/anh/luu-but.jpg',
+    pageSize: 5,
+    // Lời chúc mẫu: chỉ hiện khi CHƯA cài Google Sheets (endpoint để trống)
+    samples: [
+      { name: 'Anh Thắng và người thương', message: 'Chúc hai vợ chồng trăm năm hạnh phúc nhé!!!', time: '2027-02-08' },
+      { name: 'Chị Đinh Hoa', message: 'Chúc hai em luôn hạnh phúc nhaaaa, là một người chứng kiến chuyện tình của hai đứa từ những ngày đầu — rất mong khi hai đứa bước vào hôn nhân sẽ cùng đồng hành, sẻ chia và có những phút giây trọn vẹn nhé ❤️', time: '2027-02-06' },
+      { name: 'Em Thanh Thuý', message: 'Chúc anh chị luôn hạnh phúc và bình yên trên hành trình hôn nhân mới. Mong rằng mỗi ngày bên nhau sẽ đều ngập tràn yêu thương, thấu hiểu và thật nhiều kỷ niệm đẹp.', time: '2027-02-06' },
+      { name: 'Bạn Đạt', message: 'Chúc hai bạn trăm năm hạnh phúc', time: '2027-02-06' },
+      { name: 'Bạn Nam và người thương', message: 'Chúc 2 bạn trăm năm hạnh phúc ❤️', time: '2027-02-05' },
+      { name: 'Cô Lan', message: 'Chúc hai cháu sớm có tin vui, gia đình luôn đầm ấm.', time: '2027-02-04' },
+    ],
+  },
+
+  gift: {
+    text: 'Nếu muốn gửi chút quà mừng, mã QR của hai nhà đã được chuẩn bị sẵn cho bạn.',
+    button: 'Gửi quà mừng cưới',
+    // qr: đường dẫn ảnh QR (tải từ app ngân hàng). Để trống thì tự tạo mã VietQR
+    //     từ bankId + number (bankId: mã ngân hàng, vd 'VCB', 'MB', 'TCB', 'ACB', 'BIDV', 'ICB').
+    accounts: [
+      { side: 'Nhà trai', bankName: 'Vietcombank', bankId: 'VCB', number: '', holder: 'NGUYEN MINH KHANG', qr: '' },
+      { side: 'Nhà gái', bankName: 'MB Bank', bankId: 'MB', number: '', holder: 'TRAN THAO VY', qr: '' },
+    ],
+  },
+
+  bigDay: {
+    title: 'See you on our big day!',
+  },
+
+  thanks: {
+    photo: 'assets/anh/cam-on.jpg',
+    title: 'Lời cảm ơn!',
+    text: 'Cảm ơn bạn đã dành tình cảm cho chúng mình! Sự hiện diện của bạn là món quà quý giá nhất, khiến ngày trọng đại của chúng mình thêm trọn vẹn và đáng nhớ.',
+  },
+
+  // Dán link Google Apps Script (xem README) để lưu xác nhận tham dự & lời chúc vào Google Sheets.
+  // Để trống: thiệp chạy ở chế độ xem thử, không gửi dữ liệu đi đâu.
+  endpoint: '',
+
+  // Nhạc nền (mp3). Để trống hoặc không có file thì nút nhạc tự ẩn.
   music: 'assets/nhac-nen.mp3',
-
-  footer: {
-    note: 'Cảm ơn bạn đã dành thời gian cho chúng mình.',
-  },
 };

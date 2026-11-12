@@ -1,6 +1,6 @@
-# Thiệp cưới online — tông xanh xô thơm, nét vẽ tay
+# Thiệp cưới online — phong bì sáp, polaroid, tông đỏ rượu
 
-Thiệp cưới một trang cho điện thoại: bìa thiệp chạm để mở, hình minh hoạ tự vẽ dần ra, chữ viết tay hiện từ trái sang phải, lịch trình tiệc, dress code, quà mừng, liên hệ và form hồi âm.
+Thiệp cưới một trang cho điện thoại: phong bì “Nhấp để mở” với con dấu sáp, ảnh polaroid bay ra, tim rơi, lịch tháng cưới, đếm ngược, lễ cưới của **nhà trai / nhà gái** kèm **ngày âm lịch**, lịch trình, album ảnh, xác nhận tham dự, **sổ lưu bút có ký tên bằng tay**, mã QR mừng cưới và lời cảm ơn.
 
 Chỉ là HTML + CSS + JavaScript thuần: **không cần cài đặt, không cần build**, đăng miễn phí lên GitHub Pages / Vercel / Netlify.
 
@@ -8,70 +8,93 @@ Chỉ là HTML + CSS + JavaScript thuần: **không cần cài đặt, không c�
 
 ## Các phần của thiệp
 
-1. **Bìa thiệp** — khung viền lượn sóng, tên cô dâu chú rể, ngày cưới. Chạm để mở (bìa trượt lên).
-2. **Lời mời** — hình đôi uyên ương cầm bảng ngày/tháng, lời mời, địa điểm, nút *Mở bản đồ*.
-3. **Chương trình** — các mốc giờ đặt trong khung hình bàn tiệc.
-4. **Dress code** (kèm bảng màu), **Quà mừng**, **Hoa**, **Liên hệ** (nút nhắn Zalo).
-5. **Hồi âm** — tên, có đến không, số người, lời nhắn. Lưu vào Google Sheets nếu bạn cài (xem bên dưới).
-6. Thanh nổi phía dưới: nút nhạc nền + nút *Hồi âm*.
+1. **Phong bì** — “Nhấp để mở”, ảnh polaroid trượt vào phong bì, nắp mở ra, 2 ảnh bay lên, tim bắt đầu rơi, nhạc nền phát.
+2. **Lịch tháng** — trên nền ảnh, ngày cưới đánh dấu bằng trái tim.
+3. **Chữ lồng + đếm ngược** — ngày / giờ / phút / giây.
+4. **Ảnh chính**, **lời mời** (“Quý vị & Gia đình” hoặc tên khách), ảnh **chú rể / cô dâu**, tên **bố mẹ hai bên**.
+5. **Tab Nhà gái / Nhà trai** — mỗi nhà một danh sách lễ (Lễ Vu Quy, Lễ Thành Hôn, Tiệc Cưới…) với giờ, thứ, ngày dương, **ngày âm lịch tự tính**, địa điểm, nút *Xem bản đồ*.
+6. **Lịch trình** trong ngày và **dress code**.
+7. **Album hình cưới** — chạm để xem ảnh lớn, vuốt qua lại.
+8. **Xác nhận tham dự** — tên, khách nhà trai/nhà gái, có đến không, số người.
+9. **Sổ lưu bút** — khách **ký tên bằng ngón tay** và gửi lời chúc; lời chúc hiện ngay trên thiệp.
+10. **Gửi quà mừng cưới** — mã QR của hai nhà, nút sao chép số tài khoản.
+11. **Đếm ngược trong trái tim** và **lời cảm ơn**.
 
 ## Sửa thông tin
 
-Mọi nội dung nằm trong **`js/config.js`**: tên, ngày giờ, địa điểm, link bản đồ, lịch trình, bảng màu, người liên hệ, hạn hồi âm…
-Thứ trong tuần (Chủ nhật, Thứ hai…) và các con số trên bảng ngày/tháng được tính tự động từ `date`.
+Mọi nội dung nằm trong **`js/config.js`**: tên, ngày giờ từng lễ, địa chỉ, link bản đồ, bố mẹ hai bên, lịch trình, bảng màu dress code, tài khoản mừng cưới…
+Thứ trong tuần và ngày âm lịch được tính tự động (thuật toán âm lịch Việt Nam của Hồ Ngọc Đức, múi giờ +7).
 
-Nhớ sửa thêm phần `<title>` và các thẻ `og:` trong `index.html` — đó là chữ hiện ra khi gửi link qua Zalo/Messenger.
+Nhớ sửa thêm `<title>` và các thẻ `og:` trong `index.html` — đó là chữ hiện ra khi gửi link qua Zalo/Messenger.
+
+### Thay ảnh
+
+Thư mục `assets/anh/` đang chứa **ảnh mẫu** (khung có ghi “ẢNH MẪU · thay file …”). Chép ảnh cưới của bạn đè lên **đúng tên file**:
+
+| File | Dùng cho | Tỉ lệ nên dùng |
+|---|---|---|
+| `bia.jpg`, `bia-2.jpg` | ảnh trên phong bì và 2 ảnh bay ra | dọc 4:5 |
+| `lich.jpg` | nền phía sau lịch tháng | ngang |
+| `chinh.jpg` | ảnh lớn sau phần đếm ngược | dọc 3:4 |
+| `chu-re.jpg`, `co-dau.jpg` | ảnh chú rể, cô dâu | dọc 4:5 |
+| `album-01.jpg` … `album-08.jpg` | album (thêm/bớt trong `config.js`) | dọc 3:4 |
+| `luu-but.jpg` | ảnh trong phần sổ lưu bút | dọc 3:4 |
+| `cam-on.jpg` | ảnh lớn cuối thiệp | dọc 3:4 |
+
+Mẹo: nén ảnh còn khoảng 200–400 KB mỗi tấm (rộng ~1200px) để thiệp mở nhanh trên 4G.
 
 ### Mời riêng từng khách
 
-Thêm `?to=Tên` vào cuối link, ví dụ:
+Thêm `?to=Tên` vào cuối link; thêm `&nha=trai` (hoặc `&nha=gai`) để mở sẵn đúng tab lễ của nhà mời:
 
 ```
-https://ten-ban.github.io/bokin-thiep-onl/?to=Ngọc%20Anh
+https://ten-ban.github.io/bokin-thiep-onl/?to=Anh%20Thắng%20và%20người%20thương&nha=trai
 ```
 
-Bìa thiệp sẽ hiện *“Trân trọng kính mời — Ngọc Anh”*, ô tên trong form hồi âm được điền sẵn, và cột “Link mời” trong Google Sheets cho biết khách nào đã trả lời. Không có `?to=` thì bìa hiện *“bạn và người thương”*.
+Phần lời mời sẽ hiện tên khách thay cho “Quý vị & Gia đình”, ô tên trong form được điền sẵn, và cột “Link mời” trong Google Sheets cho biết ai đã trả lời.
+
+### Mã QR mừng cưới
+
+Trong `config.js` → `gift.accounts`, với mỗi nhà:
+- điền `number` (số tài khoản) và `bankId` (mã ngân hàng, ví dụ `VCB`, `MB`, `TCB`, `ACB`, `BIDV`, `ICB`) → thiệp tự tạo mã **VietQR** (qua dịch vụ img.vietqr.io); **hoặc**
+- tải ảnh QR từ app ngân hàng, đặt vào `assets/` và ghi đường dẫn vào `qr`.
+
+Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **Hãy quét thử mã QR bằng app ngân hàng trước khi gửi thiệp.**
 
 ### Nhạc nền
 
-Đặt một file mp3 vào `assets/nhac-nen.mp3` (hoặc đổi đường dẫn `music` trong `config.js`). Nhạc bắt đầu khi khách chạm mở thiệp. Không có file thì nút nhạc tự ẩn.
-Nên dùng nhạc có giấy phép miễn phí (ví dụ Pixabay Music) và ghi nguồn ở chân trang.
+Đặt file mp3 vào `assets/nhac-nen.mp3` (hoặc đổi `music` trong `config.js`). Nhạc phát khi khách mở phong bì; nút tròn góc dưới bên trái để bật/tắt. Không có file thì nút tự ẩn. Nên dùng nhạc có giấy phép miễn phí.
 
-### Mã QR mừng cưới (tuỳ chọn)
+## Lưu dữ liệu vào Google Sheets
 
-Đặt ảnh QR vào `assets/` rồi ghi đường dẫn vào `gift.qrImage` trong `config.js`. Phần *Quà mừng* sẽ có thêm nút *Xem mã QR mừng cưới*.
-
-## Lưu hồi âm vào Google Sheets
-
-Chưa cài thì form chạy ở chế độ xem thử: khách bấm gửi sẽ thấy *“Đây là lời hồi âm xem thử; chưa gửi đi.”*
+Chưa cài thì thiệp chạy ở **chế độ xem thử**: xác nhận tham dự không gửi đi đâu, lời chúc mẫu được hiển thị và lời chúc bạn thử gửi chỉ lưu trên máy bạn.
 
 1. Tạo một Google Sheet mới.
 2. Vào **Tiện ích mở rộng → Apps Script**, xoá code mẫu, dán nội dung file [`google-apps-script/Code.gs`](google-apps-script/Code.gs), bấm Lưu.
 3. Bấm **Triển khai → Tùy chọn triển khai mới**, chọn loại **Ứng dụng web**:
    - *Thực thi với tư cách*: **Tôi**
    - *Người có quyền truy cập*: **Bất kỳ ai**
-4. Bấm **Triển khai**, cấp quyền, rồi sao chép **URL ứng dụng web** (dạng `https://script.google.com/macros/s/.../exec`).
-5. Dán URL đó vào `rsvp.endpoint` trong `js/config.js`.
+4. Bấm **Triển khai**, cấp quyền, sao chép **URL ứng dụng web** (dạng `https://script.google.com/macros/s/.../exec`).
+5. Dán URL vào `endpoint` trong `js/config.js`.
 
-Mỗi lần khách gửi, một dòng mới xuất hiện trong trang tính **“Hồi âm”**.
+Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
+Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
 
 ## Xem thử trên máy
-
-Mở thẳng file `index.html` bằng trình duyệt là xem được. Nếu muốn giống khi đăng lên mạng, chạy một máy chủ tĩnh trong thư mục dự án:
 
 ```bash
 python3 -m http.server 8000
 ```
 
-rồi mở <http://localhost:8000>.
+rồi mở <http://localhost:8000> (mở thẳng file `index.html` cũng xem được, trừ phần tải lời chúc từ Google Sheets).
 
 ## Đăng lên mạng miễn phí (GitHub Pages)
 
 1. Đẩy code lên GitHub.
-2. Vào **Settings → Pages**, phần *Build and deployment* chọn **Deploy from a branch**, chọn nhánh và thư mục `/ (root)`, bấm **Save**.
+2. Vào **Settings → Pages**, *Build and deployment* chọn **Deploy from a branch**, chọn nhánh và thư mục `/ (root)`, bấm **Save**.
 3. Sau khoảng 1 phút, thiệp có ở `https://<tên-tài-khoản>.github.io/<tên-repo>/`.
 
-Vercel hoặc Netlify cũng được: kéo thả cả thư mục, không cần cấu hình build.
+Sau khi có link thật, sửa `og:image` trong `index.html` thành đường dẫn đầy đủ (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/assets/og-image.jpg`) để Zalo/Facebook hiện ảnh xem trước.
 
 ## Cấu trúc thư mục
 
@@ -79,14 +102,17 @@ Vercel hoặc Netlify cũng được: kéo thả cả thư mục, không cần c
 index.html                 khung trang
 css/style.css              màu sắc, bố cục, hiệu ứng
 js/config.js               ← nội dung thiệp (sửa ở đây)
-js/illustrations.js        hình minh hoạ SVG nét vẽ tay
-js/main.js                 mở bìa, hiệu ứng, nhạc, form hồi âm
-google-apps-script/Code.gs nhận hồi âm vào Google Sheets
-assets/                    nhạc, ảnh QR, ảnh xem trước khi chia sẻ
+js/lunar.js                đổi ngày dương sang âm lịch
+js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
+js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
+google-apps-script/Code.gs lưu xác nhận & lời chúc vào Google Sheets
+assets/anh/                ảnh cưới (đang là ảnh mẫu)
+assets/og-image.jpg        ảnh xem trước khi chia sẻ link
 ```
 
 ## Ghi chú
 
-- Phong cách thiệp (bố cục, tông màu xanh xô thơm, hiệu ứng) lấy cảm hứng từ một mẫu thiệp online. **Toàn bộ hình minh hoạ trong dự án là hình tự vẽ bằng SVG**, không dùng lại hình của mẫu gốc. Muốn dùng tranh của hoạ sĩ, hãy mua hoặc xin phép rồi thay vào `js/illustrations.js`.
-- Font: [Ephesis](https://fonts.google.com/specimen/Ephesis), [Manrope](https://fonts.google.com/specimen/Manrope), [Cormorant Garamond](https://fonts.google.com/specimen/Cormorant+Garamond) — Google Fonts, giấy phép SIL OFL, hỗ trợ tiếng Việt.
-- Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng, hiện nội dung ngay.
+- Bố cục và tính năng lấy cảm hứng từ một mẫu thiệp online thương mại. **Code, hình hoa rum, phong bì, con dấu sáp và chữ lồng đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
+- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond.
+- Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.
+- Thiết kế cũ (tông xanh xô thơm, nét vẽ tay) vẫn còn trong lịch sử git, commit `63f5f7b`.
