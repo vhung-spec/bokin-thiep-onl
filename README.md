@@ -1,4 +1,17 @@
-# Thiệp cưới online — phong bì sáp, polaroid, tông đỏ rượu
+# Thiệp cưới online
+
+Repo có **2 mẫu thiệp**, dùng chung ảnh trong `assets/anh/` và chung file Google Sheets:
+
+| Mẫu | Link | Sửa nội dung ở |
+|---|---|---|
+| **Đỏ rượu** — phong bì sáp, polaroid, tim rơi | `/` (trang chính) | `js/config.js` |
+| **Xanh pastel** — cửa đôi ren hoa, dấu sáp xanh, lời chúc chạy như livestream, thả tim | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
+
+Gửi khách link của mẫu bạn chọn (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/xanh-pastel/?to=Ngọc%20Anh`).
+
+---
+
+## Mẫu đỏ rượu — phong bì sáp, polaroid
 
 Thiệp cưới một trang cho điện thoại: phong bì “Nhấp để mở” với con dấu sáp, ảnh polaroid bay ra, tim rơi, lịch tháng cưới, đếm ngược, lễ cưới của **nhà trai / nhà gái** kèm **ngày âm lịch**, lịch trình, album ảnh, xác nhận tham dự, **sổ lưu bút có ký tên bằng tay**, mã QR mừng cưới và lời cảm ơn.
 
@@ -65,6 +78,30 @@ Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **
 
 Đặt file mp3 vào `assets/nhac-nen.mp3` (hoặc đổi `music` trong `config.js`). Nhạc phát khi khách mở phong bì; nút tròn góc dưới bên trái để bật/tắt. Không có file thì nút tự ẩn. Nên dùng nhạc có giấy phép miễn phí.
 
+## Mẫu xanh pastel — cửa đôi ren hoa
+
+![Xem trước mẫu xanh pastel](docs/preview-xanh-pastel.jpg)
+
+Thư mục `xanh-pastel/`. Các phần:
+
+1. **Cửa đôi** nền ren hoa, con dấu sáp xanh trên bông hoa trắng, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
+2. **Mở đầu** — dấu sáp, tên cô dâu chú rể, ngày cưới.
+3. **Lời mời** — bố mẹ hai bên, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), tên viết tay, giờ, thứ, ngày, **ngày âm lịch tự tính**, địa điểm (bấm để mở bản đồ).
+4. **Ảnh lớn + đếm ngược**, **lịch tháng “Save the Date”** với sóng giấy màu nước, **Love Story**, **Timeline** có biểu tượng.
+5. **Album** — bố cục ghép ảnh, chạm để xem lớn (có số thứ tự “1 / 6”, vuốt qua lại).
+6. **Xác nhận tham dự** — tên, có đến không, số khách, có dùng món chay không.
+7. **Gửi quà mừng** — chạm vào phong bì xanh, phong bì mở ra rồi hiện mã QR của cô dâu và chú rể.
+8. **Thank you** — ảnh, lời cảm ơn.
+9. **Thanh dưới cùng** (hiện suốt khi xem thiệp):
+   - nút **☰ Mục lục** — nhảy tới từng phần, xem tất cả lời chúc, bật/tắt lời chúc chạy;
+   - ô **“Gửi lời chúc…”** — gõ và gửi ngay, lần đầu sẽ hỏi tên;
+   - nút **♥ thả tim** — tim bay lên, có bộ đếm.
+   Lời chúc của khách **chạy ở góc dưới như livestream**.
+
+Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, timeline, tài khoản mừng cưới…). Ảnh mặc định lấy từ `../assets/anh/` (chung với mẫu đỏ rượu), muốn ảnh riêng thì đổi đường dẫn trong `config.js`. Nhạc nền dùng chung `assets/nhac-nen.mp3`. Biểu tượng timeline có sẵn: `cheers`, `rings`, `music`, `camera`, `heart`, `cake`.
+
+Hai mẫu dùng **chung một file Apps Script** (bên dưới): dán cùng URL vào `endpoint` của mẫu nào cũng được. Mẫu xanh pastel ghi thêm cột **Món chay** và lưu **lượt thả tim**.
+
 ## Lưu dữ liệu vào Google Sheets
 
 Chưa cài thì thiệp chạy ở **chế độ xem thử**: xác nhận tham dự không gửi đi đâu, lời chúc mẫu được hiển thị và lời chúc bạn thử gửi chỉ lưu trên máy bạn.
@@ -75,7 +112,7 @@ Chưa cài thì thiệp chạy ở **chế độ xem thử**: xác nhận tham d
    - *Thực thi với tư cách*: **Tôi**
    - *Người có quyền truy cập*: **Bất kỳ ai**
 4. Bấm **Triển khai**, cấp quyền, sao chép **URL ứng dụng web** (dạng `https://script.google.com/macros/s/.../exec`).
-5. Dán URL vào `endpoint` trong `js/config.js`.
+5. Dán URL vào `endpoint` trong `js/config.js` (mẫu đỏ rượu) và/hoặc `xanh-pastel/js/config.js` (mẫu xanh pastel).
 
 Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
 Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
@@ -86,7 +123,7 @@ Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triể
 python3 -m http.server 8000
 ```
 
-rồi mở <http://localhost:8000> (mở thẳng file `index.html` cũng xem được, trừ phần tải lời chúc từ Google Sheets).
+rồi mở <http://localhost:8000> (mẫu đỏ rượu) hoặc <http://localhost:8000/xanh-pastel/> (mẫu xanh pastel). Mở thẳng file `index.html` cũng xem được, trừ phần tải lời chúc từ Google Sheets.
 
 ## Đăng lên mạng miễn phí (GitHub Pages)
 
@@ -94,7 +131,9 @@ rồi mở <http://localhost:8000> (mở thẳng file `index.html` cũng xem đ�
 2. Vào **Settings → Pages**, *Build and deployment* chọn **Deploy from a branch**, chọn nhánh và thư mục `/ (root)`, bấm **Save**.
 3. Sau khoảng 1 phút, thiệp có ở `https://<tên-tài-khoản>.github.io/<tên-repo>/`.
 
-Sau khi có link thật, sửa `og:image` trong `index.html` thành đường dẫn đầy đủ (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/assets/og-image.jpg`) để Zalo/Facebook hiện ảnh xem trước.
+Mẫu xanh pastel ở `https://<tên-tài-khoản>.github.io/<tên-repo>/xanh-pastel/`.
+
+Sau khi có link thật, sửa `og:image` trong `index.html` thành đường dẫn đầy đủ (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/assets/og-image.jpg`, hoặc `.../xanh-pastel/assets/og-image.jpg` cho mẫu xanh) để Zalo/Facebook hiện ảnh xem trước.
 
 ## Cấu trúc thư mục
 
@@ -105,14 +144,22 @@ js/config.js               ← nội dung thiệp (sửa ở đây)
 js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
-google-apps-script/Code.gs lưu xác nhận & lời chúc vào Google Sheets
-assets/anh/                ảnh cưới (đang là ảnh mẫu)
+google-apps-script/Code.gs lưu xác nhận, lời chúc, lượt thả tim vào Google Sheets (dùng chung)
+assets/anh/                ảnh cưới (đang là ảnh mẫu, dùng chung cho 2 mẫu)
 assets/og-image.jpg        ảnh xem trước khi chia sẻ link
+
+xanh-pastel/               mẫu xanh pastel
+  index.html               khung trang
+  css/style.css            màu sắc, bố cục, hiệu ứng
+  js/config.js             ← nội dung mẫu xanh (sửa ở đây)
+  js/art.js                hình vẽ SVG: ren hoa, mẫu đơn, dấu sáp, giấy xé, sóng màu nước
+  js/main.js               cửa đôi, đếm ngược, lịch, form, lời chúc chạy, thả tim, QR
+  assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
 
 ## Ghi chú
 
-- Bố cục và tính năng lấy cảm hứng từ một mẫu thiệp online thương mại. **Code, hình hoa rum, phong bì, con dấu sáp và chữ lồng đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
-- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond.
+- Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền ren, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
+- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Great Vibes, Playfair Display, Cormorant Garamond, Dancing Script (mẫu xanh pastel).
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.
 - Thiết kế cũ (tông xanh xô thơm, nét vẽ tay) vẫn còn trong lịch sử git, commit `63f5f7b`.

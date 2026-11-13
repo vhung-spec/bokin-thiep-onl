@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thiệp cưới Minh Khang &amp; Thảo Vy</title>
+  <meta name="description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của Minh Khang &amp; Thảo Vy.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Thiệp cưới Minh Khang &amp; Thảo Vy">
+  <meta property="og:description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình.">
+  <meta property="og:image" content="assets/og-image.jpg">
+  <meta name="theme-color" content="#c9d6f0">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%236f8ed6'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Dancing+Script:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="locked">
+
+  <!-- ===== Cửa thiệp: chạm để mở ===== -->
+  <section class="gate" id="gate" role="button" tabindex="0" aria-label="Chạm để mở thiệp">
+    <div class="doors">
+      <div class="door l lace"><span class="shade"></span></div>
+      <div class="door r lace"><span class="shade"></span></div>
+    </div>
+    <div class="gate-seal" id="gateSeal"></div>
+    <div class="gate-foot">
+      <p class="gate-guest" id="gateGuest" hidden></p>
+      <p class="gate-hint" data-text="cover.hint"></p>
+    </div>
+  </section>
+
+  <main class="shell">
+    <!-- ===== Mở đầu ===== -->
+    <section class="hero lace" id="dau-trang">
+      <div class="fl fl-hero-l" data-art="side"></div>
+      <div class="fl fl-hero-r" data-art="sideF"></div>
+      <div class="hero-seal" id="heroSeal"></div>
+      <h1 class="names">
+        <span class="n1" id="n1"></span>
+        <span class="orn" id="ornHeart"></span>
+        <span class="n2" id="n2"></span>
+      </h1>
+      <p class="hero-date" id="heroDate"></p>
+      <div class="knot-wrap" data-art="knot"></div>
+      <a class="scroll-hint" href="#loi-moi" aria-label="Xem tiếp" id="scrollHint"></a>
+    </section>
+
+    <!-- ===== Lời mời ===== -->
+    <section class="invite lace" id="loi-moi">
+      <div class="parents rv">
+        <div><p class="caps b" id="famTraiLabel"></p><p id="famTrai"></p></div>
+        <div><p class="caps b" id="famGaiLabel"></p><p id="famGai"></p></div>
+      </div>
+      <p class="caps kicker rv" data-text="invitation.kicker"></p>
+      <p class="script guest rv" id="guestName"></p>
+      <p class="line rv" data-text="invitation.line"></p>
+      <div class="big-names">
+        <span class="script s1 write" id="bn1"></span>
+        <span class="script s2 write" id="bn2"></span>
+      </div>
+      <p class="caps when rv"><span data-text="invitation.timeLabel"></span><b id="whenTime"></b></p>
+      <div class="date-row rv">
+        <span class="caps side" id="dMonth"></span>
+        <b id="dDay"></b>
+        <span class="caps side" id="dYear"></span>
+      </div>
+      <p class="lunar rv" id="lunar"></p>
+      <p class="caps at rv">Tại</p>
+      <a class="venue rv" id="venue" target="_blank" rel="noopener">
+        <b class="caps" data-text="venue.name"></b>
+        <span data-text="venue.address"></span>
+        <small data-text="venue.mapHint"></small>
+      </a>
+      <div class="fl fl-inv" data-art="small"></div>
+    </section>
+
+    <!-- ===== Ảnh + đếm ngược ===== -->
+    <section class="cd paper" id="dem-nguoc">
+      <div class="tear up" data-tear="11"></div>
+      <figure class="hero-photo rv">
+        <img data-src="photos.hero" alt="Ảnh cưới">
+        <div class="tear up in-photo" data-tear="5"></div>
+      </figure>
+      <div class="fl fl-cd-l" data-art="side"></div>
+      <div class="fl fl-cd-r" data-art="sideF"></div>
+      <p class="script cd-title write" data-text="countdown.title"></p>
+      <div class="cd-row rv">
+        <div><b data-cd="d">0</b><span>Ngày</span></div>
+        <div><b data-cd="h">00</b><span>Giờ</span></div>
+        <div><b data-cd="m">00</b><span>Phút</span></div>
+        <div><b data-cd="s">00</b><span>Giây</span></div>
+      </div>
+      <p class="script cd-sub rv" data-text="countdown.subtitle"></p>
+    </section>
+
+    <!-- ===== Lịch tháng ===== -->
+    <section class="cal paper" id="lich">
+      <div class="fl fl-cal" data-art="corner"></div>
+      <p class="script sec-title write" data-text="calendar.title"></p>
+      <p class="caps cal-month rv" id="calMonth"></p>
+      <div class="cal-grid rv" id="calGrid"></div>
+      <div class="waves-wrap" data-art="waves"></div>
+      <div class="tear down" data-tear="17"></div>
+    </section>
+
+    <!-- ===== Chuyện tình yêu ===== -->
+    <section class="story lace" id="chuyen-tinh">
+      <p class="script sec-title write" data-text="loveStory.title"></p>
+      <div class="story-text" id="storyText"></div>
+      <p class="story-sign rv"><span data-text="loveStory.signature"></span><span class="script" id="storySign"></span></p>
+      <div class="knot-wrap rv" data-art="knot"></div>
+    </section>
+
+    <!-- ===== Lịch trình ===== -->
+    <section class="timeline paper" id="lich-trinh">
+      <div class="tear up" data-tear="23"></div>
+      <p class="script sec-title write" data-text="timeline.title"></p>
+      <ol class="tl" id="tlList"></ol>
+      <div class="knot-wrap rv" data-art="knot"></div>
+    </section>
+
+    <!-- ===== Album ===== -->
+    <section class="album paper" id="album">
+      <p class="script sec-title write" data-text="album.title"></p>
+      <div class="album-grid" id="albumGrid"></div>
+    </section>
+
+    <!-- ===== Xác nhận tham dự ===== -->
+    <section class="rsvp paper" id="xac-nhan">
+      <div class="fl fl-rsvp" data-art="smallF"></div>
+      <p class="script sec-title write" data-text="rsvp.title"></p>
+      <p class="sec-text rv" data-text="rsvp.text"></p>
+      <form id="rsvpForm" class="rv" novalidate>
+        <label class="field"><span>Tên của bạn</span><input name="name" id="rsvpName" autocomplete="name" required maxlength="80"></label>
+        <fieldset class="field">
+          <legend>Bạn sẽ tham dự chứ?</legend>
+          <label class="radio"><input type="radio" name="attending" value="yes" checked><i></i>Vui mừng tham dự</label>
+          <label class="radio"><input type="radio" name="attending" value="no"><i></i>Rất tiếc, không thể tham dự</label>
+        </fieldset>
+        <label class="field" id="guestsField"><span>Số lượng khách tham dự (tính cả bạn)</span>
+          <input name="guests" id="rsvpGuests" type="number" inputmode="numeric" min="1" value="1"></label>
+        <fieldset class="field" id="vegField">
+          <legend>Bạn có dùng món chay không?</legend>
+          <label class="radio"><input type="radio" name="veg" value="yes"><i></i>Có</label>
+          <label class="radio"><input type="radio" name="veg" value="no" checked><i></i>Không</label>
+        </fieldset>
+        <p class="form-msg" id="rsvpMsg" role="status"></p>
+        <button class="btn-navy" type="submit" id="rsvpSubmit">Gửi phản hồi</button>
+      </form>
+    </section>
+
+    <!-- ===== Quà mừng ===== -->
+    <section class="gift paper" id="qua-mung">
+      <p class="script sec-title write" data-text="gift.title"></p>
+      <p class="sec-text rv" data-text="gift.text"></p>
+      <button class="gift-env rv" type="button" id="giftEnv" aria-label="Mở phong bì quà mừng">
+        <span class="g-back"></span><span class="g-card"><span class="script">Gift</span></span>
+        <span class="g-front"></span><span class="g-flap"></span><span class="g-seal"></span>
+      </button>
+    </section>
+
+    <!-- ===== Lời cảm ơn ===== -->
+    <section class="thanks paper" id="cam-on">
+      <figure class="thanks-photo rv">
+        <div class="tear down in-photo top" data-tear="29"></div>
+        <img data-src="photos.thanks" alt="Ảnh cưới">
+        <div class="tear up in-photo" data-tear="8"></div>
+      </figure>
+      <p class="script ty write" data-text="thanks.title"></p>
+      <p class="sec-text rv" data-text="thanks.text"></p>
+      <div class="knot-wrap rv" data-art="knot"></div>
+      <p class="foot rv" id="footNames"></p>
+    </section>
+  </main>
+
+  <!-- ===== Lớp nổi: nhạc, lời chúc chạy, tim bay, thanh dưới ===== -->
+  <button class="music" id="musicBtn" type="button" aria-label="Bật/tắt nhạc" hidden></button>
+  <div class="live" id="live" aria-hidden="true"></div>
+  <div class="fly" id="fly" aria-hidden="true"></div>
+  <form class="bar" id="bar" autocomplete="off">
+    <button class="b-menu" type="button" id="menuBtn" aria-label="Mục lục"></button>
+    <label class="b-input">
+      <input id="wishInput" maxlength="300" aria-label="Lời chúc">
+      <button class="b-send" type="submit" aria-label="Gửi lời chúc"></button>
+    </label>
+    <button class="b-heart" type="button" id="heartBtn" aria-label="Thả tim"><span id="heartCount"></span></button>
+  </form>
+
+  <!-- Mục lục -->
+  <div class="sheet" id="sheet" hidden>
+    <div class="sheet-bg" data-close></div>
+    <nav class="sheet-body" aria-label="Mục lục">
+      <p class="script sheet-title">Mục lục</p>
+      <div class="sheet-links" id="sheetLinks"></div>
+      <button class="sheet-wishes" type="button" id="openWishes"></button>
+      <label class="sheet-toggle"><input type="checkbox" id="liveToggle" checked><span>Hiện lời chúc chạy</span></label>
+    </nav>
+  </div>
+
+  <!-- Hỏi tên trước khi gửi lời chúc -->
+  <dialog class="dlg" id="nameDlg">
+    <form id="nameForm" novalidate>
+      <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
+      <p class="script dlg-title">Gửi lời chúc</p>
+      <label class="field"><span>Tên của bạn</span><input id="wishName" maxlength="60" required></label>
+      <label class="field"><span>Lời chúc</span><textarea id="wishText" rows="3" maxlength="300" required></textarea></label>
+      <p class="form-msg" id="nameMsg" role="status"></p>
+      <button class="btn-navy" type="submit" id="nameSubmit">Gửi lời chúc</button>
+    </form>
+  </dialog>
+
+  <!-- Tất cả lời chúc -->
+  <dialog class="dlg" id="wishesDlg">
+    <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
+    <p class="script dlg-title">Lời chúc</p>
+    <div class="wish-list" id="wishList"></div>
+  </dialog>
+
+  <!-- Quà mừng -->
+  <dialog class="dlg" id="giftDlg">
+    <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
+    <p class="script dlg-title" data-text="gift.title"></p>
+    <div class="gift-cards" id="giftCards"></div>
+  </dialog>
+
+  <!-- Xem ảnh -->
+  <dialog class="lightbox" id="lightbox">
+    <p class="lb-count" id="lbCount"></p>
+    <img id="lbImg" alt="">
+    <button class="lb-btn lb-prev" type="button" id="lbPrev" aria-label="Ảnh trước"></button>
+    <button class="lb-btn lb-next" type="button" id="lbNext" aria-label="Ảnh sau"></button>
+    <button class="dlg-x lb-x" type="button" data-close aria-label="Đóng"></button>
+  </dialog>
+
+  <script src="js/config.js"></script>
+  <script src="../js/lunar.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

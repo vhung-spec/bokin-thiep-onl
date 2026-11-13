@@ -3,12 +3,14 @@
  *  - Lưu "Xác nhận tham dự" vào trang tính "Xác nhận tham dự"
  *  - Lưu "Lời chúc" (kèm chữ ký) vào trang tính "Lời chúc"
  *  - Trả danh sách lời chúc cho thiệp hiển thị (?action=wishes)
+ *  - Đếm lượt thả tim (mẫu xanh pastel)
+ * Dùng chung cho cả mẫu đỏ rượu và mẫu xanh pastel.
  * Muốn ẩn một lời chúc: gõ chữ x vào cột "Ẩn" của dòng đó.
  * Cách cài: xem mục "Lưu dữ liệu vào Google Sheets" trong README.md
  */
 var RSVP_SHEET = 'Xác nhận tham dự';
 var WISH_SHEET = 'Lời chúc';
-var RSVP_HEAD = ['Thời gian', 'Tên', 'Khách của', 'Tham dự', 'Số người', 'Link mời (?to=)'];
+var RSVP_HEAD = ['Thời gian', 'Tên', 'Khách của', 'Tham dự', 'Số người', 'Link mời (?to=)', 'Món chay'];
 var WISH_HEAD = ['Thời gian', 'Tên', 'Lời chúc', 'Chữ ký', 'Link mời (?to=)', 'Ẩn'];
 
 function sheet_(name, head) {
@@ -33,7 +35,11 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(10000);
   try {
-    if (p.type === 'wish') {
+    if (p.type === 'heart') {
+      var props = PropertiesService.getScriptProperties();
+      var n = Math.max(0, Math.min(50, Number(p.n) || 0));
+      props.setProperty('hearts', String((Number(props.getProperty('hearts')) || 0) + n));
+    } else if (p.type === 'wish') {
       var sig = String(p.signature || '');
       if (!/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(sig) || sig.length > 48000) sig = '';
       sheet_(WISH_SHEET, WISH_HEAD).appendRow([
@@ -42,9 +48,10 @@ function doPost(e) {
     } else {
       sheet_(RSVP_SHEET, RSVP_HEAD).appendRow([
         new Date(), clean_(p.name, 80),
-        p.side === 'gai' ? 'Nhà gái' : 'Nhà trai',
+        p.side === 'gai' ? 'Nhà gái' : p.side === 'trai' ? 'Nhà trai' : '',
         p.attending === 'yes' ? 'Có' : 'Không',
         Number(p.guests) || 0, clean_(p.invitedAs, 80),
+        p.veg === 'yes' ? 'Có' : p.veg === 'no' ? 'Không' : '',
       ]);
     }
     return json_({ ok: true });
@@ -69,5 +76,6 @@ function doGet(e) {
         time: r[0] instanceof Date ? Utilities.formatDate(r[0], tz, 'yyyy-MM-dd') : String(r[0]).slice(0, 10),
       };
     });
-  return json_({ wishes: wishes });
+  var hearts = Number(PropertiesService.getScriptProperties().getProperty('hearts')) || 0;
+  return json_({ wishes: wishes, hearts: hearts });
 }
