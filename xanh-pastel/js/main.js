@@ -28,14 +28,16 @@
   var couple = W.groom.name + ' & ' + W.bride.name;
   var key = 'thiep-xanh:' + couple + ':' + W.date;
 
-  /* ---------- Nền ren, nền giấy, hình vẽ ---------- */
+  /* ---------- Nền & hình vẽ ---------- */
   A.installDefs();
   root.style.setProperty('--lace-img', A.svgUrl(A.laceTile()));
+  root.style.setProperty('--mottle-img', A.svgUrl(A.mottleTile()));
   root.style.setProperty('--paper-img', A.svgUrl(A.paperTile()));
   var arts = {
-    side: function () { return A.spray('side'); }, sideF: function () { return A.spray('side', true); },
-    small: function () { return A.spray('small'); }, smallF: function () { return A.spray('small', true); },
-    corner: function () { return A.spray('corner'); }, knot: A.knot, waves: A.waves,
+    side: function () { return A.cluster('side'); }, sideF: function () { return A.cluster('side', true); },
+    small: function () { return A.cluster('small'); }, smallF: function () { return A.cluster('small', true); },
+    big: function () { return A.cluster('big'); }, mandala: A.mandala, waves: A.waves,
+    pflower: function () { return A.paperFlowerSvg(); }, rings: A.ringsIcon,
   };
   $$('[data-art]').forEach(function (el) { var f = arts[el.getAttribute('data-art')]; el.innerHTML = f ? f() : ''; });
   $$('[data-tear]').forEach(function (el) {
@@ -44,6 +46,7 @@
   $('#gateSeal').innerHTML = A.sealFlower({ seed: 7 });
   $('#heroSeal').innerHTML = A.sealFlower({ seed: 11 });
   $('#ornHeart').innerHTML = A.heartArrow();
+  $('#fline').innerHTML = A.flourishLine();
 
   /* ---------- Nội dung ---------- */
   function fadeIn(img) {
@@ -68,8 +71,7 @@
   $('#n1').textContent = W.groom.name;
   $('#n2').textContent = W.bride.name;
   $('#heroDate').textContent = pad(main.getDate()) + ' . ' + pad(main.getMonth() + 1) + ' . ' + main.getFullYear();
-  // thứ tự xuất hiện của phần mở đầu sau khi mở cửa
-  [['#heroSeal', .55], ['#n1', .85], ['#ornHeart', 1.05], ['#n2', 1.2], ['#heroDate', 1.4], ['.hero .knot-wrap', 1.55], ['#scrollHint', 2]]
+  [['#heroSeal', .5], ['#n1', .85], ['#ornHeart', 1.05], ['#n2', 1.2], ['#fline', 1.35], ['#heroDate', 1.5], ['#heroMandala', 1.65], ['#scrollHint', 2.1]]
     .forEach(function (p) { var el = $(p[0]); el.classList.add('hi'); el.style.setProperty('--d', p[1] + 's'); });
   $('#scrollHint').innerHTML = A.icon('down');
 
@@ -78,10 +80,10 @@
   $('#famGaiLabel').textContent = W.families.gai.label;
   $('#famGai').innerHTML = W.families.gai.parents.map(esc).join('<br>');
   $('#guestName').textContent = guest || W.invitation.defaultGuest;
-  $('#guestName').classList.toggle('long', (guest || '').length > 16);
+  if ((guest || '').length > 18) $('#guestName').style.fontSize = '30px';
   $('#bn1').textContent = W.groom.short;
   $('#bn2').textContent = W.bride.short;
-  $('#whenTime').textContent = pad(main.getHours()) + ':' + pad(main.getMinutes()) + ' · ' + WD[main.getDay()];
+  $('#whenTime').textContent = pad(main.getHours()) + ':' + pad(main.getMinutes()) + ' ' + WD[main.getDay()];
   $('#dMonth').textContent = 'Tháng ' + pad(main.getMonth() + 1);
   $('#dDay').textContent = pad(main.getDate());
   $('#dYear').textContent = main.getFullYear();
@@ -92,11 +94,51 @@
   $('#storySign').textContent = W.groom.short + ' & ' + W.bride.short;
   $('#footNames').textContent = W.groom.short + ' & ' + W.bride.short + ' · ' + pad(main.getDate()) + '.' + pad(main.getMonth() + 1) + '.' + main.getFullYear();
 
+  /* Tiêu đề chữ T uốn lượn (Timeline, The Album, Thank you); chữ khác thì dùng chữ viết tay */
+  $$('[data-swash]').forEach(function (el) {
+    var t = String(get(el.getAttribute('data-swash')) || '');
+    if (!/^T/.test(t)) { el.className = 'fancy sec-title lt'; el.textContent = t; return; }
+    var rest = t.slice(1), m = /^(he)\s+(.*)$/.exec(rest);
+    el.setAttribute('aria-label', t);
+    el.innerHTML = A.swashT() + '<span class="rest lt" aria-hidden="true">' +
+      (m ? '<span class="small">' + esc(m[1]) + '</span>' + esc(m[2]) : esc(rest)) + '</span>';
+    $$('.swash-t path, .swash-t circle', el).forEach(function (p) {
+      var len = 0; try { len = p.getTotalLength(); } catch (e) { len = 300; }
+      p.style.setProperty('--len', Math.ceil(len + 2));
+    });
+  });
+
+  /* Chữ viết tay hiện từng ký tự */
+  function splitChars(el) {
+    if (el.getAttribute('data-split')) return;
+    el.setAttribute('data-split', '1');
+    var nodes = Array.prototype.slice.call(el.childNodes), i = 0;
+    if (!el.getAttribute('aria-label') && !el.closest('[aria-label]')) el.setAttribute('aria-label', el.textContent);
+    function wrapText(node) {
+      var frag = document.createDocumentFragment();
+      Array.from(node.textContent).forEach(function (ch) {
+        var s = document.createElement('span');
+        s.className = 'ch'; s.setAttribute('aria-hidden', 'true'); s.textContent = ch; s.style.setProperty('--i', i++);
+        frag.appendChild(s);
+      });
+      node.parentNode.replaceChild(frag, node);
+    }
+    (function walk(list) {
+      list.forEach(function (n) {
+        if (n.nodeType === 3) wrapText(n);
+        else if (n.nodeType === 1) walk(Array.prototype.slice.call(n.childNodes));
+      });
+    })(nodes);
+  }
+  $$('.lt').forEach(splitChars);
+
   // biểu tượng giao diện
   $('#musicBtn').innerHTML = A.icon('music');
   $('#menuBtn').innerHTML = A.icon('menu');
-  $('.b-send').innerHTML = A.icon('send');
+  $('#chatBtn').innerHTML = A.icon('chat');
+  $('.d-send').innerHTML = A.icon('send');
   $('#heartBtn').insertAdjacentHTML('afterbegin', A.icon('heart'));
+  $('#liveX').innerHTML = A.icon('x');
   $$('.dlg-x').forEach(function (b) { b.innerHTML = A.icon('x'); });
   $('#lbPrev').innerHTML = A.icon('left');
   $('#lbNext').innerHTML = A.icon('right');
@@ -121,40 +163,33 @@
 
   /* ---------- Lịch tháng ---------- */
   (function () {
-    var y = main.getFullYear(), m = main.getMonth();
-    $('#calMonth').textContent = 'Tháng ' + pad(m + 1) + ' · ' + y;
-    var html = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'].map(function (d) { return '<span class="dow">' + d + '</span>'; }).join('');
-    var off = (new Date(y, m, 1).getDay() + 6) % 7, days = new Date(y, m + 1, 0).getDate();
+    var y = main.getFullYear(), m = main.getMonth(), sun = (W.calendar.weekStart || 'sun') === 'sun';
+    $('#calMonth').textContent = 'Tháng ' + pad(m + 1) + ' / ' + y;
+    var heads = sun ? ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'] : ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+    var html = heads.map(function (d) { return '<span class="dow">' + d + '</span>'; }).join('');
+    var first = new Date(y, m, 1).getDay(), off = sun ? first : (first + 6) % 7, days = new Date(y, m + 1, 0).getDate();
     for (var i = 0; i < off; i++) html += '<span></span>';
     for (var d = 1; d <= days; d++) {
-      html += d === main.getDate() ? '<span class="d wed" aria-label="Ngày cưới">' + A.heartOutline() + '<span>' + d + '</span></span>' : '<span class="d">' + d + '</span>';
+      html += d === main.getDate() ? '<span class="d wed" role="img" aria-label="Ngày ' + d + ' — ngày cưới">' + A.heartRings() + '</span>' : '<span class="d">' + d + '</span>';
     }
     $('#calGrid').innerHTML = html;
   })();
 
-  /* ---------- Lịch trình ---------- */
-  $('#tlList').innerHTML = W.timeline.items.map(function (it) {
-    return '<li class="rv"><div class="txt"><b>' + esc(it.time) + '</b><span>' + esc(it.label) + '</span></div><span class="dot"></span><div class="ico">' + A.tlIcon(it.icon) + '</div></li>';
+  /* ---------- Lịch trình (xen kẽ trái/phải) ---------- */
+  $('#tlList').innerHTML = W.timeline.items.map(function (it, i) {
+    var text = '<span>' + (i % 2 ? esc(it.label) + ' – ' + esc(it.time) : esc(it.time) + ' – ' + esc(it.label)) + '</span>';
+    var ico = A.tlIcon(it.icon);
+    return '<li class="rv ' + (i % 2 ? 'right' : 'left') + '"><span class="dot"></span><div class="item">' + (i % 2 ? text + ico : ico + text) + '</div></li>';
   }).join('');
   $('#tlList').classList.add('rv');
 
-  /* ---------- Album + xem ảnh ---------- */
+  /* ---------- Album lướt ngang + xem ảnh ---------- */
   var photos = W.album.photos || [];
-  var grid = $('#albumGrid');
-  grid.innerHTML = photos.map(function (src, i) {
-    return '<figure class="rv" data-i="' + i + '"><img src="' + esc(src) + '" alt="Ảnh cưới ' + (i + 1) + '" loading="lazy" decoding="async"></figure>';
+  var car = $('#carousel');
+  car.innerHTML = photos.map(function (src, i) {
+    return '<figure data-i="' + i + '"><img src="' + esc(src) + '" alt="Ảnh cưới ' + (i + 1) + '" loading="lazy" decoding="async"></figure>';
   }).join('');
-  // bố cục lặp lại mỗi 6 ảnh: 1 ảnh cao, 2 ảnh nhỏ, 1 ảnh ngang, 2 ảnh vuông
-  var rows = [];
-  $$('figure', grid).forEach(function (f, i) {
-    var b = Math.floor(i / 6) * 4, k = i % 6, pos = [[1, b + 1, 1, 2], [2, b + 1, 1, 1], [2, b + 2, 1, 1], [1, b + 3, 2, 1], [1, b + 4, 1, 1], [2, b + 4, 1, 1]][k];
-    f.style.gridColumn = pos[0] + ' / span ' + pos[2];
-    f.style.gridRow = pos[1] + ' / span ' + pos[3];
-    rows[b] = '160px'; rows[b + 1] = '160px'; rows[b + 2] = '210px'; rows[b + 3] = '170px';
-    fadeIn($('img', f));
-  });
-  grid.style.gridTemplateRows = rows.slice(0, Math.ceil(photos.length / 6) * 4).join(' ');
-
+  $$('img', car).forEach(fadeIn);
   var lb = $('#lightbox'), lbImg = $('#lbImg'), lbIdx = 0;
   function lbShow(i, dir) {
     lbIdx = (i + photos.length) % photos.length;
@@ -164,7 +199,7 @@
       lbImg.animate([{ opacity: 0, transform: 'translateX(' + dir * 40 + 'px) scale(.98)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
     }
   }
-  $$('figure', grid).forEach(function (f) { f.addEventListener('click', function () { lbShow(+f.getAttribute('data-i')); openDialog(lb); }); });
+  $$('figure', car).forEach(function (f) { f.addEventListener('click', function () { lbShow(+f.getAttribute('data-i')); openDialog(lb); }); });
   $('#lbPrev').addEventListener('click', function () { lbShow(lbIdx - 1, -1); });
   $('#lbNext').addEventListener('click', function () { lbShow(lbIdx + 1, 1); });
   var touchX = null;
@@ -187,13 +222,14 @@
     if (!d.open) dialogsOpen++;
     if (d.showModal) d.showModal(); else d.setAttribute('open', '');
   }
-  function closeDialog(d) {
+  function closeDialog(d, cb) {
     if (!d.open || d.classList.contains('closing')) return;
     function done() {
       d.classList.toggle('closing', false);
       if (d.close) d.close(); else d.removeAttribute('open');
       dialogsOpen = Math.max(0, dialogsOpen - 1);
       d.dispatchEvent(new Event('closed'));
+      if (cb) cb();
     }
     if (reduce) return done();
     d.classList.add('closing');
@@ -212,28 +248,34 @@
   }
 
   /* ---------- Xác nhận tham dự ---------- */
-  var form = $('#rsvpForm');
-  if (!W.rsvp.askVeg) $('#vegField').hidden = true;
+  var form = $('#rsvpForm'), ex = W.rsvp.extra || {};
   $('#rsvpGuests').max = W.rsvp.maxGuests || 10;
   if (guest) $('#rsvpName').value = guest;
+  if (ex.label) {
+    $('#extraLabel').textContent = ex.label;
+    $('#extraOpts').innerHTML = (ex.options || []).map(function (o) {
+      return '<label class="radio"><input type="radio" name="extra" value="' + esc(o) + '"><i></i><span>' + esc(o) + '</span></label>';
+    }).join('');
+  } else { $('#extraField').hidden = true; }
   function attending() { return (form.querySelector('input[name="attending"]:checked') || {}).value; }
   $$('input[name="attending"]', form).forEach(function (r) {
     r.addEventListener('change', function () {
       var no = attending() === 'no';
       $('#guestsField').classList.toggle('off', no);
-      $('#vegField').classList.toggle('off', no);
+      $('#extraField').classList.toggle('off', no);
     });
   });
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = $('#rsvpMsg'), name = form.name.value.trim();
+    var msg = $('#rsvpMsg'), name = form.name.value.trim(), att = attending();
     msg.className = 'form-msg';
     if (!name) { msg.textContent = 'Bạn cho chúng mình biết tên nhé.'; form.name.focus(); return; }
-    var yes = attending() === 'yes';
+    if (!att) { msg.textContent = 'Bạn chọn giúp chúng mình có tham dự không nhé.'; return; }
+    var yes = att === 'yes';
     var n = Math.min(W.rsvp.maxGuests || 10, Math.max(1, parseInt(form.guests.value, 10) || 1));
     var data = {
-      type: 'rsvp', name: name, attending: yes ? 'yes' : 'no', guests: yes ? n : 0,
-      veg: yes && W.rsvp.askVeg ? ((form.querySelector('input[name="veg"]:checked') || {}).value || '') : '', invitedAs: guest,
+      type: 'rsvp', name: name, attending: att, guests: yes ? n : 0,
+      extra: yes && ex.label ? ((form.querySelector('input[name="extra"]:checked') || {}).value || '') : '', invitedAs: guest,
     };
     var btn = $('#rsvpSubmit'); btn.disabled = true;
     post(data).then(function (r) {
@@ -309,17 +351,22 @@
   }
 
   /* Lời chúc chạy như livestream */
-  var live = $('#live'), liveIdx = 0, liveTimer = null, liveOn = store(key + ':live');
+  var live = $('#live'), liveX = $('#liveX'), liveIdx = 0, liveTimer = null, liveOn = store(key + ':live');
   liveOn = liveOn === null ? W.wishes.live !== false : !!liveOn;
   $('#liveToggle').checked = liveOn;
+  function setLive(on) {
+    liveOn = on; store(key + ':live', on);
+    live.classList.toggle('off', !on); liveX.hidden = !on;
+    $('#liveToggle').checked = on;
+  }
   function bubble(w, mine) {
     var el = document.createElement('div');
     el.className = 'bubble' + (mine ? ' mine' : '');
-    el.innerHTML = '<b>' + esc(w.name) + ':</b> ' + esc(w.message);
+    el.innerHTML = '<span class="bt"><b>' + esc(w.name) + ':</b> ' + esc(w.message) + '</span>';
     live.appendChild(el);
     var all = $$('.bubble:not(.out)', live);
-    if (all.length > 2) retire(all[0]);
-    setTimeout(function () { retire(el); }, 8000);
+    if (all.length > 3) retire(all[0]);
+    setTimeout(function () { retire(el); }, 7200);
   }
   function retire(el) {
     if (!el.parentNode || el.classList.contains('out')) return;
@@ -332,20 +379,38 @@
     liveIdx++;
   }
   function startLive() {
-    live.classList.toggle('off', !liveOn);
+    setLive(liveOn);
     if (liveTimer) return;
     liveStep();
-    liveTimer = setInterval(liveStep, 4600);
+    liveTimer = setInterval(liveStep, 3600);
   }
   live.addEventListener('click', function () { renderWishList(); openDialog($('#wishesDlg')); });
-  $('#liveToggle').addEventListener('change', function () {
-    liveOn = this.checked; store(key + ':live', liveOn);
-    live.classList.toggle('off', !liveOn);
-  });
+  liveX.addEventListener('click', function () { setLive(false); });
+  $('#liveToggle').addEventListener('change', function () { setLive(this.checked); });
+  $('#chatBtn').addEventListener('click', function () { renderWishList(); openDialog($('#wishesDlg')); });
 
-  /* Gửi lời chúc từ thanh dưới */
+  /* Thanh dưới: gửi lời chúc, thu gọn khi cuộn xuống */
   var bar = $('#bar'), input = $('#wishInput'), nameDlg = $('#nameDlg');
-  input.addEventListener('input', function () { input.parentNode.classList.toggle('has', !!input.value.trim()); });
+  function expandDock() { body.classList.toggle('compact', false); }
+  input.addEventListener('input', function () { bar.classList.toggle('has', !!input.value.trim()); });
+  input.addEventListener('focus', expandDock);
+  $('#writeWish').addEventListener('click', function () {
+    closeDialog($('#wishesDlg'), function () { expandDock(); setTimeout(function () { input.focus(); }, 300); });
+  });
+  var lastY = 0, ticking = false;
+  window.addEventListener('scroll', function () {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function () {
+      var y = window.scrollY;
+      if (document.activeElement !== input) {
+        if (y > lastY + 8 && y > 240) body.classList.add('compact');
+        else if (y < lastY - 8 || y < 120) body.classList.toggle('compact', false);
+      }
+      lastY = y; ticking = false;
+    });
+  }, { passive: true });
+
   function sendWish(name, message) {
     var w = { type: 'wish', name: name, message: message, invitedAs: guest };
     return post(w).then(function (r) {
@@ -358,8 +423,7 @@
   }
   bar.addEventListener('submit', function (e) {
     e.preventDefault();
-    var msg = input.value.trim();
-    var name = store(key + ':name');
+    var msg = input.value.trim(), name = store(key + ':name');
     if (!msg || !name) {
       $('#wishName').value = name || guest || '';
       $('#wishText').value = msg;
@@ -368,7 +432,7 @@
       setTimeout(function () { ($('#wishName').value ? $('#wishText') : $('#wishName')).focus(); }, 60);
       return;
     }
-    input.value = ''; input.parentNode.classList.toggle('has', false); input.blur();
+    input.value = ''; bar.classList.toggle('has', false); input.blur();
     sendWish(name, msg).catch(function () { input.value = msg; });
   });
   $('#nameForm').addEventListener('submit', function (e) {
@@ -378,37 +442,36 @@
     var btn = $('#nameSubmit'); btn.disabled = true;
     store(key + ':name', name);
     sendWish(name, msg).then(function () {
-      input.value = ''; input.parentNode.classList.toggle('has', false);
+      input.value = ''; bar.classList.toggle('has', false);
       closeDialog(nameDlg);
     }).catch(function () { m.textContent = 'Gửi chưa được, bạn kiểm tra mạng rồi thử lại nhé.'; })
       .then(function () { btn.disabled = false; });
   });
 
   /* ---------- Thả tim ---------- */
-  var fly = $('#fly'), heartBtn = $('#heartBtn'), myHearts = +store(key + ':hearts') || 0, pending = 0, flushT = null;
-  var COLORS = ['#e0505f', '#f07a8c', '#ff9db0', '#6f8ed6', '#9fb6e8'];
+  var fly = $('#fly'), heartBtn = $('#heartBtn'), myHearts = +store(key + ':hearts') || 0, pending = 0, pendingSent = 0, flushT = null;
+  var COLORS = ['#e0505f', '#f07a8c', '#ff9db0', '#e0505f', '#c8374b'];
   function renderHearts() {
     var n = W.endpoint ? serverHearts + pendingSent : myHearts;
-    $('#heartCount').textContent = n > 0 ? (n > 999 ? Math.floor(n / 100) / 10 + 'k' : n) : '';
+    $('#heartCount').textContent = n > 999 ? Math.floor(n / 100) / 10 + 'k' : n;
   }
-  var pendingSent = 0;
   function spawnHeart(soft) {
     if (reduce) return;
     var fr = fly.getBoundingClientRect(), br = heartBtn.getBoundingClientRect();
-    var x = br.left - fr.left + br.width / 2 - 13, y = br.top - fr.top - 4;
+    var x = br.left - fr.left + 14, y = br.top - fr.top - 4;
     var el = document.createElement('div');
     el.className = 'fh';
     el.style.color = COLORS[Math.floor(Math.random() * COLORS.length)];
     el.innerHTML = A.heartSvg();
     fly.appendChild(el);
-    var rise = 260 + Math.random() * 220, sway = 18 + Math.random() * 26, dir = Math.random() < .5 ? -1 : 1;
-    var s = soft ? .6 + Math.random() * .3 : .85 + Math.random() * .45, rot = (Math.random() - .5) * 40;
+    var rise = 280 + Math.random() * 240, sway = 16 + Math.random() * 22, dir = Math.random() < .5 ? -1 : 1;
+    var s = soft ? .55 + Math.random() * .3 : .85 + Math.random() * .45, rot = (Math.random() - .5) * 40;
     var anim = el.animate([
       { transform: 'translate(' + x + 'px,' + y + 'px) scale(.3)', opacity: 0 },
-      { transform: 'translate(' + (x + dir * sway * .5) + 'px,' + (y - rise * .2) + 'px) scale(' + s + ') rotate(' + rot * .3 + 'deg)', opacity: soft ? .7 : 1, offset: .15 },
+      { transform: 'translate(' + (x + dir * sway * .5) + 'px,' + (y - rise * .2) + 'px) scale(' + s + ') rotate(' + rot * .3 + 'deg)', opacity: soft ? .75 : 1, offset: .15 },
       { transform: 'translate(' + (x - dir * sway) + 'px,' + (y - rise * .55) + 'px) scale(' + s + ') rotate(' + -rot * .5 + 'deg)', opacity: soft ? .6 : .95, offset: .55 },
       { transform: 'translate(' + (x + dir * sway * .6) + 'px,' + (y - rise) + 'px) scale(' + s * .9 + ') rotate(' + rot + 'deg)', opacity: 0 },
-    ], { duration: 2300 + Math.random() * 1100, easing: 'cubic-bezier(.33,.0,.4,1)' });
+    ], { duration: 2300 + Math.random() * 1100, easing: 'cubic-bezier(.33,0,.4,1)' });
     anim.onfinish = function () { el.remove(); };
   }
   function burst(n) { for (var i = 0; i < n; i++) setTimeout(spawnHeart, i * 90); }
@@ -424,7 +487,6 @@
     }
     renderHearts();
   });
-  // Thỉnh thoảng có tim bay lên cho sinh động
   function ambient() {
     if (body.classList.contains('open') && !document.hidden && !dialogsOpen) spawnHeart(true);
     setTimeout(ambient, 2600 + Math.random() * 3200);
@@ -469,9 +531,8 @@
   }
 
   /* ---------- Hiện dần khi cuộn tới ---------- */
-  $$('.write').forEach(function (el) { el.innerHTML = '<span class="wr">' + el.innerHTML + '</span>'; });
   function startReveal() {
-    var els = $$('.rv, .write');
+    var els = $$('.rv, .lt, .swash');
     if (reduce || !('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
     var io = new IntersectionObserver(function (entries) {
       entries.filter(function (e) { return e.isIntersecting; })
@@ -479,10 +540,11 @@
         .forEach(function (e, i) {
           e.target.style.setProperty('--rd', Math.min(i * .09, .45).toFixed(2) + 's');
           e.target.classList.add('in');
+          $$('.lt', e.target).forEach(function (c) { c.style.setProperty('--rd', '.55s'); c.classList.add('in'); });
           io.unobserve(e.target);
         });
     }, { threshold: .12, rootMargin: '0px 0px -6% 0px' });
-    els.forEach(function (el) { io.observe(el); });
+    els.forEach(function (el) { if (!el.closest('.swash') || el.classList.contains('swash')) io.observe(el); });
   }
 
   /* ---------- Mở cửa thiệp ---------- */
@@ -502,14 +564,15 @@
     setTimeout(function () {
       loadWishes().then(startLive);
       if (!reduce) ambient();
-    }, reduce ? 0 : 2600);
+    }, reduce ? 0 : 2400);
   }
   gate.addEventListener('click', open);
   gate.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
   renderHearts();
+  liveX.hidden = true;
   if (!W.endpoint) loadWishes();
 
-  /* ---------- Cửa thiệp hiện ra khi font đã tải (tránh chữ nhảy) ---------- */
+  /* ---------- Cửa thiệp hiện ra khi font đã tải ---------- */
   var readyDone = false;
   function ready() { if (!readyDone) { readyDone = true; body.classList.add('ready'); } }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready);

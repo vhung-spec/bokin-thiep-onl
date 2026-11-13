@@ -5,12 +5,13 @@
  *  - Trả danh sách lời chúc cho thiệp hiển thị (?action=wishes)
  *  - Đếm lượt thả tim (mẫu xanh pastel)
  * Dùng chung cho cả mẫu đỏ rượu và mẫu xanh pastel.
+ * Cột "Câu hỏi thêm" lưu câu trả lời cho câu hỏi tuỳ chọn của mẫu xanh pastel (vd. có trẻ em đi cùng không).
  * Muốn ẩn một lời chúc: gõ chữ x vào cột "Ẩn" của dòng đó.
  * Cách cài: xem mục "Lưu dữ liệu vào Google Sheets" trong README.md
  */
 var RSVP_SHEET = 'Xác nhận tham dự';
 var WISH_SHEET = 'Lời chúc';
-var RSVP_HEAD = ['Thời gian', 'Tên', 'Khách của', 'Tham dự', 'Số người', 'Link mời (?to=)', 'Món chay'];
+var RSVP_HEAD = ['Thời gian', 'Tên', 'Khách của', 'Tham dự', 'Số người', 'Link mời (?to=)', 'Câu hỏi thêm'];
 var WISH_HEAD = ['Thời gian', 'Tên', 'Lời chúc', 'Chữ ký', 'Link mời (?to=)', 'Ẩn'];
 
 function sheet_(name, head) {
@@ -51,7 +52,7 @@ function doPost(e) {
         p.side === 'gai' ? 'Nhà gái' : p.side === 'trai' ? 'Nhà trai' : '',
         p.attending === 'yes' ? 'Có' : 'Không',
         Number(p.guests) || 0, clean_(p.invitedAs, 80),
-        p.veg === 'yes' ? 'Có' : p.veg === 'no' ? 'Không' : '',
+        clean_(p.extra, 120),
       ]);
     }
     return json_({ ok: true });

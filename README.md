@@ -84,23 +84,22 @@ Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **
 
 Thư mục `xanh-pastel/`. Các phần:
 
-1. **Cửa đôi** nền ren hoa, con dấu sáp xanh trên bông hoa trắng, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
-2. **Mở đầu** — dấu sáp, tên cô dâu chú rể, ngày cưới.
-3. **Lời mời** — bố mẹ hai bên, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), tên viết tay, giờ, thứ, ngày, **ngày âm lịch tự tính**, địa điểm (bấm để mở bản đồ).
-4. **Ảnh lớn + đếm ngược**, **lịch tháng “Save the Date”** với sóng giấy màu nước, **Love Story**, **Timeline** có biểu tượng.
-5. **Album** — bố cục ghép ảnh, chạm để xem lớn (có số thứ tự “1 / 6”, vuốt qua lại).
-6. **Xác nhận tham dự** — tên, có đến không, số khách, có dùng món chay không.
-7. **Gửi quà mừng** — chạm vào phong bì xanh, phong bì mở ra rồi hiện mã QR của cô dâu và chú rể.
-8. **Thank you** — ảnh, lời cảm ơn.
-9. **Thanh dưới cùng** (hiện suốt khi xem thiệp):
-   - nút **☰ Mục lục** — nhảy tới từng phần, xem tất cả lời chúc, bật/tắt lời chúc chạy;
-   - ô **“Gửi lời chúc…”** — gõ và gửi ngay, lần đầu sẽ hỏi tên;
-   - nút **♥ thả tim** — tim bay lên, có bộ đếm.
-   Lời chúc của khách **chạy ở góc dưới như livestream**.
+1. **Cửa đôi** nền ren thêu hoa, con dấu sáp xanh nhạt trên bông hoa trắng giấy, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
+2. **Mở đầu** — dấu sáp, tên cô dâu chú rể, trái tim xuyên mũi tên, ngày cưới, hoạ tiết hoa xanh.
+3. **Lời mời** — bố mẹ hai bên, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), tên viết tay, giờ, thứ, ngày, **ngày âm lịch tự tính**, địa điểm (bấm để mở bản đồ). Chữ viết tay hiện dần từng ký tự.
+4. **Ảnh lớn mép giấy xé + Countdown**, cụm hoa xanh màu nước.
+5. **Save The Date** — lịch tháng (Chủ nhật đầu tuần, đổi được trong `config.js`), ngày cưới khoanh trái tim + nhẫn, sóng giấy màu nước.
+6. **Love Story** trên nền ren, chữ viết tay.
+7. **Timeline** — tiêu đề chữ T uốn lượn tự vẽ ra, trục dọc, các mốc xen kẽ trái/phải kèm biểu tượng màu nước.
+8. **The Album** — ảnh lướt ngang, chạm để xem lớn (“1 / 6”, vuốt qua lại).
+9. **Xác Nhận Tham Dự** — tên, có tham dự không, số khách, một câu hỏi thêm tuỳ chỉnh (mặc định: có trẻ em đi cùng không).
+10. **Gửi Quà Mừng** — phong bì xanh nắp viền ren, chạm để mở rồi hiện mã QR của cô dâu và chú rể; ảnh mép giấy xé bên dưới.
+11. **Thank you!** — lời cảm ơn.
+12. **Thanh dưới cùng**: nút ☰ mục lục; nút 💬 xem tất cả lời chúc; nút ♥ thả tim có bộ đếm; ô **“Gửi lời chúc…”** (lần đầu sẽ hỏi tên). Thanh tự thu gọn khi cuộn xuống, hiện lại khi cuộn lên. Lời chúc của khách **chạy ở góc dưới như livestream**, có nút ✕ để ẩn.
 
 Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, timeline, tài khoản mừng cưới…). Ảnh mặc định lấy từ `../assets/anh/` (chung với mẫu đỏ rượu), muốn ảnh riêng thì đổi đường dẫn trong `config.js`. Nhạc nền dùng chung `assets/nhac-nen.mp3`. Biểu tượng timeline có sẵn: `cheers`, `rings`, `music`, `camera`, `heart`, `cake`.
 
-Hai mẫu dùng **chung một file Apps Script** (bên dưới): dán cùng URL vào `endpoint` của mẫu nào cũng được. Mẫu xanh pastel ghi thêm cột **Món chay** và lưu **lượt thả tim**.
+Hai mẫu dùng **chung một file Apps Script** (bên dưới): dán cùng URL vào `endpoint` của mẫu nào cũng được. Mẫu xanh pastel ghi thêm cột **Câu hỏi thêm** và lưu **lượt thả tim**.
 
 ## Lưu dữ liệu vào Google Sheets
 
@@ -152,7 +151,7 @@ xanh-pastel/               mẫu xanh pastel
   index.html               khung trang
   css/style.css            màu sắc, bố cục, hiệu ứng
   js/config.js             ← nội dung mẫu xanh (sửa ở đây)
-  js/art.js                hình vẽ SVG: ren hoa, mẫu đơn, dấu sáp, giấy xé, sóng màu nước
+  js/art.js                hình vẽ SVG: ren thêu, giấy thủ công, hoa, dấu sáp, giấy xé, sóng, chữ T uốn lượn
   js/main.js               cửa đôi, đếm ngược, lịch, form, lời chúc chạy, thả tim, QR
   assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
@@ -160,6 +159,6 @@ xanh-pastel/               mẫu xanh pastel
 ## Ghi chú
 
 - Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền ren, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
-- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Great Vibes, Playfair Display, Cormorant Garamond, Dancing Script (mẫu xanh pastel).
+- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Pinyon Script, Monsieur La Doulaise, Ms Madi, Playfair Display, Cormorant Garamond (mẫu xanh pastel). Monsieur La Doulaise chỉ dùng cho chữ tiếng Anh (Countdown, Save The Date, Love Story) vì không có dấu tiếng Việt.
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.
 - Thiết kế cũ (tông xanh xô thơm, nét vẽ tay) vẫn còn trong lịch sử git, commit `63f5f7b`.

@@ -42,11 +42,11 @@ window.WEDDING = {
 
   photos: {
     hero: '../assets/anh/chinh.jpg',   // ảnh lớn trên phần đếm ngược
-    thanks: '../assets/anh/cam-on.jpg', // ảnh lời cảm ơn
+    thanks: '../assets/anh/cam-on.jpg', // ảnh dưới phong bì quà mừng
   },
 
   countdown: { title: 'Countdown', subtitle: 'To Our Big Day' },
-  calendar: { title: 'Save the Date' },
+  calendar: { title: 'Save The Date', weekStart: 'sun' }, // 'sun' = Chủ nhật đầu tuần, 'mon' = Thứ hai
 
   loveStory: {
     title: 'Love Story',
@@ -70,7 +70,7 @@ window.WEDDING = {
   },
 
   album: {
-    title: 'Album',
+    title: 'The Album',
     photos: [
       '../assets/anh/album-01.jpg', '../assets/anh/album-02.jpg', '../assets/anh/album-03.jpg',
       '../assets/anh/album-04.jpg', '../assets/anh/album-05.jpg', '../assets/anh/album-06.jpg',
@@ -79,14 +79,19 @@ window.WEDDING = {
 
   rsvp: {
     title: 'Xác Nhận Tham Dự',
-    text: 'Sự hiện diện của bạn là niềm vinh hạnh của gia đình chúng tôi. Bạn xác nhận giúp chúng mình nhé!',
+    text: 'Sự hiện diện của bạn là niềm vui của Cô Dâu và Chú Rể',
+    yes: 'Vui mừng chấp nhận',
+    no: 'Rất tiếc không thể tham dự',
+    guestsLabel: 'Số lượng khách trong bữa tiệc của bạn',
     maxGuests: 10,
-    askVeg: true, // hỏi khách có dùng món chay không
+    // Câu hỏi thêm (để trống label nếu không cần), ví dụ hỏi món chay: 'Bạn có dùng món chay không?'
+    extra: { label: 'Có trẻ em đi cùng bạn không?', options: ['Có', 'Không'] },
+    button: 'Gửi phản hồi',
   },
 
   gift: {
     title: 'Gửi Quà Mừng',
-    text: 'Chạm vào phong bì để mở mã QR gửi quà mừng tới chúng mình.',
+    text: 'Quét mã QR để gửi quà mừng tới chúng mình nhé',
     // qr: ảnh QR từ app ngân hàng; hoặc để trống và điền bankId + number để tự tạo VietQR
     accounts: [
       { side: 'Chú rể', bankName: 'Vietcombank', bankId: 'VCB', number: '', holder: 'NGUYEN MINH KHANG', qr: '' },
@@ -95,7 +100,7 @@ window.WEDDING = {
   },
 
   thanks: {
-    title: 'Thank you',
+    title: 'Thank you!',
     text: 'Cảm ơn bạn đã dành thời gian quý báu để chung vui cùng chúng mình. Sự hiện diện của bạn là món quà ý nghĩa nhất!',
   },
 
