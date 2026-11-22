@@ -35,25 +35,40 @@
     sprig: function () { return motif('canh-la-vang.webp'); },
     garland: function () { return motif('day-la-vang.webp'); },
   };
+  /* ---------- Ảnh bìa của chủ thiệp (config.js → cover) ---------- */
   var cov = W.cover || {};
+  function cssUrl(p) { return 'url("' + new URL(p, location.href).href.replace(/"/g, '%22') + '")'; }
   var SEAL = '<img class="seal-img" src="' + esc(cov.seal || 'assets/dau-sap-vang.webp') + '" alt="" aria-hidden="true" decoding="async">';
   if (cov.seal) body.classList.add('custom-seal');
-  // Ảnh bìa đã mua bản quyền: phủ kín 2 cánh bìa (mỗi cánh một nửa ảnh) và phần đầu thiệp
+  if (cov.inner) { root.style.setProperty('--inner-paper', cssUrl(cov.inner)); body.classList.add('custom-inner'); }
+  if (cov.cream) root.style.setProperty('--cream-paper', cssUrl(cov.cream));
+  // Bìa: hai cánh ghép thành đúng một ảnh phủ kín màn hình; dấu sáp đặt đúng chỗ của nó trên ảnh
+  var coverReady = Promise.resolve();
   if (cov.paper) {
     var coverImg = new Image();
-    root.style.setProperty('--cover-paper', 'url("' + new URL(cov.paper, location.href).href.replace(/"/g, '%22') + '")');
+    root.style.setProperty('--cover-paper', cssUrl(cov.paper));
     body.classList.add('custom-cover');
     var fitCover = function () {
       if (!coverImg.naturalWidth) return;
-      var gw = Math.min(window.innerWidth, 480), gh = window.innerHeight;
+      var vw = window.innerWidth, gw = Math.min(vw, 480), gh = window.innerHeight;
       var k = Math.max(gw / coverImg.naturalWidth, gh / coverImg.naturalHeight);
       var w = coverImg.naturalWidth * k, h = coverImg.naturalHeight * k;
       root.style.setProperty('--cov-size', w + 'px ' + h + 'px');
       root.style.setProperty('--cov-x-l', (gw - w) / 2 + 'px');
       root.style.setProperty('--cov-x-r', (gw - w) / 2 - gw / 2 + 'px');
       root.style.setProperty('--cov-y', (gh - h) / 2 + 'px');
+      var at = cov.sealAt, go = $('#gateOpen');
+      if (at && go) {
+        go.style.left = (vw - gw) / 2 + (gw - w) / 2 + at.x * w + 'px';
+        go.style.top = (gh - h) / 2 + at.y * h + 'px';
+        go.style.width = at.w * w + 'px';
+      }
+      body.classList.add('cover-fit');
     };
-    coverImg.onload = fitCover;
+    coverReady = new Promise(function (res) {
+      coverImg.onload = function () { fitCover(); res(); };
+      coverImg.onerror = function () { body.classList.remove('custom-cover'); res(); };
+    });
     coverImg.src = cov.paper;
     window.addEventListener('resize', fitCover);
   }
@@ -546,6 +561,7 @@
   /* ---------- Bìa hiện ra khi phông chữ đã sẵn sàng ---------- */
   var readyDone = false;
   function ready() { if (!readyDone) { readyDone = true; body.classList.add('ready'); setTimeout(buildOpening, 60); } }
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready);
-  setTimeout(ready, 1500);
+  // chờ phông chữ và ảnh bìa (tối đa ~2,5 giây) rồi mới cho dấu sáp hiện ra
+  Promise.all([document.fonts && document.fonts.ready ? document.fonts.ready : null, coverReady]).then(ready);
+  setTimeout(ready, 2500);
 })();

@@ -57,12 +57,16 @@ section { position: relative; }
 /* ---------- Giấy dập nổi lá cây (ô lặp liền mạch) ---------- */
 .sage, .cream { background-size: 100% auto; background-repeat: repeat-y; background-position: center var(--by, 0px); }
 .sage { background-color: var(--sage); background-image: var(--sage-paper); }
-/* Ảnh bìa đã mua (cover.paper): 2 cánh ghép thành một ảnh phủ kín màn hình, đầu thiệp dùng cùng ảnh */
+/* Ảnh bìa của chủ thiệp (cover.paper): 2 cánh ghép thành một ảnh phủ kín màn hình; ảnh đã có sẵn đường gáp và bóng */
 .custom-cover .door { background-size: var(--cov-size, cover); background-repeat: no-repeat; }
+.custom-cover:not(.cover-fit) .door { background-image: none; }
 .custom-cover .door.l { background-position: var(--cov-x-l, 0) var(--cov-y, 0); }
-.custom-cover .door.r { background-position: var(--cov-x-r, 0) var(--cov-y, 0); }
-.custom-cover .hero { background-image: var(--cover-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
-.custom-seal .gate-seal .sheen { display: none; }
+.custom-cover .door.r { background-position: var(--cov-x-r, 0) var(--cov-y, 0); box-shadow: none; }
+.custom-cover .door.r::after { display: none; }
+.custom-cover:not(.custom-inner) .hero { background-image: var(--cover-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
+/* Trang trong (cover.inner): đầu thiệp, lời mời, câu chuyện — mỗi phần phủ kín một ảnh, không lặp */
+.custom-inner .sage { background-image: var(--inner-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.custom-seal .gate-seal .sheen { left: 12%; top: 11%; width: 76%; }
 .cream { background-color: var(--cream); background-image: var(--cream-paper); }
 
 /* ---------- Mép giấy xé ---------- */

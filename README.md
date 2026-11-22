@@ -102,10 +102,12 @@ Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa đi�
 - `photos.ending`: ảnh mở đầu phần cảm ơn;
 - `album.photos`: danh sách `{ src, alt }` (thêm `focus: '50% 30%'` nếu muốn chỉnh chỗ cắt một ảnh).
 
-**Dùng ảnh bìa đã mua bản quyền** (ví dụ mua thiệp của Petit Moments): chép file vào `xanh-pastel/assets/bia/` rồi điền trong `config.js` → `cover`:
-- `paper: 'assets/bia/giay.jpg'` — nền giấy **không có dấu sáp**, ảnh dọc (nên 1080×1920 trở lên). Hai cánh bìa ghép thành đúng một ảnh phủ kín màn hình; phần đầu thiệp dùng cùng ảnh.
-- `seal: 'assets/bia/dau-sap.png'` — dấu sáp riêng, **nền trong suốt**; nằm giữa đường gáp và nhấc lên khi mở.
-Để trống thì thiệp dùng giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`; hãy chắc giấy phép cho phép dùng trên website.
+**Ảnh bìa của chủ thiệp** nằm trong `xanh-pastel/assets/bia/`, khai báo ở `config.js` → `cover`:
+- `paper: 'assets/bia/bia.jpg'` — bìa hai cánh đã xoá dấu sáp, đường gáp nằm đúng giữa ảnh. Hai cánh bìa ghép thành đúng một ảnh phủ kín màn hình.
+- `seal: 'assets/bia/dau-sap.webp'` — dấu sáp tách riêng, nền trong suốt; `sealAt` là vị trí của nó trên ảnh bìa (tâm x, y và bề rộng theo tỉ lệ), để dấu sáp nằm đúng chỗ rồi nhấc lên khi mở.
+- `inner: 'assets/bia/trang-trong.jpg'` — hai cánh ghép liền (không đường gáp): nền đầu thiệp, lời mời, câu chuyện.
+- `cream: 'assets/bia/giay-kem.jpg'` — giấy kem cùng hoạ tiết lá, nền các phần còn lại.
+Các file này được tách từ một ảnh bìa duy nhất bằng `tools/hoa-tiet/tach_bia.py` và `giay_kem_tu_anh.py`. Xoá 5 dòng trên (để trống) thì thiệp quay về giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`.
 
 Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. Muốn có nhạc nền: chép file mp3 vào `xanh-pastel/assets/` rồi ghi `music: 'assets/ten-file.mp3'`.
 
@@ -155,7 +157,7 @@ js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
 google-apps-script/Code.gs lưu xác nhận, lời chúc, lượt thả tim vào Google Sheets (dùng chung)
-tools/hoa-tiet/            code vẽ giấy dập nổi, dấu sáp vàng, cành lá vàng của mẫu xanh pastel
+tools/hoa-tiet/            code tách ảnh bìa (dấu sáp, nền, trang trong, giấy kem) và vẽ hoạ tiết vàng của mẫu xanh pastel
 assets/anh/                ảnh mẫu của mẫu đỏ rượu
 assets/og-image.jpg        ảnh xem trước khi chia sẻ link
 
@@ -174,7 +176,7 @@ xanh-pastel/               mẫu xanh pastel
 
 ## Ghi chú
 
-- Tông xanh xô thơm & vàng của mẫu xanh pastel lấy cảm hứng từ một ghim Pinterest (bìa thiệp của Petit Moments); giấy dập nổi, dấu sáp và cành lá đều **tự vẽ lại bằng code** trong `tools/hoa-tiet/`, không dùng ảnh gốc. Bản nền màu nước + hoa dâm bụt trước đó còn trong lịch sử git, commit `4d4db84`.
+- Bìa, trang trong và giấy kem của mẫu xanh pastel làm từ **ảnh bìa do chủ thiệp cung cấp** (`xanh-pastel/assets/bia/`). Cành lá vàng, dải lá vàng và bản giấy/dấu sáp dự phòng được **tự vẽ bằng code** trong `tools/hoa-tiet/`. Bản nền màu nước + hoa dâm bụt trước đó còn trong lịch sử git, commit `4d4db84`.
 - Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền giấy thủ công, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
 - Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Ephesis, Lora, Playfair Display, Be Vietnam Pro (mẫu xanh pastel).
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.

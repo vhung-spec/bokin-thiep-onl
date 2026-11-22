@@ -21,3 +21,14 @@ Rồi chuyển sang WebP và chép vào `xanh-pastel/assets/`:
 | `garland.png` | `day-la-vang.webp` | kết phần lịch, kết thiệp |
 
 Đổi màu: sửa các bộ màu trong `shade(...)` (giấy) và `GOLD` / `GOLD2` (vàng) rồi chạy lại.
+
+## Dùng ảnh bìa có sẵn (đang dùng)
+
+Bìa hiện tại làm từ ảnh bìa của chủ thiệp (một ảnh có sẵn dấu sáp):
+
+```bash
+python3 tools/hoa-tiet/tach_bia.py anh-bia.png /tmp/bia            # bia.jpg, dau-sap.png, trang-trong.jpg + in ra sealAt
+python3 tools/hoa-tiet/giay_kem_tu_anh.py /tmp/bia/trang-trong.jpg /tmp/bia/giay-kem.jpg 0.34
+```
+
+Chép kết quả vào `xanh-pastel/assets/bia/` (dấu sáp lưu thành `dau-sap.webp`) và dán dòng `sealAt` in ra vào `config.js`.
