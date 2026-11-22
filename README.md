@@ -5,7 +5,7 @@ Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượ
 | Mẫu | Link | Sửa nội dung ở |
 |---|---|---|
 | **Đỏ rượu** — phong bì sáp, polaroid, tim rơi | `/` (trang chính) | `js/config.js` |
-| **Xanh pastel** — cửa đôi giấy thủ công xanh pastel, dấu sáp xanh, lời chúc chạy như livestream, thả tim | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
+| **Xanh pastel** — nền màu nước xanh da trời, hoa dâm bụt, sóng nước, dấu sáp xanh, lời chúc chạy như livestream, thả tim | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
 
 Gửi khách link của mẫu bạn chọn (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/xanh-pastel/?to=Ngọc%20Anh`).
 
@@ -78,18 +78,18 @@ Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **
 
 Đặt file mp3 vào `assets/nhac-nen.mp3` (hoặc đổi `music` trong `config.js`). Nhạc phát khi khách mở phong bì; nút tròn góc dưới bên trái để bật/tắt. Không có file thì nút tự ẩn. Nên dùng nhạc có giấy phép miễn phí.
 
-## Mẫu xanh pastel — cửa đôi giấy thủ công xanh
+## Mẫu xanh pastel — nền màu nước, hoa dâm bụt
 
 ![Xem trước mẫu xanh pastel](docs/preview-xanh-pastel.jpg)
 
 Thư mục `xanh-pastel/`. Các phần:
 
-1. **Cửa đôi** nền giấy thủ công xanh pastel (hạt nhám, vệt loang màu nước, sợi giấy, kim tuyến, cánh hoa ép), con dấu sáp xanh nhạt trên bông hoa trắng giấy, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
+1. **Cửa đôi** nền màu nước xanh da trời (hai cánh đối xứng gương ở đường giữa), con dấu sáp xanh nhạt trên bông hoa trắng giấy, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
 2. **Mở đầu** — dấu sáp, tên cô dâu chú rể, trái tim xuyên mũi tên, ngày cưới, hoạ tiết hoa xanh.
 3. **Lời mời** — bố mẹ hai bên, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), tên viết tay, giờ, thứ, ngày, **ngày âm lịch tự tính**, địa điểm (bấm để mở bản đồ). Chữ viết tay hiện dần từng ký tự.
 4. **Ảnh lớn mép giấy xé + Countdown**, cụm hoa xanh màu nước.
 5. **Save The Date** — lịch tháng dạng thẻ, chữ số dễ đọc (Be Vietnam Pro), Chủ nhật tô đỏ, ngày cưới nằm trong trái tim xanh, dòng thứ/ngày/giờ và ngày âm lịch bên dưới; Chủ nhật đầu tuần (đổi được trong `config.js`), sóng giấy màu nước.
-6. **Love Story** trên nền giấy thủ công xanh, chữ viết tay.
+6. **Love Story** trên nền màu nước, chữ viết tay, hoạ tiết sóng nước và hoa dâm bụt.
 7. **Timeline** — tiêu đề chữ T uốn lượn tự vẽ ra, trục dọc, các mốc xen kẽ trái/phải kèm biểu tượng màu nước.
 8. **The Album** — ảnh lướt ngang, chạm để xem lớn (“1 / 6”, vuốt qua lại).
 9. **Xác Nhận Tham Dự** — tên, có tham dự không, số khách, một câu hỏi thêm tuỳ chỉnh (mặc định: có trẻ em đi cùng không).
@@ -151,14 +151,17 @@ xanh-pastel/               mẫu xanh pastel
   index.html               khung trang
   css/style.css            màu sắc, bố cục, hiệu ứng
   js/config.js             ← nội dung mẫu xanh (sửa ở đây)
-  js/art.js                hình vẽ SVG: giấy thủ công, hoa, dấu sáp, giấy xé, sóng, chữ T uốn lượn
+  js/art.js                hình vẽ SVG: hoa trắng, dấu sáp, giấy xé, sóng, chữ T uốn lượn
   js/main.js               cửa đôi, đếm ngược, lịch, form, lời chúc chạy, thả tim, QR
   assets/anh/              ảnh cưới của mẫu xanh pastel
+  assets/nen-mau-nuoc.webp nền màu nước (ô lặp dọc liền mạch); phần nền nhạt là ảnh này phủ trắng 80%
+  assets/hoa-dam-but.webp, song-nuoc.webp  hoạ tiết hoa dâm bụt và sóng nước (nền trong suốt)
   assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
 
 ## Ghi chú
 
+- Nền màu nước, hoa dâm bụt và sóng nước của mẫu xanh pastel lấy từ ảnh do chủ thiệp cung cấp; nếu ảnh đó tải từ trang ảnh/thiết kế, hãy kiểm tra giấy phép trước khi đăng thiệp công khai.
 - Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền giấy thủ công, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
 - Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Pinyon Script, Monsieur La Doulaise, Ms Madi, Playfair Display, Cormorant Garamond, Be Vietnam Pro (mẫu xanh pastel). Monsieur La Doulaise chỉ dùng cho chữ tiếng Anh (Countdown, Save The Date, Love Story) vì không có dấu tiếng Việt.
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.

@@ -4,16 +4,14 @@
 :root {
   --col: 480px;
   --dock-h: 112px;
-  --ink: #2d3452;
-  --ink-2: #5a6079;
+  --ink: #1f3556;
+  --ink-2: #4a5d7a;
   --gray: #8a8fa3;
-  --blue: #6f8ed6;
-  --blue-d: #4e6cb8;
-  --navy: #1f3366;
-  --sand: #a3c2fa;
-  --sand-2: #86a9f2;
-  --paper: #edf3ff;
-  --paper-2: #dfe9fd;
+  --blue: #4a98e0;
+  --blue-d: #2a72c2;
+  --navy: #1c4378;
+  --sand: #7fc9f9;
+  --paper: #e5f4fe;
   --cal: 'Be Vietnam Pro', system-ui, sans-serif;
   --rose: #c0485e;
   --fancy: 'Monsieur La Doulaise', 'Pinyon Script', cursive;
@@ -51,13 +49,16 @@ section { position: relative; }
 .art { display: block; width: 100%; height: auto; overflow: visible; }
 .icon { width: 20px; height: 20px; display: block; }
 
-/* ---------- Nền giấy thủ công (ảnh nền do main.js tạo) ---------- */
+/* ---------- Nền màu nước ---------- */
 .lace {
   background-color: var(--sand);
-  background-image: radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, .26), rgba(255, 255, 255, 0) 62%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2));
-  background-size: 100% 100%, 400px 400px, 100% 100%;
+  background-image: url(../assets/nen-mau-nuoc.webp);
+  background-size: 150% auto; background-repeat: repeat-y; background-position: center var(--by, 0px);
 }
-.paper { background-color: var(--paper); background-image: var(--paper-img), linear-gradient(180deg, var(--paper), var(--paper-2)); background-size: 400px 400px, 100% 100%; }
+.paper {
+  background-color: var(--paper); background-image: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)), url(../assets/nen-mau-nuoc.webp);
+  background-size: 100% 100%, 150% auto; background-repeat: no-repeat, repeat-y; background-position: 0 0, center var(--by, 0px);
+}
 
 /* ---------- Mép giấy xé ---------- */
 .tear { position: absolute; left: 0; right: 0; height: 24px; z-index: 4; pointer-events: none; }
@@ -92,9 +93,11 @@ section.vis .fl { animation-play-state: running; }
 .gate { position: fixed; inset: 0; z-index: 80; cursor: pointer; outline: none; }
 .doors { position: absolute; inset: 0; max-width: var(--col); margin: 0 auto; display: flex; perspective: 1500px; }
 .door { position: relative; flex: 1; will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-.door { background-image: linear-gradient(90deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 55%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2)); background-size: 100% 100%, 400px 400px, 100% 100%; }
-.door.l { transform-origin: 0 50%; background-position: 0 0, right 0 top 0, 0 0; box-shadow: inset -10px 0 14px -10px rgba(35, 45, 90, .45); }
-.door.r { transform-origin: 100% 50%; background-image: linear-gradient(270deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 55%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2)); background-position: 0 0, 0 0, 0 0; box-shadow: inset 10px 0 14px -10px rgba(35, 45, 90, .4); }
+.door { background: url(../assets/nen-mau-nuoc.webp) right 0 top 0 / auto 100% no-repeat, var(--sand); }
+.door.r { background: var(--sand); }
+.door.r::before { content: ''; position: absolute; inset: 0; background: url(../assets/nen-mau-nuoc.webp) right 0 top 0 / auto 100% no-repeat; transform: scaleX(-1); }
+.door.l { transform-origin: 0 50%; box-shadow: inset -10px 0 14px -10px rgba(35, 45, 90, .45); }
+.door.r { transform-origin: 100% 50%; box-shadow: inset 10px 0 14px -10px rgba(35, 45, 90, .4); }
 .door.l::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 1.5px; background: rgba(60, 60, 90, .55); }
 .shade { position: absolute; inset: 0; opacity: 0; will-change: opacity; }
 .door.l .shade { background: linear-gradient(90deg, rgba(25, 32, 70, .15), rgba(25, 32, 70, .5)); }
@@ -183,9 +186,9 @@ body.open .scroll-hint .icon { animation: nudge 2s ease-in-out 3s infinite; }
 .cd-row span { font: italic 500 14px var(--serif); color: var(--ink-2); }
 .cd-sub { font-size: 36px; text-align: right; padding-right: 8%; margin-top: 4px; position: relative; z-index: 2; }
 .cd-body { position: relative; }
-.fl-cd-l { left: -34px; top: 40px; width: 25%; }
-.fl-cd-r { right: -26px; top: -18px; width: 30%; }
-.fl-cd-b { left: 50%; bottom: -8px; width: 62%; margin-left: -31%; }
+.fl-cd-l { left: -30px; bottom: -118px; width: 24%; }
+.fl-cd-r { right: -30px; top: -62px; width: 24%; }
+.fl-cd-b { left: 50%; bottom: 18px; width: 70%; margin-left: -35%; }
 
 /* =========================================================
    Lịch tháng
@@ -195,15 +198,15 @@ body.open .scroll-hint .icon { animation: nudge 2s ease-in-out 3s infinite; }
 .cal-card {
   position: relative; z-index: 2; max-width: 350px; margin: 16px auto 0; padding: 20px 12px 16px;
   border-radius: 26px; background: rgba(255, 255, 255, .78);
-  box-shadow: 0 16px 36px rgba(60, 85, 150, .16), 0 2px 6px rgba(60, 85, 150, .08), inset 0 0 0 1px rgba(111, 142, 214, .2);
+  box-shadow: 0 16px 36px rgba(60, 85, 150, .16), 0 2px 6px rgba(60, 85, 150, .08), inset 0 0 0 1px rgba(74, 152, 224, .2);
 }
-.cal-card::before { content: ''; position: absolute; inset: 7px; border: 1px dashed rgba(111, 142, 214, .38); border-radius: 20px; pointer-events: none; }
-.cal-flower { position: absolute; right: -24px; top: -40px; width: 104px; pointer-events: none; }
+.cal-card::before { content: ''; position: absolute; inset: 7px; border: 1px dashed rgba(74, 152, 224, .38); border-radius: 20px; pointer-events: none; }
+.cal-flower { position: absolute; right: -16px; top: -14px; width: 80px; pointer-events: none; }
 .cal-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
 .cal-m { font: 600 22px var(--title); color: var(--ink); letter-spacing: .02em; }
-.cal-y { font: 600 13px var(--cal); color: var(--blue-d); letter-spacing: .16em; padding: 3px 11px; border-radius: 999px; background: rgba(111, 142, 214, .15); }
+.cal-y { font: 600 13px var(--cal); color: var(--blue-d); letter-spacing: .16em; padding: 3px 11px; border-radius: 999px; background: rgba(74, 152, 224, .15); }
 .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; }
-.cal-grid .dow { font: 600 11.5px/1 var(--cal); letter-spacing: .04em; color: var(--blue-d); padding: 9px 0; background: rgba(111, 142, 214, .13); }
+.cal-grid .dow { font: 600 11.5px/1 var(--cal); letter-spacing: .04em; color: var(--blue-d); padding: 9px 0; background: rgba(74, 152, 224, .13); }
 .cal-grid .dow:first-child { border-radius: 999px 0 0 999px; }
 .cal-grid .dow:nth-child(7) { border-radius: 0 999px 999px 0; }
 .cal-grid .dow:nth-child(7) + * { margin-top: 4px; }
@@ -216,12 +219,11 @@ body.open .scroll-hint .icon { animation: nudge 2s ease-in-out 3s infinite; }
 .cal-grid .wed { animation: beat 1.8s ease-in-out infinite paused; }
 section.vis .cal-grid .wed { animation-play-state: running; }
 @keyframes beat { 0%, 60%, 100% { transform: scale(1); } 12% { transform: scale(1.14); } 24% { transform: scale(.97); } 36% { transform: scale(1.07); } }
-.cal-note { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(111, 142, 214, .35); text-align: left; }
+.cal-note { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(74, 152, 224, .35); text-align: left; }
 .cal-note .rings-ico { width: 34px; flex: none; }
 .cal-note b { display: block; font: 600 14px/1.35 var(--cal); color: var(--ink); }
 .cal-note small { display: block; font: 400 12.5px/1.35 var(--cal); color: var(--ink-2); }
-.waves-wrap { margin: 22px -22px 0; position: relative; z-index: 1; }
-.waves-wrap .waves { height: 170px; }
+.cal-wave { width: 74%; margin: 18px auto 46px; }
 
 /* =========================================================
    Chuyện tình yêu
@@ -263,7 +265,7 @@ section.vis .cal-grid .wed { animation-play-state: running; }
 .carousel figure { flex: 0 0 76%; scroll-snap-align: center; cursor: zoom-in; box-shadow: 0 8px 20px rgba(40, 45, 80, .18); background: #ddd; border-radius: 18px; overflow: hidden; }
 .carousel img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
 .album-title { position: relative; margin-top: 8px; }
-.fl-album { right: 4%; bottom: -26px; width: 120px; }
+.fl-album { right: 2%; bottom: -30px; width: 118px; }
 
 /* =========================================================
    Xác nhận tham dự
@@ -277,7 +279,7 @@ section.vis .cal-grid .wed { animation-play-state: running; }
   padding: 10px 12px; font: 500 18px var(--serif); color: var(--ink); outline: none; transition: border-color .3s, background .3s;
 }
 .box-input::placeholder { color: #9a9fb2; }
-.box-input:focus { border-color: var(--blue); background: rgba(255, 255, 255, .9); box-shadow: 0 0 0 3px rgba(111, 142, 214, .18); }
+.box-input:focus { border-color: var(--blue); background: rgba(255, 255, 255, .9); box-shadow: 0 0 0 3px rgba(74, 152, 224, .18); }
 textarea.box-input { resize: vertical; margin-top: 10px; }
 .field { display: block; margin: 12px 0 0; border: 0; padding: 0; min-width: 0; }
 .field > span, .field legend { display: block; padding: 0; font-size: 15.5px; color: var(--ink-2); margin-bottom: 4px; }
@@ -303,7 +305,7 @@ textarea.box-input { resize: vertical; margin-top: 10px; }
 .form-msg { min-height: 1.3em; margin-top: 10px; text-align: center; font-size: 15px; color: #a3405a; }
 .form-msg.ok { font: 400 30px/1.25 var(--viet); color: var(--blue-d); }
 .form-msg small { display: block; font: 500 14px var(--serif); color: var(--ink-2); }
-.fl-rsvp { right: -30px; top: -52px; width: 104px; z-index: 5; }
+.fl-rsvp { left: -30px; top: -64px; width: 100px; z-index: 5; }
 
 /* =========================================================
    Quà mừng
@@ -425,7 +427,7 @@ body.open .dock { transform: none; }
   padding: 0 46px 0 16px; font: 400 15px system-ui, -apple-system, 'Segoe UI', sans-serif; outline: none; transition: border-color .25s, box-shadow .25s;
 }
 .d-input input::placeholder { color: #8a8fa3; }
-.d-input input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(111, 142, 214, .18); background: #fff; }
+.d-input input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(74, 152, 224, .18); background: #fff; }
 .dock .d-send { position: absolute; right: 4px; top: 4px; width: 34px; height: 34px; border-radius: 50%; background: var(--navy); color: #fff; opacity: 0; pointer-events: none; transition: opacity .25s; }
 .dock .d-send .icon { width: 16px; height: 16px; }
 .d-input.has .d-send { opacity: 1; pointer-events: auto; }
@@ -439,7 +441,7 @@ body.compact .d-input { max-height: 0; opacity: 0; margin-top: 0; pointer-events
 .sheet-bg { position: absolute; inset: 0; background: rgba(25, 30, 60, .45); opacity: 0; transition: opacity .35s ease; }
 .sheet-body {
   position: absolute; left: 0; right: 0; bottom: 0; max-width: var(--col); margin: 0 auto;
-  background: var(--paper); background-image: var(--paper-img); border-radius: 20px 20px 0 0; padding: 14px 18px calc(22px + env(safe-area-inset-bottom));
+  background: var(--paper); background-image: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)), url(../assets/nen-mau-nuoc.webp); background-size: 100% 100%, 150% auto; border-radius: 20px 20px 0 0; padding: 14px 18px calc(22px + env(safe-area-inset-bottom));
   transform: translateY(100%); transition: transform .45s var(--ease-soft); box-shadow: 0 -10px 30px rgba(25, 30, 60, .15);
 }
 .sheet.show .sheet-bg { opacity: 1; }
@@ -457,7 +459,7 @@ body.compact .d-input { max-height: 0; opacity: 0; margin-top: 0; pointer-events
 /* Hộp thoại */
 .dlg {
   border: 0; border-radius: 22px; padding: 22px 20px 20px; width: min(92vw, 420px); max-height: 84vh;
-  background: var(--paper); background-image: var(--paper-img); color: var(--ink); box-shadow: 0 20px 60px rgba(20, 25, 55, .3);
+  background: var(--paper); background-image: linear-gradient(rgba(255, 255, 255, .8), rgba(255, 255, 255, .8)), url(../assets/nen-mau-nuoc.webp); background-size: 100% 100%, 150% auto; color: var(--ink); box-shadow: 0 20px 60px rgba(20, 25, 55, .3);
 }
 .dlg::backdrop { background: rgba(25, 30, 60, .5); }
 dialog[open] { animation: dlgIn .42s var(--ease-soft); }
@@ -517,3 +519,13 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
   img.lz { opacity: 1; }
   .tl.rv:not(.in)::before { transform: none; }
 }
+
+/* ---------- Hoạ tiết hoa dâm bụt & sóng nước ---------- */
+.motif { display: block; width: 100%; height: auto; }
+.motif.flip { transform: scaleX(-1); }
+.cal-flower .motif { transform: rotate(18deg); }
+.fl-hero-a { right: -44px; top: 0; width: 36%; transform: rotate(-14deg); z-index: 1; }
+.fl-hero-b { left: -30px; bottom: calc(var(--dock-h) + 6px); width: 46%; z-index: 1; }
+.fl-story { left: -18px; top: -8px; width: 38%; }
+.fl-story-b { right: -36px; bottom: -14px; width: 26%; transform: rotate(-12deg); }
+.fl-ty { left: 50%; width: 62%; margin: 10px 0 0 -31%; position: relative; }

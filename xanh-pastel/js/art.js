@@ -1,7 +1,7 @@
 /*
  * Hình vẽ SVG tự vẽ cho mẫu thiệp "Xanh pastel":
- * nền giấy nhám, hoa xanh màu nước, hoa trắng giấy, con dấu sáp,
- * mép giấy xé, sóng giấy màu nước, biểu tượng màu nước, chữ T uốn lượn, phong bì ren.
+ * hoa trắng giấy, con dấu sáp, mép giấy xé, biểu tượng màu nước, chữ T uốn lượn, phong bì ren.
+ * Nền màu nước, hoa dâm bụt và sóng nước là ảnh trong assets/.
  */
 (function () {
   /* ---------- Số ngẫu nhiên có hạt giống (hình giống nhau mỗi lần tải) ---------- */
@@ -36,10 +36,10 @@
     lin('wp3', '#e8ecf5', '#ffffff');
     lin('sage', '#b9c3b4', '#8b9a88', 1, 0);
     lin('sageB', '#c8d0dc', '#93a1b8', 1, 0);
-    g += '<radialGradient id="waxG" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#dce6f8"/><stop offset=".5" stop-color="#a8bdea"/><stop offset="1" stop-color="#7f9ad8"/></radialGradient>';
+    g += '<radialGradient id="waxG" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#e2f2ff"/><stop offset=".5" stop-color="#9fd0f7"/><stop offset="1" stop-color="#5a9fe0"/></radialGradient>';
     g += '<radialGradient id="ctrB" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fbf6e6"/><stop offset="1" stop-color="#d9e2f5"/></radialGradient>';
-    g += '<linearGradient id="icoB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9bff0"/><stop offset="1" stop-color="#5677c6"/></linearGradient>';
-    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b6cffc"/><stop offset="1" stop-color="#8aaef4"/></linearGradient>';
+    g += '<linearGradient id="icoB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6d8fb"/><stop offset="1" stop-color="#2f7fd0"/></linearGradient>';
+    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4defc"/><stop offset="1" stop-color="#78bcf2"/></linearGradient>';
     g += '<filter id="wc" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".3"/></filter>';
     g += '<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="#2d4479" flood-opacity=".2"/></filter>';
     g += '<filter id="shadowS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#3b4d7c" flood-opacity=".22"/></filter>';
@@ -48,9 +48,6 @@
     document.body.insertBefore(wrap.firstChild, document.body.firstChild);
   }
 
-  /* =========================================================
-     Nền giấy nhám
-     ========================================================= */
   // Cánh hoa có mép gợn sóng, gốc ở (0,0) hướng lên (dùng cho hoa trắng sau dấu sáp)
   function ruffle(len, w, waves) {
     waves = waves || 3;
@@ -63,102 +60,9 @@
     return d + ' C' + f1(w * 1.05) + ' ' + f1(-len * .7) + ' ' + f1(w * .9) + ' ' + f1(-len * .2) + ' 0 0Z';
   }
 
-  // Giấy thủ công nhám: vệt loang màu nước, hạt nhám li ti, sợi giấy dài, kim tuyến, cánh hoa ép.
-  // Ô lặp 400px, các chi tiết ở mép được vẽ lặp sang phía đối diện để ghép liền mạch.
-  //   o.deep: màu vệt loang đậm (sRGB 0..1)   o.k: độ đậm hạt nhám   o.bloom: độ đậm vệt loang
-  //   o.glitter / o.petals / o.fibers: số lượng chi tiết   o.fiberDeep: màu sợi đậm
-  function paperArt(o) {
-    o = o || {};
-    var T = 400, R = rng(o.seed || 31), k = o.k == null ? 1 : o.k, kb = o.bloom == null ? 1 : o.bloom;
-    var deep = o.deep || [.33, .47, .86], fd = o.fiberDeep || '#4f6fc4';
-    function wrap(x, y, m, fn) {
-      var out = '';
-      [-T, 0, T].forEach(function (dx) {
-        [-T, 0, T].forEach(function (dy) {
-          var X = x + dx, Y = y + dy;
-          if (X < -m || Y < -m || X > T + m || Y > T + m) return;
-          out += fn(X, Y);
-        });
-      });
-      return out;
-    }
-    function speck(id, seed, freq, color, slope, cut) {
-      return '<filter id="' + id + '" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="' + freq + '" numOctaves="2" seed="' + seed + '" stitchTiles="stitch"/>' +
-        '<feColorMatrix values="0 0 0 0 ' + color[0] + '  0 0 0 0 ' + color[1] + '  0 0 0 0 ' + color[2] + '  ' + slope + ' 0 0 0 ' + cut + '"/></filter>';
-    }
-    function bloom(id, seed, freq, color, slope, cut) {
-      return '<filter id="' + id + '" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="' + freq + '" numOctaves="3" seed="' + seed + '" stitchTiles="stitch"/>' +
-        '<feColorMatrix values="0 0 0 0 ' + color[0] + '  0 0 0 0 ' + color[1] + '  0 0 0 0 ' + color[2] + '  ' + slope + ' 0 0 0 ' + cut + '"/></filter>';
-    }
-    var defs = bloom('bl', 5, .0075, [1, 1, 1], 2.1, -1.02) + bloom('bd', 12, .01, deep, 2.4, -1.18) +
-      speck('l', 3, .95, [1, 1, 1], 7, -4.05) + speck('d', 8, .95, [.16, .22, .45], -7, 2.9) +
-      '<radialGradient id="gl"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
-    var body = '<rect width="' + T + '" height="' + T + '" filter="url(#bl)" opacity="' + f1(.45 * kb) + '"/>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#bd)" opacity="' + f1(.42 * kb) + '"/>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#l)" opacity="' + f1(.5 * k) + '"/>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#d)" opacity="' + f1(.26 * k) + '"/>';
-    // sợi giấy dài, uốn cong
-    var nf = o.fibers == null ? 34 : o.fibers;
-    for (var i = 0; i < nf; i++) {
-      var x = R() * T, y = R() * T, a = R() * Math.PI * 2, l = 14 + R() * 30;
-      var c1x = Math.cos(a + .9) * l * .4, c1y = Math.sin(a + .9) * l * .4, c2x = Math.cos(a - .7) * l * .8, c2y = Math.sin(a - .7) * l * .8;
-      var ex = Math.cos(a) * l, ey = Math.sin(a) * l, isDeep = i % 5 === 0;
-      var path = ' c' + f1(c1x) + ' ' + f1(c1y) + ' ' + f1(c2x) + ' ' + f1(c2y) + ' ' + f1(ex) + ' ' + f1(ey);
-      var attrs = '" fill="none" stroke="' + (isDeep ? fd : '#fff') + '" stroke-opacity="' + f1(isDeep ? .18 + R() * .12 : .35 + R() * .3) + '" stroke-width="' + f1(.35 + R() * .45) + '" stroke-linecap="round"/>';
-      body += wrap(x, y, l + 4, function (X, Y) { return '<path d="M' + f1(X) + ' ' + f1(Y) + path + attrs; });
-    }
-    // cánh hoa ép li ti
-    var np = o.petals == null ? 13 : o.petals;
-    for (var j = 0; j < np; j++) {
-      var px = R() * T, py = R() * T, pr = R() * 360, n = 1 + Math.floor(R() * 3), sz = 2.2 + R() * 1.8;
-      var col = j % 3 === 0 ? '#dce8ff' : '#fff', op = f1(.38 + R() * .22), pet = '';
-      for (var q = 0; q < n; q++) {
-        pet += '<ellipse cx="0" cy="' + f1(-sz * .9) + '" rx="' + f1(sz * .62) + '" ry="' + f1(sz) + '" transform="rotate(' + f1(q * (360 / Math.max(n, 3)) + R() * 20) + ')"/>';
-      }
-      body += wrap(px, py, 10, function (X, Y) {
-        return '<g transform="translate(' + f1(X) + ' ' + f1(Y) + ') rotate(' + f1(pr) + ')" fill="' + col + '" fill-opacity="' + op + '">' + pet + '</g>';
-      });
-    }
-    // kim tuyến: chấm sáng, vài hạt có quầng và tia sáng nhỏ
-    var ng = o.glitter == null ? 54 : o.glitter;
-    for (var g = 0; g < ng; g++) {
-      var gx = R() * T, gy = R() * T, gr = .45 + R() * .9, gop = f1(.6 + R() * .4), big = g % 9 === 0;
-      body += wrap(gx, gy, 8, function (X, Y) {
-        var s = '';
-        if (big) {
-          s += '<circle cx="' + f1(X) + '" cy="' + f1(Y) + '" r="4" fill="url(#gl)" opacity=".55"/>' +
-            '<path d="M' + f1(X - 3.2) + ' ' + f1(Y) + 'L' + f1(X + 3.2) + ' ' + f1(Y) + 'M' + f1(X) + ' ' + f1(Y - 3.2) + 'L' + f1(X) + ' ' + f1(Y + 3.2) + '" stroke="#fff" stroke-width=".5" stroke-opacity=".85"/>';
-        }
-        return s + '<circle cx="' + f1(X) + '" cy="' + f1(Y) + '" r="' + f1(big ? 1.1 : gr) + '" fill="#fff" fill-opacity="' + gop + '"/>';
-      });
-    }
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + T + '" height="' + T + '"><defs>' + defs + '</defs>' + body + '</svg>';
-  }
-
   /* =========================================================
      Hoa
      ========================================================= */
-  function petal5(r) {
-    return 'M0 0 C' + f1(-r * .5) + ' ' + f1(-r * .2) + ' ' + f1(-r * .72) + ' ' + f1(-r * .8) + ' ' + f1(-r * .32) + ' ' + f1(-r * .98) +
-      ' Q0 ' + f1(-r * 1.1) + ' ' + f1(r * .32) + ' ' + f1(-r * .98) + ' C' + f1(r * .72) + ' ' + f1(-r * .8) + ' ' + f1(r * .5) + ' ' + f1(-r * .2) + ' 0 0Z';
-  }
-  // Hoa xanh 5 cánh màu nước
-  function blossom(cx, cy, r, rot, light) {
-    var s = '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + (rot || 0) + ')" filter="url(#wc)">';
-    var fills = light ? ['url(#bp2)', 'url(#bp3)'] : ['url(#bp1)', 'url(#bp2)'];
-    for (var i = 0; i < 5; i++) {
-      var a = i * 72;
-      s += '<path transform="rotate(' + a + ')" d="' + petal5(r) + '" fill="' + fills[0] + '" stroke="#6a88d0" stroke-opacity=".35" stroke-width=".6"/>';
-      s += '<path transform="rotate(' + a + ')" d="M0 ' + f1(-r * .15) + ' L0 ' + f1(-r * .78) + ' M0 ' + f1(-r * .3) + ' L' + f1(-r * .2) + ' ' + f1(-r * .7) + ' M0 ' + f1(-r * .3) + ' L' + f1(r * .2) + ' ' + f1(-r * .7) + '" stroke="#5f7fca" stroke-opacity=".28" stroke-width=".5" fill="none"/>';
-    }
-    for (var j = 0; j < 5; j++) s += '<path transform="rotate(' + (j * 72 + 36) + ')" d="' + petal5(r * .55) + '" fill="' + fills[1] + '" opacity=".85"/>';
-    s += '<circle r="' + f1(r * .2) + '" fill="url(#ctrB)"/>';
-    for (var k = 0; k < 10; k++) {
-      var b = k / 10 * Math.PI * 2;
-      s += '<circle cx="' + f1(Math.cos(b) * r * .2) + '" cy="' + f1(Math.sin(b) * r * .2) + '" r="' + f1(r * .035 + .3) + '" fill="#3f5ca8" opacity=".8"/>';
-    }
-    return s + '</g>';
-  }
   // Hoa trắng nhiều lớp (như hoa giấy)
   function paperFlower(cx, cy, r, rot) {
     var s = '<g transform="translate(' + cx + ' ' + cy + ') rotate(' + (rot || 0) + ')">';
@@ -184,37 +88,6 @@
       '<path d="M0 0 C' + f1(len * .25) + ' ' + f1(-w) + ' ' + f1(len * .7) + ' ' + f1(-w * .9) + ' ' + len + ' 0 C' + f1(len * .7) + ' ' + f1(w * .9) + ' ' + f1(len * .25) + ' ' + f1(w) + ' 0 0Z" fill="url(#' + (blue ? 'sageB' : 'sage') + ')" opacity=".92"/>' +
       '<path d="M2 0 L' + f1(len * .92) + ' 0" stroke="#eef2ea" stroke-opacity=".6" stroke-width=".7"/></g>';
   }
-  function twig(x, y, rot, len) {
-    var s = '<g transform="translate(' + x + ' ' + y + ') rotate(' + rot + ')"><path d="M0 0 Q' + f1(len * .5) + ' -4 ' + len + ' 0" stroke="#8b9a88" stroke-width="1" fill="none"/>';
-    for (var i = 1; i < 5; i++) {
-      var t = i / 5;
-      s += leaf(f1(len * t), f1(-4 * 2 * t * (1 - t)), i % 2 ? -50 : 50, len * .28);
-    }
-    return s + '</g>';
-  }
-  function bud(x, y, r, rot) {
-    return '<g transform="translate(' + x + ' ' + y + ') rotate(' + rot + ')" filter="url(#wc)"><path d="M0 0 C' + f1(-r) + ' ' + f1(-r * .6) + ' ' + f1(-r * .7) + ' ' + f1(-r * 1.7) + ' 0 ' + f1(-r * 2) + ' C' + f1(r * .7) + ' ' + f1(-r * 1.7) + ' ' + f1(r) + ' ' + f1(-r * .6) + ' 0 0Z" fill="url(#bp1)"/>' +
-      '<path d="M-3 1 C-6 -2 -6 -5 -4 -7 M3 1 C6 -2 6 -5 4 -7" stroke="#8b9a88" stroke-width="1" fill="none"/></g>';
-  }
-  // Cụm hoa xanh trang trí
-  function cluster(variant, flip) {
-    var s = '', vb;
-    if (variant === 'big') {
-      vb = '0 0 240 170';
-      s += twig(30, 120, -30, 70) + twig(210, 110, 210, 66) + leaf(120, 95, 200, 60) + leaf(120, 95, -20, 60) + leaf(118, 100, 90, 44) + leaf(80, 60, -110, 40, true);
-      s += blossom(120, 92, 46, 8) + blossom(64, 108, 28, -20, true) + blossom(176, 104, 30, 30) + blossom(150, 52, 22, 10, true) + bud(92, 50, 9, -30) + bud(196, 70, 8, 40);
-    } else if (variant === 'side') {
-      vb = '0 0 120 180';
-      s += twig(60, 170, -95, 80) + leaf(60, 100, 240, 52) + leaf(60, 100, -60, 50) + leaf(60, 140, 120, 40, true);
-      s += blossom(60, 96, 36, 0) + blossom(70, 38, 20, 20, true) + bud(30, 140, 8, -60);
-    } else {
-      vb = '0 0 120 90';
-      s += leaf(60, 50, 200, 46) + leaf(60, 50, -20, 46) + leaf(60, 52, 90, 30, true);
-      s += blossom(60, 48, 26, 0) + bud(22, 60, 7, -70) + bud(98, 60, 7, 70);
-    }
-    var w = vb.split(' ')[2];
-    return '<svg class="art" viewBox="' + vb + '" aria-hidden="true"><g' + (flip ? ' transform="translate(' + w + ' 0) scale(-1 1)"' : '') + '>' + s + '</g></svg>';
-  }
   function paperFlowerSvg(r) {
     return '<svg class="art" viewBox="-30 -30 60 60" aria-hidden="true">' + paperFlower(0, 0, r || 26, 0) + '</svg>';
   }
@@ -238,10 +111,10 @@
       pts.push(f1(Math.cos(a) * r) + ' ' + f1(Math.sin(a) * r));
     }
     return '<g filter="url(#shadow)"><path d="M' + pts.join(' L') + 'Z" fill="url(#waxG)"/></g>' +
-      '<circle r="21.5" fill="none" stroke="#7491d4" stroke-opacity=".55" stroke-width="2"/>' +
-      '<circle r="20" fill="none" stroke="#eef3fc" stroke-opacity=".7" stroke-width=".8"/>' +
-      '<circle r="18.6" fill="#b4c7ee" fill-opacity=".35"/>' +
-      sprig('#6d8bd0', .6, .8) + sprig('#f1f5fd', -.5, -.5) + sprig('#a7bcea', 0, 0);
+      '<circle r="21.5" fill="none" stroke="#3d8ad2" stroke-opacity=".55" stroke-width="2"/>' +
+      '<circle r="20" fill="none" stroke="#f0f8ff" stroke-opacity=".7" stroke-width=".8"/>' +
+      '<circle r="18.6" fill="#b5dcfa" fill-opacity=".35"/>' +
+      sprig('#2f7fd0', .6, .8) + sprig('#f1f5fd', -.5, -.5) + sprig('#a3d3f7', 0, 0);
   }
   function sealFlower(opts) {
     opts = opts || {};
@@ -252,7 +125,7 @@
   }
 
   /* =========================================================
-     Mép giấy xé & sóng giấy màu nước
+     Mép giấy xé
      ========================================================= */
   function tear(seed, dir, color) {
     var R = rng(seed), W = 400, H = 30, d = 'M0 ' + H, x = 0, pts = [];
@@ -266,27 +139,9 @@
     var fiber = 'M' + pts.map(function (p) { return p[0] + ' ' + f1(+p[1] + 1.4 + R() * .8); }).join(' L');
     var tr = dir === 'down' ? ' transform="translate(0 ' + H + ') scale(1 -1)"' : '';
     return '<svg class="tear-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><g' + tr + '>' +
-      '<path d="' + d + '" fill="' + (color || '#eef2fa') + '"/>' +
+      '<path d="' + d + '" fill="' + (color || '#e5f4fe') + '"/>' +
       '<path d="' + fiber + '" fill="none" stroke="#fff" stroke-width="2.6" stroke-opacity=".95"/></g></svg>';
   }
-  function waves() {
-    var W = 400, H = 170, s = '', defs = '', layers = [
-      ['#d3e3ff', '#eef4ff', 22, 7, 3.1], ['#acc8fb', '#d6e5ff', 44, 9, 1.7], ['#8db1f6', '#bcd4fc', 66, 8, 4.4],
-      ['#7399ee', '#a7c3f8', 88, 9, 2.3], ['#9dbcf9', '#cadcfd', 110, 7, 5.6], ['#6a8fe8', '#9fbbf5', 128, 6, 3.9], ['#b4cdfb', '#e4eeff', 146, 5, .9],
-    ];
-    layers.forEach(function (L, i) {
-      defs += '<linearGradient id="wv' + i + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + L[0] + '"/><stop offset="1" stop-color="' + L[1] + '"/></linearGradient>';
-      var R = rng(i * 31 + 5), y0 = L[2], amp = L[3], ph = L[4], top = [];
-      for (var x = 0; x <= W; x += 1.5 + R() * 3) {
-        var y = y0 + Math.sin(x / 52 + ph) * amp + Math.sin(x / 19 + ph * 2) * amp * .35 + (R() - .5) * 2.4;
-        top.push(f1(x) + ' ' + f1(y));
-      }
-      s += '<path d="M0 ' + H + ' L' + top.join(' L') + ' L' + W + ' ' + H + 'Z" fill="url(#wv' + i + ')"/>';
-      s += '<path d="M' + top.join(' L') + '" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="1.8"/>';
-    });
-    return '<svg class="art waves" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><defs>' + defs + '</defs><g filter="url(#wc)">' + s + '</g></svg>';
-  }
-
   /* =========================================================
      Hoạ tiết & biểu tượng
      ========================================================= */
@@ -382,8 +237,8 @@
   function heartSvg() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + HEART + '"/></svg>'; }
 
   window.ART = {
-    rng: rng, svgUrl: svgUrl, installDefs: installDefs, paperArt: paperArt,
-    cluster: cluster, paperFlowerSvg: paperFlowerSvg, sealFlower: sealFlower, tear: tear, waves: waves,
+    rng: rng, svgUrl: svgUrl, installDefs: installDefs,
+    paperFlowerSvg: paperFlowerSvg, sealFlower: sealFlower, tear: tear,
     mandala: mandala, heartArrow: heartArrow, flourishLine: flourishLine, heartRings: heartRings,
     tlIcon: tlIcon, ringsIcon: ringsIcon, swashT: swashT, giftEnvelope: giftEnvelope, icon: icon, heartSvg: heartSvg,
   };

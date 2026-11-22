@@ -30,12 +30,16 @@
 
   /* ---------- Nền & hình vẽ ---------- */
   A.installDefs();
-  root.style.setProperty('--sand-img', A.svgUrl(A.paperArt({ k: 1.05, deep: [.3, .45, .88] })));
-  root.style.setProperty('--paper-img', A.svgUrl(A.paperArt({ seed: 47, k: .6, bloom: .8, deep: [.66, .77, .99], glitter: 30, petals: 10, fibers: 26, fiberDeep: '#7d98dc' })));
+  // Hoạ tiết ảnh (hoa dâm bụt, sóng nước) trong assets/
+  function motif(file, alt, flip) {
+    return '<img class="motif' + (flip ? ' flip' : '') + '" src="assets/' + file + '" alt="" aria-hidden="true" decoding="async">';
+  }
   var arts = {
-    side: function () { return A.cluster('side'); }, sideF: function () { return A.cluster('side', true); },
-    small: function () { return A.cluster('small'); }, smallF: function () { return A.cluster('small', true); },
-    big: function () { return A.cluster('big'); }, mandala: A.mandala, waves: A.waves,
+    flower: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt'); }, flowerF: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt', true); },
+    wave: function () { return motif('song-nuoc.webp', 'Sóng nước'); }, waveF: function () { return motif('song-nuoc.webp', 'Sóng nước', true); },
+    side: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt'); }, sideF: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt', true); },
+    small: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt'); }, smallF: function () { return motif('hoa-dam-but.webp', 'Hoa dâm bụt', true); },
+    big: function () { return motif('song-nuoc.webp', 'Sóng nước'); }, mandala: A.mandala,
     pflower: function () { return A.paperFlowerSvg(); }, rings: A.ringsIcon,
   };
   $$('[data-art]').forEach(function (el) { var f = arts[el.getAttribute('data-art')]; el.innerHTML = f ? f() : ''; });
@@ -592,6 +596,9 @@
     watchVisible();
   }
   // Gắn class .vis cho phần đang trên màn hình: hoạ tiết lặp chỉ chạy ở đó, phần khuất thì tạm dừng
+  function alignBg() {
+    $$('.shell > section.lace, .shell > section.paper').forEach(function (s) { s.style.setProperty('--by', -s.offsetTop + 'px'); });
+  }
   function watchVisible() {
     if (!('IntersectionObserver' in window)) { $$('.shell > section').forEach(function (s) { s.classList.add('vis'); }); return; }
     var vo = new IntersectionObserver(function (entries) {
@@ -663,6 +670,10 @@
   renderHearts();
   liveX.hidden = true;
   if (!W.endpoint) loadWishes();
+
+  alignBg();
+  window.addEventListener('load', alignBg);
+  if ('ResizeObserver' in window) new ResizeObserver(function () { requestAnimationFrame(alignBg); }).observe($('.shell'));
 
   /* ---------- Cửa thiệp hiện ra khi font đã tải ---------- */
   var readyDone = false;
