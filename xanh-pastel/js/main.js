@@ -30,8 +30,8 @@
 
   /* ---------- Nền & hình vẽ ---------- */
   A.installDefs();
-  root.style.setProperty('--sand-img', A.svgUrl(A.sandTile(null, 1.15)));
-  root.style.setProperty('--paper-img', A.svgUrl(A.sandTile([.3, .36, .55], .7)));
+  root.style.setProperty('--sand-img', A.svgUrl(A.paperArt({ k: 1.05, deep: [.3, .45, .88] })));
+  root.style.setProperty('--paper-img', A.svgUrl(A.paperArt({ seed: 47, k: .6, bloom: .8, deep: [.66, .77, .99], glitter: 30, petals: 10, fibers: 26, fiberDeep: '#7d98dc' })));
   var arts = {
     side: function () { return A.cluster('side'); }, sideF: function () { return A.cluster('side', true); },
     small: function () { return A.cluster('small'); }, smallF: function () { return A.cluster('small', true); },

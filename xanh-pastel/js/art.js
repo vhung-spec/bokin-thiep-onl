@@ -39,7 +39,7 @@
     g += '<radialGradient id="waxG" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#dce6f8"/><stop offset=".5" stop-color="#a8bdea"/><stop offset="1" stop-color="#7f9ad8"/></radialGradient>';
     g += '<radialGradient id="ctrB" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fbf6e6"/><stop offset="1" stop-color="#d9e2f5"/></radialGradient>';
     g += '<linearGradient id="icoB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a9bff0"/><stop offset="1" stop-color="#5677c6"/></linearGradient>';
-    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b9cdf2"/><stop offset="1" stop-color="#94afe3"/></linearGradient>';
+    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b6cffc"/><stop offset="1" stop-color="#8aaef4"/></linearGradient>';
     g += '<filter id="wc" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".3"/></filter>';
     g += '<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="#2d4479" flood-opacity=".2"/></filter>';
     g += '<filter id="shadowS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#3b4d7c" flood-opacity=".22"/></filter>';
@@ -63,29 +63,76 @@
     return d + ' C' + f1(w * 1.05) + ' ' + f1(-len * .7) + ' ' + f1(w * .9) + ' ' + f1(-len * .2) + ' 0 0Z';
   }
 
-  // Giấy nhám: hạt sáng + hạt tối li ti, vài sợi giấy, mảng sáng tối rất nhẹ.
-  // dark: màu hạt tối; k: độ đậm của hạt (1 = mặc định)
-  function sandTile(dark, k) {
-    var T = 240, R = rng(31), fib = '';
-    k = k || 1;
-    for (var i = 0; i < 26; i++) {
-      var x = R() * T, y = R() * T, a = R() * Math.PI, l = 6 + R() * 16, bx = Math.cos(a) * l, by = Math.sin(a) * l;
-      fib += '<path d="M' + f1(x) + ' ' + f1(y) + ' q' + f1(bx * .5 + (R() - .5) * 5) + ' ' + f1(by * .5 + (R() - .5) * 5) + ' ' + f1(bx) + ' ' + f1(by) +
-        '" stroke="#fff" stroke-opacity="' + f1(.25 + R() * .25) + '" stroke-width="' + f1(.4 + R() * .4) + '" fill="none"/>';
+  // Giấy thủ công nhám: vệt loang màu nước, hạt nhám li ti, sợi giấy dài, kim tuyến, cánh hoa ép.
+  // Ô lặp 400px, các chi tiết ở mép được vẽ lặp sang phía đối diện để ghép liền mạch.
+  //   o.deep: màu vệt loang đậm (sRGB 0..1)   o.k: độ đậm hạt nhám   o.bloom: độ đậm vệt loang
+  //   o.glitter / o.petals / o.fibers: số lượng chi tiết   o.fiberDeep: màu sợi đậm
+  function paperArt(o) {
+    o = o || {};
+    var T = 400, R = rng(o.seed || 31), k = o.k == null ? 1 : o.k, kb = o.bloom == null ? 1 : o.bloom;
+    var deep = o.deep || [.33, .47, .86], fd = o.fiberDeep || '#4f6fc4';
+    function wrap(x, y, m, fn) {
+      var out = '';
+      [-T, 0, T].forEach(function (dx) {
+        [-T, 0, T].forEach(function (dy) {
+          var X = x + dx, Y = y + dy;
+          if (X < -m || Y < -m || X > T + m || Y > T + m) return;
+          out += fn(X, Y);
+        });
+      });
+      return out;
     }
     function speck(id, seed, freq, color, slope, cut) {
       return '<filter id="' + id + '" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="' + freq + '" numOctaves="2" seed="' + seed + '" stitchTiles="stitch"/>' +
         '<feColorMatrix values="0 0 0 0 ' + color[0] + '  0 0 0 0 ' + color[1] + '  0 0 0 0 ' + color[2] + '  ' + slope + ' 0 0 0 ' + cut + '"/></filter>';
     }
-    var dk = dark || [.18, .22, .4];
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + T + '" height="' + T + '">' +
-      speck('l', 3, .95, [1, 1, 1], 7, -4.05) +
-      speck('d', 8, .95, dk, -7, 2.9) +
-      '<filter id="m" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="5" stitchTiles="stitch"/>' +
-      '<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.1 0 0 0 -.45"/></filter>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#m)" opacity=".32"/>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#l)" opacity="' + f1(.55 * k) + '"/>' +
-      '<rect width="' + T + '" height="' + T + '" filter="url(#d)" opacity="' + f1(.32 * k) + '"/>' + fib + '</svg>';
+    function bloom(id, seed, freq, color, slope, cut) {
+      return '<filter id="' + id + '" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB"><feTurbulence type="fractalNoise" baseFrequency="' + freq + '" numOctaves="3" seed="' + seed + '" stitchTiles="stitch"/>' +
+        '<feColorMatrix values="0 0 0 0 ' + color[0] + '  0 0 0 0 ' + color[1] + '  0 0 0 0 ' + color[2] + '  ' + slope + ' 0 0 0 ' + cut + '"/></filter>';
+    }
+    var defs = bloom('bl', 5, .0075, [1, 1, 1], 2.1, -1.02) + bloom('bd', 12, .01, deep, 2.4, -1.18) +
+      speck('l', 3, .95, [1, 1, 1], 7, -4.05) + speck('d', 8, .95, [.16, .22, .45], -7, 2.9) +
+      '<radialGradient id="gl"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>';
+    var body = '<rect width="' + T + '" height="' + T + '" filter="url(#bl)" opacity="' + f1(.45 * kb) + '"/>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#bd)" opacity="' + f1(.42 * kb) + '"/>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#l)" opacity="' + f1(.5 * k) + '"/>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#d)" opacity="' + f1(.26 * k) + '"/>';
+    // sợi giấy dài, uốn cong
+    var nf = o.fibers == null ? 34 : o.fibers;
+    for (var i = 0; i < nf; i++) {
+      var x = R() * T, y = R() * T, a = R() * Math.PI * 2, l = 14 + R() * 30;
+      var c1x = Math.cos(a + .9) * l * .4, c1y = Math.sin(a + .9) * l * .4, c2x = Math.cos(a - .7) * l * .8, c2y = Math.sin(a - .7) * l * .8;
+      var ex = Math.cos(a) * l, ey = Math.sin(a) * l, isDeep = i % 5 === 0;
+      var path = ' c' + f1(c1x) + ' ' + f1(c1y) + ' ' + f1(c2x) + ' ' + f1(c2y) + ' ' + f1(ex) + ' ' + f1(ey);
+      var attrs = '" fill="none" stroke="' + (isDeep ? fd : '#fff') + '" stroke-opacity="' + f1(isDeep ? .18 + R() * .12 : .35 + R() * .3) + '" stroke-width="' + f1(.35 + R() * .45) + '" stroke-linecap="round"/>';
+      body += wrap(x, y, l + 4, function (X, Y) { return '<path d="M' + f1(X) + ' ' + f1(Y) + path + attrs; });
+    }
+    // cánh hoa ép li ti
+    var np = o.petals == null ? 13 : o.petals;
+    for (var j = 0; j < np; j++) {
+      var px = R() * T, py = R() * T, pr = R() * 360, n = 1 + Math.floor(R() * 3), sz = 2.2 + R() * 1.8;
+      var col = j % 3 === 0 ? '#dce8ff' : '#fff', op = f1(.38 + R() * .22), pet = '';
+      for (var q = 0; q < n; q++) {
+        pet += '<ellipse cx="0" cy="' + f1(-sz * .9) + '" rx="' + f1(sz * .62) + '" ry="' + f1(sz) + '" transform="rotate(' + f1(q * (360 / Math.max(n, 3)) + R() * 20) + ')"/>';
+      }
+      body += wrap(px, py, 10, function (X, Y) {
+        return '<g transform="translate(' + f1(X) + ' ' + f1(Y) + ') rotate(' + f1(pr) + ')" fill="' + col + '" fill-opacity="' + op + '">' + pet + '</g>';
+      });
+    }
+    // kim tuyến: chấm sáng, vài hạt có quầng và tia sáng nhỏ
+    var ng = o.glitter == null ? 54 : o.glitter;
+    for (var g = 0; g < ng; g++) {
+      var gx = R() * T, gy = R() * T, gr = .45 + R() * .9, gop = f1(.6 + R() * .4), big = g % 9 === 0;
+      body += wrap(gx, gy, 8, function (X, Y) {
+        var s = '';
+        if (big) {
+          s += '<circle cx="' + f1(X) + '" cy="' + f1(Y) + '" r="4" fill="url(#gl)" opacity=".55"/>' +
+            '<path d="M' + f1(X - 3.2) + ' ' + f1(Y) + 'L' + f1(X + 3.2) + ' ' + f1(Y) + 'M' + f1(X) + ' ' + f1(Y - 3.2) + 'L' + f1(X) + ' ' + f1(Y + 3.2) + '" stroke="#fff" stroke-width=".5" stroke-opacity=".85"/>';
+        }
+        return s + '<circle cx="' + f1(X) + '" cy="' + f1(Y) + '" r="' + f1(big ? 1.1 : gr) + '" fill="#fff" fill-opacity="' + gop + '"/>';
+      });
+    }
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + T + '" height="' + T + '"><defs>' + defs + '</defs>' + body + '</svg>';
   }
 
   /* =========================================================
@@ -224,8 +271,8 @@
   }
   function waves() {
     var W = 400, H = 170, s = '', defs = '', layers = [
-      ['#d4dff5', '#edf2fb', 22, 7, 3.1], ['#aec4ee', '#d7e3f7', 44, 9, 1.7], ['#8eabe4', '#bdd0f2', 66, 8, 4.4],
-      ['#7697da', '#a9c1ec', 88, 9, 2.3], ['#9db7e8', '#cbdaf4', 110, 7, 5.6], ['#6f8fd6', '#a2bbea', 128, 6, 3.9], ['#b7cbef', '#e2eaf8', 146, 5, .9],
+      ['#d3e3ff', '#eef4ff', 22, 7, 3.1], ['#acc8fb', '#d6e5ff', 44, 9, 1.7], ['#8db1f6', '#bcd4fc', 66, 8, 4.4],
+      ['#7399ee', '#a7c3f8', 88, 9, 2.3], ['#9dbcf9', '#cadcfd', 110, 7, 5.6], ['#6a8fe8', '#9fbbf5', 128, 6, 3.9], ['#b4cdfb', '#e4eeff', 146, 5, .9],
     ];
     layers.forEach(function (L, i) {
       defs += '<linearGradient id="wv' + i + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + L[0] + '"/><stop offset="1" stop-color="' + L[1] + '"/></linearGradient>';
@@ -335,7 +382,7 @@
   function heartSvg() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + HEART + '"/></svg>'; }
 
   window.ART = {
-    rng: rng, svgUrl: svgUrl, installDefs: installDefs, sandTile: sandTile,
+    rng: rng, svgUrl: svgUrl, installDefs: installDefs, paperArt: paperArt,
     cluster: cluster, paperFlowerSvg: paperFlowerSvg, sealFlower: sealFlower, tear: tear, waves: waves,
     mandala: mandala, heartArrow: heartArrow, flourishLine: flourishLine, heartRings: heartRings,
     tlIcon: tlIcon, ringsIcon: ringsIcon, swashT: swashT, giftEnvelope: giftEnvelope, icon: icon, heartSvg: heartSvg,
