@@ -18,6 +18,10 @@ window.WEDDING = {
   cover: {
     hint: 'Chạm để mở thiệp',
     guestPrefix: 'Thân gửi', // hiện trên bìa khi link có ?to=
+    // ẢNH BÌA ĐÃ MUA BẢN QUYỀN (ví dụ từ Petit Moments). Để trống thì dùng giấy + dấu sáp tự vẽ.
+    // Chép file vào xanh-pastel/assets/bia/ rồi ghi tên, ví dụ  paper: 'assets/bia/giay.jpg',
+    paper: '', // nền giấy KHÔNG có dấu sáp (dọc, nên 1080×1920 trở lên): dùng cho 2 cánh bìa và đầu thiệp
+    seal: '',  // dấu sáp riêng, nền trong suốt (PNG/WebP): nằm giữa đường gáp, nhấc lên khi mở
   },
 
   families: {

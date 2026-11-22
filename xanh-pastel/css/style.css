@@ -19,6 +19,7 @@
   --tile-w: min(100vw, var(--col));
   --sage-paper: url(../assets/giay-xo-tham.webp);
   --cream-paper: url(../assets/giay-kem.webp);
+  --cover-paper: var(--sage-paper); /* đổi bằng cover.paper trong config.js */
   /* Phông chữ: chữ viết tay chỉ cho tên, chữ ký và tiêu đề ngắn */
   --script: 'Ephesis', 'Segoe Script', cursive;
   --serif: 'Lora', Georgia, 'Times New Roman', serif;
@@ -56,6 +57,12 @@ section { position: relative; }
 /* ---------- Giấy dập nổi lá cây (ô lặp liền mạch) ---------- */
 .sage, .cream { background-size: 100% auto; background-repeat: repeat-y; background-position: center var(--by, 0px); }
 .sage { background-color: var(--sage); background-image: var(--sage-paper); }
+/* Ảnh bìa đã mua (cover.paper): 2 cánh ghép thành một ảnh phủ kín màn hình, đầu thiệp dùng cùng ảnh */
+.custom-cover .door { background-size: var(--cov-size, cover); background-repeat: no-repeat; }
+.custom-cover .door.l { background-position: var(--cov-x-l, 0) var(--cov-y, 0); }
+.custom-cover .door.r { background-position: var(--cov-x-r, 0) var(--cov-y, 0); }
+.custom-cover .hero { background-image: var(--cover-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.custom-seal .gate-seal .sheen { display: none; }
 .cream { background-color: var(--cream); background-image: var(--cream-paper); }
 
 /* ---------- Mép giấy xé ---------- */
@@ -94,7 +101,7 @@ section { position: relative; }
 .door {
   --half: min(50vw, calc(var(--col) / 2));
   position: relative; flex: 1; overflow: hidden;
-  background: var(--sage) var(--sage-paper) 0 0 / var(--tile-w) auto repeat;
+  background: var(--sage) var(--cover-paper) 0 0 / var(--tile-w) auto repeat;
   will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden;
 }
 .door.l { transform-origin: 0 50%; }

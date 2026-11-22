@@ -35,7 +35,28 @@
     sprig: function () { return motif('canh-la-vang.webp'); },
     garland: function () { return motif('day-la-vang.webp'); },
   };
-  var SEAL = '<img class="seal-img" src="assets/dau-sap-vang.webp" alt="" aria-hidden="true" decoding="async">';
+  var cov = W.cover || {};
+  var SEAL = '<img class="seal-img" src="' + esc(cov.seal || 'assets/dau-sap-vang.webp') + '" alt="" aria-hidden="true" decoding="async">';
+  if (cov.seal) body.classList.add('custom-seal');
+  // Ảnh bìa đã mua bản quyền: phủ kín 2 cánh bìa (mỗi cánh một nửa ảnh) và phần đầu thiệp
+  if (cov.paper) {
+    var coverImg = new Image();
+    root.style.setProperty('--cover-paper', 'url("' + new URL(cov.paper, location.href).href.replace(/"/g, '%22') + '")');
+    body.classList.add('custom-cover');
+    var fitCover = function () {
+      if (!coverImg.naturalWidth) return;
+      var gw = Math.min(window.innerWidth, 480), gh = window.innerHeight;
+      var k = Math.max(gw / coverImg.naturalWidth, gh / coverImg.naturalHeight);
+      var w = coverImg.naturalWidth * k, h = coverImg.naturalHeight * k;
+      root.style.setProperty('--cov-size', w + 'px ' + h + 'px');
+      root.style.setProperty('--cov-x-l', (gw - w) / 2 + 'px');
+      root.style.setProperty('--cov-x-r', (gw - w) / 2 - gw / 2 + 'px');
+      root.style.setProperty('--cov-y', (gh - h) / 2 + 'px');
+    };
+    coverImg.onload = fitCover;
+    coverImg.src = cov.paper;
+    window.addEventListener('resize', fitCover);
+  }
   $$('[data-art]').forEach(function (el) { var f = arts[el.getAttribute('data-art')]; el.innerHTML = f ? f() : ''; });
   $$('[data-tear]').forEach(function (el) {
     el.innerHTML = A.tear(+el.getAttribute('data-tear'), el.classList.contains('down') ? 'down' : 'up');

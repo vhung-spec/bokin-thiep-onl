@@ -102,6 +102,11 @@ Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa đi�
 - `photos.ending`: ảnh mở đầu phần cảm ơn;
 - `album.photos`: danh sách `{ src, alt }` (thêm `focus: '50% 30%'` nếu muốn chỉnh chỗ cắt một ảnh).
 
+**Dùng ảnh bìa đã mua bản quyền** (ví dụ mua thiệp của Petit Moments): chép file vào `xanh-pastel/assets/bia/` rồi điền trong `config.js` → `cover`:
+- `paper: 'assets/bia/giay.jpg'` — nền giấy **không có dấu sáp**, ảnh dọc (nên 1080×1920 trở lên). Hai cánh bìa ghép thành đúng một ảnh phủ kín màn hình; phần đầu thiệp dùng cùng ảnh.
+- `seal: 'assets/bia/dau-sap.png'` — dấu sáp riêng, **nền trong suốt**; nằm giữa đường gáp và nhấc lên khi mở.
+Để trống thì thiệp dùng giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`; hãy chắc giấy phép cho phép dùng trên website.
+
 Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. Muốn có nhạc nền: chép file mp3 vào `xanh-pastel/assets/` rồi ghi `music: 'assets/ten-file.mp3'`.
 
 Phiên bản cũ của mẫu xanh pastel (có thanh lời chúc chạy, thả tim) vẫn còn trong lịch sử git, commit `14691db`.
