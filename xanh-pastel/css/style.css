@@ -234,7 +234,7 @@ body.open .hero-seal.hi { transform: none; transition-timing-function: var(--eas
 }
 .carousel::-webkit-scrollbar { display: none; }
 .carousel figure { flex: 0 0 76%; scroll-snap-align: center; cursor: zoom-in; box-shadow: 0 8px 20px rgba(40, 45, 80, .18); background: #ddd; }
-.carousel img { width: 100%; aspect-ratio: 3 / 4; object-fit: cover; }
+.carousel img { width: 100%; aspect-ratio: 2 / 3; object-fit: cover; }
 .album-title { position: relative; margin-top: 8px; }
 .fl-album { right: 4%; bottom: -26px; width: 120px; }
 

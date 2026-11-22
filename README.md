@@ -1,6 +1,6 @@
 # Thiệp cưới online
 
-Repo có **2 mẫu thiệp**, dùng chung ảnh trong `assets/anh/` và chung file Google Sheets:
+Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượu dùng ảnh trong `assets/anh/` (đang là ảnh mẫu); mẫu xanh pastel dùng ảnh cưới thật trong `xanh-pastel/assets/anh/`:
 
 | Mẫu | Link | Sửa nội dung ở |
 |---|---|---|
@@ -97,7 +97,7 @@ Thư mục `xanh-pastel/`. Các phần:
 11. **Thank you!** — lời cảm ơn.
 12. **Thanh dưới cùng**: nút ☰ mục lục; nút 💬 xem tất cả lời chúc; nút ♥ thả tim có bộ đếm; ô **“Gửi lời chúc…”** (lần đầu sẽ hỏi tên). Thanh tự thu gọn khi cuộn xuống, hiện lại khi cuộn lên. Lời chúc của khách **chạy ở góc dưới như livestream**, có nút ✕ để ẩn.
 
-Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, timeline, tài khoản mừng cưới…). Ảnh mặc định lấy từ `../assets/anh/` (chung với mẫu đỏ rượu), muốn ảnh riêng thì đổi đường dẫn trong `config.js`. Nhạc nền dùng chung `assets/nhac-nen.mp3`. Biểu tượng timeline có sẵn: `cheers`, `rings`, `music`, `camera`, `heart`, `cake`.
+Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, timeline, tài khoản mừng cưới…). Ảnh cưới nằm trong `xanh-pastel/assets/anh/` (`anh-01.jpg` … ); chọn ảnh nào cho phần Countdown, phần quà mừng và album trong mục `photos` và `album.photos` của `config.js`. Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px để thiệp mở nhanh. Nhạc nền dùng chung `assets/nhac-nen.mp3`. Biểu tượng timeline có sẵn: `cheers`, `rings`, `music`, `camera`, `heart`, `cake`.
 
 Hai mẫu dùng **chung một file Apps Script** (bên dưới): dán cùng URL vào `endpoint` của mẫu nào cũng được. Mẫu xanh pastel ghi thêm cột **Câu hỏi thêm** và lưu **lượt thả tim**.
 
@@ -144,7 +144,7 @@ js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
 google-apps-script/Code.gs lưu xác nhận, lời chúc, lượt thả tim vào Google Sheets (dùng chung)
-assets/anh/                ảnh cưới (đang là ảnh mẫu, dùng chung cho 2 mẫu)
+assets/anh/                ảnh mẫu của mẫu đỏ rượu
 assets/og-image.jpg        ảnh xem trước khi chia sẻ link
 
 xanh-pastel/               mẫu xanh pastel
@@ -153,6 +153,7 @@ xanh-pastel/               mẫu xanh pastel
   js/config.js             ← nội dung mẫu xanh (sửa ở đây)
   js/art.js                hình vẽ SVG: ren thêu, giấy thủ công, hoa, dấu sáp, giấy xé, sóng, chữ T uốn lượn
   js/main.js               cửa đôi, đếm ngược, lịch, form, lời chúc chạy, thả tim, QR
+  assets/anh/              ảnh cưới của mẫu xanh pastel
   assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
 

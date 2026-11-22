@@ -40,9 +40,10 @@ window.WEDDING = {
     mapHint: '(Bấm vào để xem bản đồ)',
   },
 
+  // Ảnh cưới của mẫu này nằm trong xanh-pastel/assets/anh/ (ảnh dài nhất ~1600px, đã nén).
   photos: {
-    hero: '../assets/anh/chinh.jpg',   // ảnh lớn trên phần đếm ngược
-    thanks: '../assets/anh/cam-on.jpg', // ảnh dưới phong bì quà mừng
+    hero: 'assets/anh/anh-03.jpg',   // ảnh lớn trên phần Countdown (ảnh dọc, khung 4:5)
+    thanks: 'assets/anh/anh-05.jpg', // ảnh dưới phong bì quà mừng (ảnh ngang)
   },
 
   countdown: { title: 'Countdown', subtitle: 'To Our Big Day' },
@@ -72,8 +73,9 @@ window.WEDDING = {
   album: {
     title: 'The Album',
     photos: [
-      '../assets/anh/album-01.jpg', '../assets/anh/album-02.jpg', '../assets/anh/album-03.jpg',
-      '../assets/anh/album-04.jpg', '../assets/anh/album-05.jpg', '../assets/anh/album-06.jpg',
+      // Thêm/bớt dòng tuỳ ý. Ảnh dọc hiển thị trọn khung; ảnh ngang được cắt phần giữa (xem lớn thì thấy đủ).
+      'assets/anh/anh-01.jpg', 'assets/anh/anh-04.jpg', 'assets/anh/anh-02.jpg',
+      'assets/anh/anh-03.jpg', 'assets/anh/anh-05.jpg',
     ],
   },
 
