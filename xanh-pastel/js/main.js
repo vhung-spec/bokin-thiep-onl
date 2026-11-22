@@ -23,6 +23,7 @@
 
   var qs = new URLSearchParams(location.search);
   var guest = (qs.get('to') || '').trim().slice(0, 80);
+  var side = { trai: 'trai', gai: 'gai' }[(qs.get('ben') || '').toLowerCase()] || ''; // khách của nhà trai / nhà gái
   var couple = W.groom.name + ' & ' + W.bride.name;
 
   /* ---------- Hình vẽ & hoạ tiết ---------- */
@@ -392,7 +393,7 @@
     if (!name) { setMsg('need', 'Bạn cho chúng mình biết tên nhé.'); $('#rsvpName').focus(); return; }
     if (!att) { setMsg('need', 'Bạn chọn giúp chúng mình có tham dự hay không nhé.'); $('#attYes').focus(); return; }
     var yes = att === 'yes';
-    var data = { type: 'rsvp', name: name, attending: att, guests: yes ? guests : 0, invitedAs: guest };
+    var data = { type: 'rsvp', name: name, attending: att, guests: yes ? guests : 0, invitedAs: guest, side: side };
     sending(true);
     setMsg('', '');
     saveRsvp(data).then(function () {
@@ -456,19 +457,28 @@
   });
   giftDlg.addEventListener('closed', function () { setTimeout(function () { env.classList.toggle('open', false); env.focus({ preventScroll: true }); }, 200); });
 
-  /* ---------- Nhạc nền (chỉ hiện nút khi có file nhạc) ---------- */
-  var audio = null, musicBtn = $('#musicBtn');
+  /* ---------- Nhạc nền ----------
+     Lấy từ link mời (?nhac=…, do trang tao-link.html tạo) hoặc từ config.js (music).
+     Nhận link YouTube hoặc file nhạc; phát khi khách chạm mở thiệp, nút góc trên để bật/tắt. */
+  var musicBtn = $('#musicBtn'), music = null, musicWanted = false;
   function setPlaying(on) { musicBtn.classList.toggle('playing', on); musicBtn.classList.toggle('muted', !on); }
-  if (W.music) {
-    audio = new Audio();
-    audio.loop = true; audio.preload = 'metadata';
-    audio.addEventListener('loadedmetadata', function () { musicBtn.hidden = false; });
-    audio.addEventListener('error', function () { musicBtn.hidden = true; audio = null; });
-    audio.src = W.music;
+  var musicSpec = window.NHAC ? NHAC.parse(qs.has('nhac') ? qs.get('nhac') : W.music) : null;
+  if (musicSpec && musicSpec.type !== 'off') {
+    music = NHAC.player(musicSpec, {
+      onReady: function () { musicBtn.hidden = false; },
+      onState: setPlaying,
+      onError: function () { musicBtn.hidden = true; music = null; },
+    });
     musicBtn.addEventListener('click', function () {
-      if (!audio) return;
-      if (audio.paused) audio.play().then(function () { setPlaying(true); }).catch(function () {});
-      else { audio.pause(); setPlaying(false); }
+      if (!music) return;
+      musicWanted = !music.playing();
+      if (musicWanted) music.play(); else music.pause();
+    });
+    // tạm dừng khi khách chuyển sang ứng dụng khác, mở lại thì phát tiếp
+    document.addEventListener('visibilitychange', function () {
+      if (!music) return;
+      if (document.hidden) { if (music.playing()) music.pause(); }
+      else if (musicWanted && body.classList.contains('open')) music.play();
     });
   }
 
@@ -549,7 +559,7 @@
   function open(e) {
     if (opened) return;
     opened = true;
-    if (audio) audio.play().then(function () { setPlaying(true); }).catch(function () { setPlaying(false); });
+    if (music) { musicWanted = true; music.play(); }
     var byKeyboard = e && e.detail === 0;
     function focusHero() { if (byKeyboard) { var h = $('#dau-trang'); h.setAttribute('tabindex', '-1'); h.focus({ preventScroll: true }); } }
     if (reduce || !root.animate) {

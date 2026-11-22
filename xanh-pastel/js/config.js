@@ -119,7 +119,9 @@ window.WEDDING = {
   // Để trống thì nút "Gửi phản hồi" sẽ báo chưa lưu được, không bao giờ báo thành công giả.
   endpoint: '',
 
-  // Nhạc nền (mp3), phát sau khi khách chạm mở thiệp. Chép file vào xanh-pastel/assets/ rồi ghi tên,
-  // ví dụ  music: 'assets/nhac-nen.mp3',  — để trống thì không có nút nhạc.
+  // NHẠC NỀN MẶC ĐỊNH, phát khi khách chạm mở thiệp. Nhận:
+  //   • link YouTube, ví dụ  music: 'https://www.youtube.com/watch?v=xxxxxxxxxxx',  (thêm &t=30 để bắt đầu từ giây 30)
+  //   • file nhạc chép vào xanh-pastel/assets/nhac/, ví dụ  music: 'assets/nhac/bai-hat.mp3',
+  // Để trống thì không có nhạc. Trang tao-link.html có thể chọn nhạc khác và gắn vào từng link mời.
   music: '',
 };

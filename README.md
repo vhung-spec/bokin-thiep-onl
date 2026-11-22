@@ -109,7 +109,19 @@ Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa đi�
 - `cream: 'assets/bia/giay-kem.jpg'` và `creamColor` — giấy kem lấy từ lòng khung của trang trong, nền các phần ở giữa (lời mời, đếm ngược, lịch, câu chuyện, album, xác nhận, quà mừng).
 Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_bia.py`; giấy kem làm bằng `tools/hoa-tiet/giay_be.py`. Để trống các dòng này thì thiệp quay về giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`.
 
-Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. Muốn có nhạc nền: chép file mp3 vào `xanh-pastel/assets/` rồi ghi `music: 'assets/ten-file.mp3'`.
+### Tạo link mời riêng cho từng khách (`xanh-pastel/tao-link.html`)
+
+Mở `https://<tên-tài-khoản>.github.io/<tên-repo>/xanh-pastel/tao-link.html` trên điện thoại hoặc máy tính:
+
+1. **Nhạc nền** — dán link YouTube (`youtube.com/watch?v=…`, `youtu.be/…`, có thể chọn giây bắt đầu) hoặc đường dẫn file nhạc (`assets/nhac/ten-file.mp3` sau khi chép file vào `xanh-pastel/assets/nhac/`). Bấm **Nghe thử** để kiểm tra; video YouTube nào chặn phát trên trang khác thì chọn video khác.
+2. **Lời nhắn gửi kèm** — sửa tuỳ ý; `{ten}` là tên khách, `{link}` là link thiệp riêng.
+3. **Khách mời** — thêm từng người hoặc nhiều người một lúc, ghi khách nhà trai / nhà gái. Mỗi khách có nút **Gửi lời mời** (mở bảng chia sẻ của điện thoại: Zalo, Messenger, tin nhắn…), **Chép lời mời**, **Chép link**, xem thử thiệp, gửi SMS, sửa (kể cả nhạc riêng cho từng khách), đánh dấu đã gửi.
+
+Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-video@30`: bìa và lời mời hiện đúng tên khách, phần xác nhận tham dự điền sẵn tên và ghi khách của bên nào vào Google Sheets, nhạc phát khi khách chạm mở thiệp (nút góc trên để tắt/bật). Danh sách khách chỉ lưu trong trình duyệt của máy đang dùng: bấm **Tải danh sách (CSV)** để lưu dự phòng hoặc chuyển sang máy khác (**Nhập từ file CSV**).
+
+Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
+
+Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. 
 
 Phiên bản cũ của mẫu xanh pastel (có thanh lời chúc chạy, thả tim) vẫn còn trong lịch sử git, commit `14691db`.
 
@@ -167,6 +179,10 @@ xanh-pastel/               mẫu xanh pastel
   js/config.js             ← nội dung mẫu xanh (sửa ở đây)
   js/art.js                hình vẽ SVG: hoa trắng, dấu sáp, giấy xé, phong bì, chữ T uốn lượn
   js/main.js               mở bìa, đếm ngược giờ VN, lịch, album, xác nhận tham dự, hộp QR
+  js/nhac.js               nhạc nền: link YouTube hoặc file mp3 (dùng chung cho thiệp và trang tạo link)
+  tao-link.html, js/tao-link.js, css/tao-link.css  trang tạo link mời riêng cho từng khách
+  assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
+  assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel
   assets/giay-xo-tham.webp, giay-kem.webp  giấy dập nổi lá cây (ô lặp liền mạch)
   assets/dau-sap-vang.webp, canh-la-vang.webp, day-la-vang.webp  dấu sáp, cành lá, dải lá vàng

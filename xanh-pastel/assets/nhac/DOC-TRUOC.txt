@@ -1,0 +1,3 @@
+Chép file nhạc nền (mp3, m4a…) vào thư mục này rồi chọn trong trang tao-link.html
+hoặc ghi vào config.js, ví dụ  music: 'assets/nhac/bai-hat.mp3',
+Nên dùng nhạc bạn có quyền sử dụng.
