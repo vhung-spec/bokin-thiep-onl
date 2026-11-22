@@ -37,10 +37,36 @@
         <button class="btn ghost" type="button" id="musicNone">Không dùng nhạc</button>
       </div>
       <div class="preview" id="musicPreview"></div>
-      <details class="help">
-        <summary>Dùng file mp3 của riêng bạn?</summary>
-        <p>Chép file vào thư mục <code>xanh-pastel/assets/nhac/</code> trên GitHub (nút <b>Add file → Upload files</b>), rồi nhập ở ô trên: <code>assets/nhac/ten-file.mp3</code>. Nên dùng nhạc bạn có quyền sử dụng.</p>
-      </details>
+      <div class="upload" id="upload">
+        <p class="lbl">Hoặc tải file nhạc của bạn lên</p>
+        <div class="btns">
+          <label class="btn ghost file" id="pickLabel">Chọn file nhạc (mp3)<input type="file" id="mp3File" accept=".mp3,.m4a,.aac,.ogg,audio/mpeg,audio/mp4,audio/x-m4a,audio/aac,audio/ogg"></label>
+          <button class="btn" type="button" id="mp3Upload" disabled>Tải lên</button>
+        </div>
+        <p class="hint" id="mp3Info" aria-live="polite"></p>
+        <div id="tokenBox" hidden>
+          <label class="lbl" for="ghToken">Mã GitHub (token) để lưu file vào thiệp</label>
+          <input class="inp" id="ghToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+          <label class="check"><input type="checkbox" id="ghRemember"> Nhớ mã trên máy này</label>
+          <details class="help">
+            <summary>Lấy mã GitHub thế nào?</summary>
+            <ol class="steps">
+              <li>Đăng nhập GitHub, mở <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">trang tạo mã (Fine-grained token)</a>.</li>
+              <li>Đặt tên, ví dụ <b>Nhạc thiệp cưới</b>; <b>Expiration</b> chọn 30 ngày.</li>
+              <li><b>Repository access</b> → <b>Only select repositories</b> → chọn <code>bokin-thiep-onl</code>.</li>
+              <li><b>Permissions → Repository permissions → Contents</b> → <b>Read and write</b>.</li>
+              <li>Bấm <b>Generate token</b>, chép mã (bắt đầu bằng <code>github_pat_</code>) và dán vào ô trên.</li>
+            </ol>
+            <p>Mã chỉ dùng để gửi file nhạc lên GitHub từ trình duyệt này, không gửi đi nơi khác. Đừng đưa mã cho người khác.</p>
+          </details>
+        </div>
+        <button class="link" type="button" id="tokenToggle" hidden>Đổi mã GitHub</button>
+        <div class="songs" id="songs" hidden>
+          <p class="lbl">Nhạc đã tải lên</p>
+          <div class="song-list" id="songList"></div>
+        </div>
+        <p class="hint">Nên dùng nhạc bạn có quyền sử dụng. File tối đa 20 MB.</p>
+      </div>
     </section>
 
     <!-- 2. Lời nhắn -->

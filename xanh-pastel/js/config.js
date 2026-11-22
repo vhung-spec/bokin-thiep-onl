@@ -119,6 +119,9 @@ window.WEDDING = {
   // Để trống: tự lấy theo địa chỉ đang mở (github.io bây giờ, tên miền riêng khi gắn sau), trang gốc mở thẳng thiệp.
   shareUrl: '',
 
+  // NƠI LƯU FILE NHẠC tải lên từ trang tao-link.html: repo GitHub và nhánh đang chạy GitHub Pages
+  github: { repo: 'vhung-spec/bokin-thiep-onl', branch: 'claude/modest-maxwell-l2dq6l', musicDir: 'xanh-pastel/assets/nhac' },
+
   // NƠI NHẬN PHẢN HỒI: dán link ứng dụng web Google Apps Script vào đây (xem README, mục "Lưu phản hồi").
   // Để trống thì nút "Gửi phản hồi" sẽ báo chưa lưu được, không bao giờ báo thành công giả.
   endpoint: '',

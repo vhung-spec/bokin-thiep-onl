@@ -117,6 +117,19 @@ details.help p { font-size: 14.5px; color: var(--ink-2); }
 }
 .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
+/* ---------- Tải file nhạc lên ---------- */
+.upload { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.upload .btns { margin-top: 4px; }
+.upload #tokenBox { margin-top: 12px; }
+.steps { margin: 6px 0 8px; padding-left: 22px; font-size: 14.5px; color: var(--ink-2); }
+.steps li { margin: 4px 0; }
+.steps a { color: var(--btn); font-weight: 600; }
+.songs { margin-top: 14px; }
+.song-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.song { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid rgba(85, 99, 63, .3); background: #fff; color: var(--btn); font-weight: 600; font-size: 14px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.song.on { background: var(--btn); border-color: var(--btn); color: #fff; }
+#tokenToggle { margin-top: 10px; }
+
 /* ---------- Trang thống kê ---------- */
 .check { display: flex; align-items: center; gap: 10px; margin-top: 12px; font-size: 15px; cursor: pointer; }
 .check input { width: 20px; height: 20px; accent-color: var(--btn); }

@@ -136,6 +136,137 @@
   });
   showMusicInfo();
 
+  /* ---------- Tải file nhạc lên (lưu vào repo GitHub, GitHub Pages phát lại) ---------- */
+  var GH = W.github || {};
+  var TOKEN_KEY = 'tao-link:gh-token', MAX_MB = 20, AUDIO = /\.(mp3|m4a|aac|ogg)$/i;
+  var mp3File = $('#mp3File'), mp3Info = $('#mp3Info'), upBtn = $('#mp3Upload'), tokenBox = $('#tokenBox'), ghToken = $('#ghToken');
+  var picked = null;
+  function getToken() { try { return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY) || ''; } catch (e) { return ''; } }
+  function setToken(t, persist) {
+    try { localStorage.removeItem(TOKEN_KEY); sessionStorage.removeItem(TOKEN_KEY); if (t) (persist ? localStorage : sessionStorage).setItem(TOKEN_KEY, t); } catch (e) { /* bỏ qua */ }
+  }
+  // tên file không dấu, không khoảng trắng: "Nơi Này Có Anh.mp3" → "noi-nay-co-anh.mp3"
+  function slugFile(name) {
+    var m = /^(.*?)(\.[a-z0-9]+)?$/i.exec(name), base = m[1], ext = (m[2] || '.mp3').toLowerCase();
+    base = base.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 60) || 'nhac-nen';
+    return base + ext;
+  }
+  // đường dẫn file nhạc tính từ trang này (trang này nằm trong xanh-pastel/)
+  function relPath(fname) { return (GH.musicDir || 'xanh-pastel/assets/nhac').replace(/^xanh-pastel\//, '') + '/' + fname; }
+  function gh(path, opts) {
+    opts = opts || {};
+    var h = { Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28' };
+    var tok = ghToken.value.trim() || getToken();
+    if (tok && opts.auth !== false) h.Authorization = 'Bearer ' + tok;
+    if (opts.body) h['Content-Type'] = 'application/json';
+    return fetch('https://api.github.com/repos/' + GH.repo + path, { method: opts.method || 'GET', headers: h, body: opts.body, cache: 'no-store' });
+  }
+  function readBase64(file) {
+    return new Promise(function (ok, fail) {
+      var r = new FileReader();
+      r.onload = function () { ok(String(r.result).split(',')[1] || ''); };
+      r.onerror = function () { fail(new Error('Không đọc được file')); };
+      r.readAsDataURL(file);
+    });
+  }
+  function mb(n) { return (n / 1048576).toFixed(1).replace('.', ',') + ' MB'; }
+  function useSong(rel, quiet) {
+    musicInput.value = rel; musicStart.value = '';
+    onMusicChange();
+    if (!quiet) toast('Đã chọn nhạc ' + rel.split('/').pop() + ' cho mọi link mời.');
+  }
+  function loadSongs() {
+    if (!GH.repo) return Promise.resolve();
+    return gh('/contents/' + GH.musicDir + '?ref=' + encodeURIComponent(GH.branch || ''), { auth: !!getToken() })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (list) {
+        var songs = (Array.isArray(list) ? list : []).filter(function (f) { return f.type === 'file' && AUDIO.test(f.name); });
+        $('#songs').hidden = !songs.length;
+        $('#songList').innerHTML = songs.map(function (f) {
+          var rel = relPath(f.name), on = musicInput.value.trim() === rel;
+          return '<button type="button" class="song' + (on ? ' on' : '') + '" data-rel="' + esc(rel) + '">♪ ' + esc(f.name) + '</button>';
+        }).join('');
+      }).catch(function () { /* không tải được danh sách: bỏ qua */ });
+  }
+  $('#songList').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-rel]');
+    if (!b) return;
+    useSong(b.getAttribute('data-rel'));
+    loadSongs();
+  });
+  // chờ GitHub Pages đăng file mới (thường 1–2 phút)
+  function waitLive(rel) {
+    var url = new URL(rel, location.href).href, tries = 0;
+    mp3Info.className = 'hint';
+    mp3Info.textContent = 'Đã lưu lên GitHub. Đang chờ GitHub đăng file (thường 1–2 phút)…';
+    (function check() {
+      fetch(url + '?v=' + Date.now(), { method: 'HEAD', cache: 'no-store' }).then(function (r) {
+        if (r.ok) { mp3Info.className = 'hint ok'; mp3Info.textContent = '✓ File nhạc đã sẵn sàng. Bấm “Nghe thử” để nghe.'; toast('File nhạc đã sẵn sàng.'); return; }
+        throw new Error('chưa có');
+      }).catch(function () {
+        if (++tries < 24) setTimeout(check, 10000);
+        else { mp3Info.className = 'hint'; mp3Info.textContent = 'GitHub vẫn đang đăng file. Vài phút nữa bấm “Nghe thử” lại nhé.'; }
+      });
+    })();
+  }
+  mp3File.addEventListener('change', function () {
+    picked = mp3File.files && mp3File.files[0] || null;
+    mp3Info.className = 'hint';
+    if (!picked) { upBtn.disabled = true; mp3Info.textContent = ''; return; }
+    if (!AUDIO.test(picked.name)) { picked = null; upBtn.disabled = true; mp3Info.className = 'hint bad'; mp3Info.textContent = 'Chỉ nhận file nhạc .mp3, .m4a, .aac hoặc .ogg.'; return; }
+    if (picked.size > MAX_MB * 1048576) { picked = null; upBtn.disabled = true; mp3Info.className = 'hint bad'; mp3Info.textContent = 'File lớn quá (tối đa ' + MAX_MB + ' MB).'; return; }
+    upBtn.disabled = false;
+    mp3Info.textContent = picked.name + ' · ' + mb(picked.size) + ' → sẽ lưu thành ' + slugFile(picked.name);
+    if (!getToken()) { tokenBox.hidden = false; }
+  });
+  $('#tokenToggle').addEventListener('click', function () { tokenBox.hidden = !tokenBox.hidden; if (!tokenBox.hidden) ghToken.focus(); });
+  upBtn.addEventListener('click', function () {
+    if (!picked) return;
+    var tok = ghToken.value.trim() || getToken();
+    if (!tok) { tokenBox.hidden = false; ghToken.focus(); toast('Dán mã GitHub trước nhé.'); return; }
+    var fname = slugFile(picked.name), path = GH.musicDir + '/' + fname;
+    upBtn.disabled = true; upBtn.textContent = 'Đang tải lên…';
+    mp3Info.className = 'hint'; mp3Info.textContent = 'Đang gửi ' + fname + ' lên GitHub…';
+    readBase64(picked).then(function (content) {
+      // file trùng tên thì ghi đè (cần mã sha của file cũ)
+      return gh('/contents/' + path + '?ref=' + encodeURIComponent(GH.branch || '')).then(function (r) {
+        if (r.status === 401) throw new Error('401');
+        return r.ok ? r.json() : null;
+      }).then(function (old) {
+        var body = { message: 'Thêm nhạc nền ' + fname + ' (từ trang tạo link)', content: content, branch: GH.branch || undefined };
+        if (old && old.sha) body.sha = old.sha;
+        return gh('/contents/' + path, { method: 'PUT', body: JSON.stringify(body) });
+      });
+    }).then(function (r) {
+      if (r.ok) return r.json();
+      throw new Error(String(r.status));
+    }).then(function () {
+      setToken(tok, $('#ghRemember').checked);
+      tokenBox.hidden = true; $('#tokenToggle').hidden = false;
+      var rel = relPath(fname);
+      useSong(rel, true);
+      waitLive(rel);
+      loadSongs();
+      mp3File.value = ''; picked = null;
+    }).catch(function (err) {
+      var c = err && err.message;
+      mp3Info.className = 'hint bad';
+      mp3Info.textContent = c === '401' ? 'Mã GitHub không đúng hoặc đã hết hạn. Tạo mã mới theo hướng dẫn bên dưới.'
+        : c === '403' || c === '404' ? 'Mã GitHub chưa có quyền ghi vào repo bokin-thiep-onl (cần Contents: Read and write).'
+          : c === '409' || c === '422' ? 'GitHub chưa nhận file (mã ' + c + '). Thử lại sau ít giây.'
+            : 'Chưa tải lên được (' + (c || 'lỗi mạng') + '). Kiểm tra mạng rồi thử lại.';
+      if (c === '401' || c === '403' || c === '404') { tokenBox.hidden = false; setToken(''); }
+    }).then(function () { upBtn.textContent = 'Tải lên'; upBtn.disabled = !picked; });
+  });
+  if (!GH.repo) $('#upload').hidden = true;
+  else {
+    ghToken.value = getToken();
+    try { $('#ghRemember').checked = !!localStorage.getItem(TOKEN_KEY); } catch (e) { /* bỏ qua */ }
+    $('#tokenToggle').hidden = !ghToken.value;
+    loadSongs();
+  }
+
   /* ---------- 2. Lời nhắn ---------- */
   var tpl = $('#tpl');
   tpl.value = S.tpl;
