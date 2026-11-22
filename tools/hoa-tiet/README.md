@@ -28,7 +28,8 @@ Bìa hiện tại làm từ ảnh bìa của chủ thiệp (một ảnh có sẵ
 
 ```bash
 python3 tools/hoa-tiet/tach_bia.py anh-bia.png /tmp/bia            # bia.jpg, dau-sap.png, trang-trong.jpg + in ra sealAt
-python3 tools/hoa-tiet/giay_kem_tu_anh.py /tmp/bia/trang-trong.jpg /tmp/bia/giay-kem.jpg 0.34
+python3 tools/hoa-tiet/giay_be.py anh-trang-trong.png /tmp/bia/giay-kem.jpg   # giấy kem từ lòng khung trang trong + màu trung bình
 ```
 
-Chép kết quả vào `xanh-pastel/assets/bia/` (dấu sáp lưu thành `dau-sap.webp`) và dán dòng `sealAt` in ra vào `config.js`.
+Chép kết quả vào `xanh-pastel/assets/bia/` (dấu sáp lưu thành `dau-sap.webp`, ảnh trang trong lưu thành `trang-dau.jpg`), dán dòng `sealAt` và màu trung bình (`creamColor`) in ra vào `config.js`.
+(`giay_kem_tu_anh.py` là bản cũ: giấy trắng dập nổi lá làm từ ảnh bìa.)

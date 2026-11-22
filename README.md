@@ -105,9 +105,9 @@ Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa đi�
 **Ảnh bìa của chủ thiệp** nằm trong `xanh-pastel/assets/bia/`, khai báo ở `config.js` → `cover`:
 - `paper: 'assets/bia/bia.jpg'` — bìa hai cánh đã xoá dấu sáp, đường gáp nằm đúng giữa ảnh. Hai cánh bìa ghép thành đúng một ảnh phủ kín màn hình.
 - `seal: 'assets/bia/dau-sap.webp'` — dấu sáp tách riêng, nền trong suốt; `sealAt` là vị trí của nó trên ảnh bìa (tâm x, y và bề rộng theo tỉ lệ), để dấu sáp nằm đúng chỗ rồi nhấc lên khi mở.
-- `inner: 'assets/bia/trang-trong.jpg'` — hai cánh ghép liền (không đường gáp): nền đầu thiệp, lời mời, câu chuyện.
-- `cream: 'assets/bia/giay-kem.jpg'` — giấy kem cùng hoạ tiết lá, nền các phần còn lại.
-Các file này được tách từ một ảnh bìa duy nhất bằng `tools/hoa-tiet/tach_bia.py` và `giay_kem_tu_anh.py`. Xoá 5 dòng trên (để trống) thì thiệp quay về giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`.
+- `page: 'assets/bia/trang-dau.jpg'` — trang trong có khung và hoa (ảnh của chủ thiệp): nền phần đầu thiệp ngay sau khi mở bìa và trang “Thank you!” cuối thiệp; chữ nằm trong lòng khung.
+- `cream: 'assets/bia/giay-kem.jpg'` và `creamColor` — giấy kem lấy từ lòng khung của trang trong, nền các phần ở giữa (lời mời, đếm ngược, lịch, câu chuyện, album, xác nhận, quà mừng).
+Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_bia.py`; giấy kem làm bằng `tools/hoa-tiet/giay_be.py`. Để trống các dòng này thì thiệp quay về giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`.
 
 Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. Muốn có nhạc nền: chép file mp3 vào `xanh-pastel/assets/` rồi ghi `music: 'assets/ten-file.mp3'`.
 

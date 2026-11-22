@@ -63,10 +63,29 @@ section { position: relative; }
 .custom-cover .door.l { background-position: var(--cov-x-l, 0) var(--cov-y, 0); }
 .custom-cover .door.r { background-position: var(--cov-x-r, 0) var(--cov-y, 0); box-shadow: none; }
 .custom-cover .door.r::after { display: none; }
-.custom-cover:not(.custom-inner) .hero { background-image: var(--cover-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
+.custom-cover:not(.custom-inner):not(.custom-page) .hero { background-image: var(--cover-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
 /* Trang trong (cover.inner): đầu thiệp, lời mời, câu chuyện — mỗi phần phủ kín một ảnh, không lặp */
 .custom-inner .sage { background-image: var(--inner-paper); background-size: cover; background-position: center; background-repeat: no-repeat; }
 .custom-seal .gate-seal .sheen { left: 12%; top: 11%; width: 76%; }
+/* Trang trong có khung (cover.page): đầu thiệp và trang cảm ơn; chữ nằm trong lòng khung */
+.custom-page .hero { background: var(--cream) var(--page-paper) center / cover no-repeat; padding: 84px 46px 74px; }
+.custom-page .hero::before { display: none; }
+.custom-page .hero-seal { width: 128px; }
+.custom-page .hero-names .name { font-size: clamp(52px, 15.5vw, 64px); }
+.custom-page .end-page {
+  aspect-ratio: 941 / 1672; margin-top: 18px; padding: 22% 15% 18%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: var(--page-paper) center / 100% 100% no-repeat;
+}
+.custom-page .end-page .swash { transform: scale(.9); margin-bottom: -6px; }
+.custom-page .end-page .thanks-text { padding: 0; font-size: 16.5px; }
+.custom-page .end-page .end-sign { font-size: clamp(28px, 8.6vw, 38px); }
+.custom-page .end-page .wave-end { display: none; }
+.custom-page .ending { padding-bottom: 0; }
+@media (max-width: 359px) {
+  .custom-page .end-page .swash { transform: scale(.74); margin: -16px 0 -22px; }
+  .custom-page .end-page .end-sign { font-size: 25px; }
+  .custom-page .end-page .thanks-text { font-size: 15.5px; }
+}
 .cream { background-color: var(--cream); background-image: var(--cream-paper); }
 
 /* ---------- Mép giấy xé ---------- */

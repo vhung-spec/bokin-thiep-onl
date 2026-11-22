@@ -22,8 +22,9 @@ window.WEDDING = {
     paper: 'assets/bia/bia.jpg',          // bìa 2 cánh, đã xoá dấu sáp; đường gáp nằm đúng giữa ảnh
     seal: 'assets/bia/dau-sap.webp',      // dấu sáp tách riêng, nền trong suốt; nhấc lên khi mở
     sealAt: { x: 0.4829, y: 0.4746, w: 0.4839 }, // vị trí dấu sáp trên ảnh bìa: tâm (x, y) và bề rộng, theo tỉ lệ ảnh
-    inner: 'assets/bia/trang-trong.jpg',  // trang trong (2 cánh ghép liền, không đường gáp): đầu thiệp, lời mời, câu chuyện
-    cream: 'assets/bia/giay-kem.jpg',     // giấy kem cùng hoạ tiết lá: nền các phần còn lại
+    page: 'assets/bia/trang-dau.jpg',     // trang trong có khung và hoa: nền đầu thiệp (sau khi mở bìa) và trang cảm ơn cuối thiệp
+    cream: 'assets/bia/giay-kem.jpg',     // giấy kem lấy từ lòng khung của trang trong: nền các phần ở giữa
+    creamColor: '#E1D3C2',                // màu trung bình của giấy kem (mép giấy xé dùng màu này)
   },
 
   families: {

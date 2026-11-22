@@ -46,7 +46,9 @@
   var SEAL = '<img class="seal-img" src="' + esc(cov.seal || 'assets/dau-sap-vang.webp') + '" alt="" aria-hidden="true" decoding="async">';
   if (cov.seal) body.classList.add('custom-seal');
   if (cov.inner) { root.style.setProperty('--inner-paper', cssUrl(cov.inner)); body.classList.add('custom-inner'); }
+  if (cov.page) { root.style.setProperty('--page-paper', cssUrl(cov.page)); body.classList.add('custom-page'); }
   if (cov.cream) root.style.setProperty('--cream-paper', cssUrl(cov.cream));
+  if (cov.creamColor) root.style.setProperty('--cream', cov.creamColor);
   // Bìa: hai cánh ghép thành đúng một ảnh phủ kín màn hình; dấu sáp đặt đúng chỗ của nó trên ảnh
   var coverReady = Promise.resolve();
   if (cov.paper) {
@@ -78,8 +80,9 @@
     window.addEventListener('resize', fitCover);
   }
   $$('[data-art]').forEach(function (el) { var f = arts[el.getAttribute('data-art')]; el.innerHTML = f ? f() : ''; });
+  var tearColor = (W.cover && W.cover.creamColor) || undefined; // mép giấy xé cùng màu giấy kem
   $$('[data-tear]').forEach(function (el) {
-    el.innerHTML = A.tear(+el.getAttribute('data-tear'), el.classList.contains('down') ? 'down' : 'up');
+    el.innerHTML = A.tear(+el.getAttribute('data-tear'), el.classList.contains('down') ? 'down' : 'up', tearColor);
   });
   $('#gateSeal').innerHTML = SEAL + '<span class="sheen"></span>';
   $('#heroSeal').innerHTML = SEAL;
