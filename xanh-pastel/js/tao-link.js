@@ -52,7 +52,8 @@
   }
 
   /* ---------- Link thiệp ---------- */
-  var autoBase = new URL('./', location.href).href;
+  // link mời: tên miền trong config.js (shareUrl), không có thì lấy thư mục của trang này
+  var autoBase = (function () { try { return new URL(W.shareUrl).href; } catch (e) { return new URL('./', location.href).href; } })();
   function base() {
     var b = (S.base || autoBase).trim();
     try { b = new URL(b).href; } catch (e) { b = autoBase; }
@@ -124,7 +125,7 @@
         '&rel=0&playsinline=1" title="Nghe thử nhạc" allow="autoplay; encrypted-media" allowfullscreen></iframe>' +
         '<p class="hint">Nếu khung báo “Video không khả dụng”, video này không cho phát trên trang khác: hãy chọn video khác.</p>';
     } else {
-      var src = /^https?:/i.test(sp.src) ? sp.src : new URL(sp.src, base()).href;
+      var src = /^https?:/i.test(sp.src) ? sp.src : new URL(sp.src, location.href).href; // file nhạc nằm cạnh trang này
       preview.innerHTML = '<audio controls autoplay src="' + esc(src) + '"></audio>';
       $('audio', preview).addEventListener('error', function () { musicInfo.className = 'hint bad'; musicInfo.textContent = 'Không mở được file nhạc này. Kiểm tra lại đường dẫn.'; });
     }

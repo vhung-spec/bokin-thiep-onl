@@ -4,10 +4,10 @@ Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượ
 
 | Mẫu | Link | Sửa nội dung ở |
 |---|---|---|
-| **Đỏ rượu** — phong bì sáp, polaroid, tim rơi | `/` (trang chính) | `js/config.js` |
+| **Đỏ rượu** — phong bì sáp, polaroid, tim rơi (thiệp mẫu Minh Khang & Thảo Vy) | `/mau-do-ruou.html` | `js/config.js` |
 | **Xanh pastel** — thiệp Văn Hùng & Tuyết Anh: giấy xanh xô thơm dập nổi lá cây, hai cánh mở, dấu sáp vàng | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
 
-Gửi khách link của mẫu bạn chọn (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/xanh-pastel/?to=Ngọc%20Anh`).
+Thiệp Văn Hùng & Tuyết Anh chạy ở tên miền **https://thiepmoihungtuyetanh.xyz/** — trang gốc mở thẳng mẫu xanh pastel (giữ nguyên `?to=…` của link mời riêng), ví dụ `https://thiepmoihungtuyetanh.xyz/?to=Ngọc%20Anh`.
 
 ---
 
@@ -61,7 +61,7 @@ Mẹo: nén ảnh còn khoảng 200–400 KB mỗi tấm (rộng ~1200px) để 
 Thêm `?to=Tên` vào cuối link; thêm `&nha=trai` (hoặc `&nha=gai`) để mở sẵn đúng tab lễ của nhà mời:
 
 ```
-https://ten-ban.github.io/bokin-thiep-onl/?to=Anh%20Thắng%20và%20người%20thương&nha=trai
+https://thiepmoihungtuyetanh.xyz/mau-do-ruou.html?to=Anh%20Thắng%20và%20người%20thương&nha=trai
 ```
 
 Phần lời mời sẽ hiện tên khách thay cho “Quý vị & Gia đình”, ô tên trong form được điền sẵn, và cột “Link mời” trong Google Sheets cho biết ai đã trả lời.
@@ -111,7 +111,7 @@ Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_b
 
 ### Tạo link mời riêng cho từng khách (`xanh-pastel/tao-link.html`)
 
-Mở `https://<tên-tài-khoản>.github.io/<tên-repo>/xanh-pastel/tao-link.html` trên điện thoại hoặc máy tính:
+Mở **https://thiepmoihungtuyetanh.xyz/xanh-pastel/tao-link.html** trên điện thoại hoặc máy tính. Link mời tạo ra dùng tên miền gọn (`config.js` → `shareUrl`):
 
 1. **Nhạc nền** — dán link YouTube (`youtube.com/watch?v=…`, `youtu.be/…`, có thể chọn giây bắt đầu) hoặc đường dẫn file nhạc (`assets/nhac/ten-file.mp3` sau khi chép file vào `xanh-pastel/assets/nhac/`). Bấm **Nghe thử** để kiểm tra; video YouTube nào chặn phát trên trang khác thì chọn video khác.
 2. **Lời nhắn gửi kèm** — sửa tuỳ ý; `{ten}` là tên khách, `{link}` là link thiệp riêng.
@@ -157,7 +157,7 @@ Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triể
 python3 -m http.server 8000
 ```
 
-rồi mở <http://localhost:8000> (mẫu đỏ rượu) hoặc <http://localhost:8000/xanh-pastel/> (mẫu xanh pastel). Mở thẳng file `index.html` cũng xem được, trừ phần tải lời chúc từ Google Sheets.
+rồi mở <http://localhost:8000/xanh-pastel/> (mẫu xanh pastel; <http://localhost:8000> cũng tự chuyển vào đây) hoặc <http://localhost:8000/mau-do-ruou.html> (mẫu đỏ rượu). Mở thẳng file `index.html` cũng xem được, trừ phần tải lời chúc từ Google Sheets.
 
 ## Đăng lên mạng miễn phí (GitHub Pages)
 
@@ -165,16 +165,21 @@ rồi mở <http://localhost:8000> (mẫu đỏ rượu) hoặc <http://localhos
 2. Vào **Settings → Pages**, *Build and deployment* chọn **Deploy from a branch**, chọn nhánh và thư mục `/ (root)`, bấm **Save**.
 3. Sau khoảng 1 phút, thiệp có ở `https://<tên-tài-khoản>.github.io/<tên-repo>/`.
 
-Mẫu xanh pastel ở `https://<tên-tài-khoản>.github.io/<tên-repo>/xanh-pastel/`.
+### Tên miền riêng (đang dùng: thiepmoihungtuyetanh.xyz, quản lý DNS ở Mắt Bão)
 
-Sau khi có link thật, sửa `og:image` trong `index.html` thành đường dẫn đầy đủ (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/assets/og-image.jpg`, hoặc `.../xanh-pastel/assets/og-image.jpg` cho mẫu xanh) để Zalo/Facebook hiện ảnh xem trước.
+- DNS: bản ghi **A** `@` → `185.199.108.153` (thêm được `185.199.109.153`, `185.199.110.153`, `185.199.111.153` thì càng tốt) và **CNAME** `www` → `vhung-spec.github.io.`
+- GitHub: **Settings → Pages → Custom domain** = `thiepmoihungtuyetanh.xyz` (file `CNAME` ở gốc repo giữ tên miền này, đừng xoá). Khi GitHub báo *DNS check successful* thì tích **Enforce HTTPS**.
+- Trang gốc `index.html` chỉ chuyển thẳng vào `xanh-pastel/` và mang sẵn ảnh xem trước (`og:image`) cho Zalo/Facebook; mẫu đỏ rượu cũ ở `mau-do-ruou.html`.
+- Đổi tên miền khác: sửa file `CNAME`, `og:url` / `og:image` trong `index.html` và `xanh-pastel/index.html`, và `shareUrl` trong `xanh-pastel/js/config.js`.
 
 ## Cấu trúc thư mục
 
 ```
-index.html                 khung trang
-css/style.css              màu sắc, bố cục, hiệu ứng
-js/config.js               ← nội dung thiệp (sửa ở đây)
+index.html                 trang gốc của tên miền: chuyển thẳng vào thiệp xanh pastel
+CNAME                      tên miền riêng cho GitHub Pages
+mau-do-ruou.html           mẫu đỏ rượu (khung trang)
+css/style.css              màu sắc, bố cục, hiệu ứng (mẫu đỏ rượu)
+js/config.js               ← nội dung mẫu đỏ rượu
 js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
