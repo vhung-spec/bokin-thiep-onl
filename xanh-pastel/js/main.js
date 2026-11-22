@@ -48,7 +48,7 @@
     if (tlTear) $('#album').insertBefore(tlTear, $('#album').firstChild);
     tlSec.hidden = true;
   }
-  $('#gateSeal').innerHTML = A.sealFlower({ seed: 7 });
+  $('#gateSeal').innerHTML = '<div class="seal-float">' + A.sealFlower({ seed: 7 }) + '</div>';
   $('#heroSeal').innerHTML = A.sealFlower({ seed: 11 });
   $('#ornHeart').innerHTML = A.heartArrow();
   $('#fline').innerHTML = A.flourishLine();
@@ -160,7 +160,7 @@
       if (el.textContent === txt) return;
       var first = !el.getAttribute('data-ok');
       el.textContent = txt; el.setAttribute('data-ok', '1');
-      if (!first && !reduce && el.animate && !document.hidden) {
+      if (!first && !reduce && el.animate && !document.hidden && el.closest('section.vis')) {
         el.animate([{ transform: 'translateY(-35%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 420, easing: 'cubic-bezier(.16,1,.3,1)' });
       }
     });
@@ -559,24 +559,97 @@
     els.forEach(function (el) { if (!el.closest('.swash') || el.classList.contains('swash')) io.observe(el); });
   }
 
-  /* ---------- Mở cửa thiệp ---------- */
+  /* ---------- Mở cửa thiệp ----------
+     Toàn bộ chuỗi chạy bằng Web Animations, chỉ đổi transform và opacity trên các lớp đã
+     được chuẩn bị sẵn (will-change), nên trình duyệt dựng hình trên GPU ở 60 khung/giây.
+     Mọi animation được tạo ngay lúc chạm (kèm độ trễ), không đổi class hay bố cục giữa chừng;
+     việc nặng (mở khoá cuộn, lời chúc, tim bay) chỉ làm sau khi cửa đã mở xong.
+       0.0s  dấu sáp nhấn xuống rồi nhấc lên, mờ dần          (1.1s)
+       0.6s  hai cánh cửa mở chậm vào trong                  (2.8s)
+       0.4s  phần mở đầu phía sau lùi nhẹ từ 108% về 100%      (3.6s)
+       1.5s  dấu sáp, tên, ngày... lần lượt hiện ra
+       3.4s  ẩn cửa, mở khoá cuộn, hiện thanh dưới
+       4.0s  lời chúc chạy, tim bay */
   var gate = $('#gate'), opened = false;
+  var T = { seal: 1100, doorDelay: 600, door: 2800, zoomDelay: 400, zoom: 3600, itemsDelay: 1000 };
+  // Đồng hồ theo dòng thời gian animation (đồng bộ với các animation khác, kể cả khi quay chậm)
+  function wait(ms) { return root.animate([], { duration: ms }).finished; }
+  function finishItem(el, anim) {
+    anim.finished.then(function () { el.classList.add('shown'); anim.cancel(); }).catch(function () {});
+  }
+  function afterOpen() {
+    gate.hidden = true;
+    body.classList.add('open');
+    body.classList.toggle('locked', false);
+    startReveal();
+    watchVisible();
+  }
+  // Gắn class .vis cho phần đang trên màn hình: hoạ tiết lặp chỉ chạy ở đó, phần khuất thì tạm dừng
+  function watchVisible() {
+    if (!('IntersectionObserver' in window)) { $$('.shell > section').forEach(function (s) { s.classList.add('vis'); }); return; }
+    var vo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { e.target.classList.toggle('vis', e.isIntersecting); });
+    }, { rootMargin: '80px 0px' });
+    $$('.shell > section').forEach(function (s) { vo.observe(s); });
+  }
+  // Dựng sẵn mọi animation ở trạng thái tạm dừng ngay khi trang sẵn sàng, để lúc chạm chỉ việc
+  // bấm "chạy" (không phải tính lại kiểu dáng hay vẽ lại gì vào đúng khoảnh khắc đó).
+  var openAnims = null;
+  function buildOpening() {
+    if (openAnims || reduce || !root.animate) return;
+    openAnims = [];
+    function add(el, frames, timing) { var a = el.animate(frames, timing); a.pause(); openAnims.push(a); return a; }
+    // 1. Dấu sáp: nhấn xuống, nhấc lên, mờ dần
+    add($('#gateSeal'), [
+      { transform: 'translate(-50%,-50%) scale(1)', opacity: 1 },
+      { transform: 'translate(-50%,-50%) scale(.93)', opacity: 1, offset: .2 },
+      { transform: 'translate(-50%,-51.5%) scale(1.03)', opacity: 1, offset: .42 },
+      { transform: 'translate(-50%,-56%) scale(1.1)', opacity: 0 },
+    ], { duration: T.seal, easing: 'cubic-bezier(.33,0,.25,1)', fill: 'forwards' });
+    add($('.gate-foot'), [{ opacity: 1 }, { opacity: 0 }], { duration: 500, easing: 'ease-out', fill: 'forwards' });
+    // 2. Hai cánh cửa mở chậm: khởi động nhẹ, lướt đều, dừng êm
+    var doorTiming = { duration: T.door, delay: T.doorDelay, easing: 'cubic-bezier(.6,0,.2,1)', fill: 'forwards' };
+    add($('.door.l'), [{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(100deg)' }], doorTiming);
+    add($('.door.r'), [{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(-100deg)' }], doorTiming);
+    $$('.door .shade').forEach(function (sh) { add(sh, [{ opacity: 0 }, { opacity: 1 }], doorTiming); });
+    // 3. Phần mở đầu phía sau lùi nhẹ về đúng cỡ, tạo chiều sâu khi bước qua cửa
+    var zoom = add($('#dau-trang'), [{ transform: 'scale(1.08)' }, { transform: 'scale(1)' }],
+      { duration: T.zoom, delay: T.zoomDelay, easing: 'cubic-bezier(.2,.65,.25,1)', fill: 'both' });
+    zoom.finished.then(function () { zoom.cancel(); }).catch(function () {});
+    // 4. Dấu sáp, tên, ngày... lần lượt hiện ra khi cửa đã hé
+    $$('.hi').forEach(function (el) {
+      var d = parseFloat(el.style.getPropertyValue('--d')) || 0;
+      var seal = el.classList.contains('hero-seal');
+      var a = add(el, [{ opacity: 0, transform: seal ? 'scale(.7)' : 'translateY(14px)' }, { opacity: 1, transform: 'none' }], {
+        duration: 1400, delay: T.itemsDelay + d * 900, fill: 'both',
+        easing: seal ? 'cubic-bezier(.34,1.3,.64,1)' : 'cubic-bezier(.16,1,.3,1)',
+      });
+      finishItem(el, a);
+    });
+  }
   function open() {
     if (opened) return;
     opened = true;
     if (audio) audio.play().then(function () { setPlaying(true); }).catch(function () { setPlaying(false); });
-    window.scrollTo(0, 0);
-    gate.classList.add('opening');
-    setTimeout(function () {
-      body.classList.add('open');
-      body.classList.toggle('locked', false);
-      startReveal();
-    }, reduce ? 0 : 450);
-    setTimeout(function () { gate.hidden = true; }, reduce ? 0 : 1850);
-    setTimeout(function () {
+    if (reduce || !root.animate) {
+      $$('.hi').forEach(function (el) { el.classList.add('shown'); });
+      afterOpen();
       loadWishes().then(startLive);
-      if (!reduce) ambient();
-    }, reduce ? 0 : 2400);
+      return;
+    }
+    buildOpening();
+    openAnims.forEach(function (a) { a.play(); });
+    // 5. Cửa mở xong thì ẩn; khi mọi chuyển động đã dừng mới mở khoá cuộn và làm các việc nặng
+    wait(T.doorDelay + T.door).then(function () {
+      gate.hidden = true;
+      return wait(T.zoomDelay + T.zoom - T.doorDelay - T.door);
+    }).then(function () {
+      afterOpen();
+      return wait(500);
+    }).then(function () {
+      loadWishes().then(startLive);
+      ambient();
+    });
   }
   gate.addEventListener('click', open);
   gate.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
@@ -586,7 +659,7 @@
 
   /* ---------- Cửa thiệp hiện ra khi font đã tải ---------- */
   var readyDone = false;
-  function ready() { if (!readyDone) { readyDone = true; body.classList.add('ready'); } }
+  function ready() { if (!readyDone) { readyDone = true; body.classList.add('ready'); setTimeout(buildOpening, 60); } }
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(ready);
   setTimeout(ready, 1500);
 })();

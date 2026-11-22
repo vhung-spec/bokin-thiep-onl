@@ -10,7 +10,7 @@
  *  • Mời riêng: thêm ?to=Tên vào link, ví dụ  .../xanh-pastel/?to=Anh%20Thắng
  */
 window.WEDDING = {
-  groom: { name: 'Văn Hùng', short: 'Hùng' },
+  groom: { name: 'Văn Hùng', short: 'Văn Hùng' },
   bride: { name: 'Tuyết Anh', short: 'Tuyết Anh' },
 
   // Giờ lễ/tiệc chính: dùng cho lời mời, đếm ngược và lịch tháng
@@ -64,7 +64,10 @@ window.WEDDING = {
     // icon: cheers (ly rượu), rings (nhẫn), music (nhạc), camera, heart, cake
     // Để trống [] thì phần Timeline tự ẩn. Ví dụ một dòng:
     //   { time: '10:00', label: 'Đón khách', icon: 'cheers' },
-    items: [],
+    items: [
+      { time: '10:00', label: 'Đón khách', icon: 'heart' },
+      { time: '10:30', label: 'Khai tiệc', icon: 'cheers' },
+    ],
   },
 
   album: {
@@ -88,7 +91,7 @@ window.WEDDING = {
     guestsLabel: 'Số lượng khách trong bữa tiệc của bạn',
     maxGuests: 10,
     // Câu hỏi thêm (để trống label nếu không cần), ví dụ hỏi món chay: 'Bạn có dùng món chay không?'
-    extra: { label: 'Có trẻ em đi cùng bạn không?', options: ['Có', 'Không'] },
+    extra: { label: '', options: [] }, // ví dụ: { label: 'Có trẻ em đi cùng bạn không?', options: ['Có', 'Không'] }
     button: 'Gửi phản hồi',
   },
 
@@ -98,7 +101,10 @@ window.WEDDING = {
     // qr: ảnh QR từ app ngân hàng; hoặc để trống và điền bankId + number để tự tạo VietQR
     // Để trống [] thì phần quà mừng (tiêu đề, phong bì) tự ẩn, ảnh bên dưới vẫn hiện. Ví dụ một tài khoản:
     //   { side: 'Chú rể', bankName: 'Vietcombank', bankId: 'VCB', number: '0123456789', holder: 'NGUYEN VAN HUNG', qr: '' },
-    accounts: [],
+    accounts: [
+      // Mã QR tạo sẵn theo chuẩn VietQR (NAPAS) cho tài khoản này, nội dung chuyển khoản "Mung cuoi Van Hung Tuyet Anh"
+      { side: 'Cô dâu & Chú rể', bankName: 'VPBank', bankId: 'VPB', number: '3646866', holder: '', qr: 'assets/qr-mung-cuoi.png' },
+    ],
   },
 
   thanks: {
