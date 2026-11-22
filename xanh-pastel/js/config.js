@@ -10,11 +10,12 @@
  *  • Mời riêng: thêm ?to=Tên vào link, ví dụ  .../xanh-pastel/?to=Anh%20Thắng
  */
 window.WEDDING = {
-  groom: { name: 'Minh Khang', short: 'Khang' },
-  bride: { name: 'Thảo Vy', short: 'Vy' },
+  groom: { name: 'Văn Hùng', short: 'Hùng' },
+  bride: { name: 'Tuyết Anh', short: 'Tuyết Anh' },
 
   // Giờ lễ/tiệc chính: dùng cho lời mời, đếm ngược và lịch tháng
-  date: '2027-03-07T17:30',
+  // CHƯA CÓ NGÀY CƯỚI: giờ 10:30 là thật, ngày 07/03/2027 chỉ là ngày tạm.
+  date: '2027-03-07T10:30',
 
   cover: {
     hint: 'Chạm để mở thiệp',
@@ -22,8 +23,8 @@ window.WEDDING = {
   },
 
   families: {
-    trai: { label: 'Nhà trai', parents: ['Ông Nguyễn Văn An', 'Bà Phạm Thị Bình'] },
-    gai: { label: 'Nhà gái', parents: ['Ông Trần Văn Hùng', 'Bà Lê Thị Hoa'] },
+    trai: { label: 'Nhà trai', parents: ['Ông Nguyễn Văn Khiên', 'Bà Trần Thị Lượt'] },
+    gai: { label: 'Nhà gái', parents: ['Ông Bạch Đăng Nhung', 'Bà Nguyễn Thị Hà'] },
   },
 
   invitation: {
@@ -34,9 +35,9 @@ window.WEDDING = {
   },
 
   venue: {
-    name: 'Trung tâm tiệc cưới Hoa Sen',
-    address: '126 Lê Lợi, TP. Hưng Yên',
-    map: 'https://maps.google.com/?q=Hung+Yen',
+    name: 'Nhà văn hoá Tổ 1 Ngọc Trục',
+    address: 'P. Ngọc Trục, làng Ngọc Trục, Đại Mỗ, Hà Nội',
+    map: 'https://www.google.com/maps?q=XQRF%2B254+Nh%C3%A0+V%C4%83n+Ho%C3%A1+T%E1%BB%95+1+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+P.+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+l%C3%A0ng+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+%C4%90%E1%BA%A1i+M%E1%BB%97,+H%C3%A0+N%E1%BB%99i&ftid=0x3134530024c79431:0x28d0367215a69c81',
     mapHint: '(Bấm vào để xem bản đồ)',
   },
 
@@ -62,12 +63,9 @@ window.WEDDING = {
   timeline: {
     title: 'Timeline',
     // icon: cheers (ly rượu), rings (nhẫn), music (nhạc), camera, heart, cake
-    items: [
-      { time: '17:30', label: 'Đón khách', icon: 'cheers' },
-      { time: '18:00', label: 'Lễ thành hôn', icon: 'rings' },
-      { time: '18:30', label: 'Khai tiệc', icon: 'music' },
-      { time: '20:30', label: 'Chụp ảnh kỷ niệm', icon: 'camera' },
-    ],
+    // Để trống [] thì phần Timeline tự ẩn. Ví dụ một dòng:
+    //   { time: '10:00', label: 'Đón khách', icon: 'cheers' },
+    items: [],
   },
 
   album: {
@@ -99,10 +97,9 @@ window.WEDDING = {
     title: 'Gửi Quà Mừng',
     text: 'Quét mã QR để gửi quà mừng tới chúng mình nhé',
     // qr: ảnh QR từ app ngân hàng; hoặc để trống và điền bankId + number để tự tạo VietQR
-    accounts: [
-      { side: 'Chú rể', bankName: 'Vietcombank', bankId: 'VCB', number: '', holder: 'NGUYEN MINH KHANG', qr: '' },
-      { side: 'Cô dâu', bankName: 'MB Bank', bankId: 'MB', number: '', holder: 'TRAN THAO VY', qr: '' },
-    ],
+    // Để trống [] thì phần quà mừng (tiêu đề, phong bì) tự ẩn, ảnh bên dưới vẫn hiện. Ví dụ một tài khoản:
+    //   { side: 'Chú rể', bankName: 'Vietcombank', bankId: 'VCB', number: '0123456789', holder: 'NGUYEN VAN HUNG', qr: '' },
+    accounts: [],
   },
 
   thanks: {
@@ -113,14 +110,8 @@ window.WEDDING = {
   wishes: {
     placeholder: 'Gửi lời chúc...',
     live: true, // lời chúc chạy ở góc dưới như livestream
-    // Lời chúc mẫu: chỉ hiện khi CHƯA cài Google Sheets (endpoint để trống)
-    samples: [
-      { name: 'Anh Thắng và người thương', message: 'Chúc hai vợ chồng trăm năm hạnh phúc nhé!!!', time: '2027-02-08' },
-      { name: 'Chị Đinh Hoa', message: 'Chúc hai em luôn hạnh phúc, sớm có tin vui nhaaa ❤️', time: '2027-02-06' },
-      { name: 'Em Thanh Thuý', message: 'Đám cưới đẹp quá, chúc anh chị mãi yêu thương như hôm nay!', time: '2027-02-06' },
-      { name: 'Bạn Đạt', message: 'Chúc hai bạn trăm năm hạnh phúc', time: '2027-02-06' },
-      { name: 'Bạn Nam và người thương', message: 'Chúc mừng hai bạn! Mong sớm được dự đầy tháng 😄', time: '2027-02-05' },
-    ],
+    // Lời chúc mẫu: chỉ hiện khi CHƯA cài Google Sheets (endpoint để trống). Thiệp thật thì để trống.
+    samples: [],
   },
 
   // Dán link Google Apps Script (xem README) để lưu xác nhận, lời chúc và lượt thả tim vào Google Sheets.

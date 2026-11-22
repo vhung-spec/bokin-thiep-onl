@@ -43,6 +43,11 @@
   $$('[data-tear]').forEach(function (el) {
     el.innerHTML = A.tear(+el.getAttribute('data-tear'), el.classList.contains('down') ? 'down' : 'up');
   });
+  if (!(W.timeline.items || []).length) {
+    var tlSec = $('#lich-trinh'), tlTear = $('.tear', tlSec);
+    if (tlTear) $('#album').insertBefore(tlTear, $('#album').firstChild);
+    tlSec.hidden = true;
+  }
   $('#gateSeal').innerHTML = A.sealFlower({ seed: 7 });
   $('#heroSeal').innerHTML = A.sealFlower({ seed: 11 });
   $('#ornHeart').innerHTML = A.heartArrow();
@@ -83,6 +88,7 @@
   if ((guest || '').length > 18) $('#guestName').style.fontSize = '30px';
   $('#bn1').textContent = W.groom.short;
   $('#bn2').textContent = W.bride.short;
+  if ((W.groom.short + W.bride.short).length > 9) $('.big-names').classList.add('stack');
   $('#whenTime').textContent = pad(main.getHours()) + ':' + pad(main.getMinutes()) + ' ' + WD[main.getDay()];
   $('#dMonth').textContent = 'Tháng ' + pad(main.getMonth() + 1);
   $('#dDay').textContent = pad(main.getDate());
@@ -92,7 +98,7 @@
   $('#venue').href = W.venue.map || '#';
   $('#storyText').innerHTML = (W.loveStory.paragraphs || []).map(function (p) { return '<p class="rv">' + esc(p) + '</p>'; }).join('');
   $('#storySign').textContent = W.groom.short + ' & ' + W.bride.short;
-  $('#footNames').textContent = W.groom.short + ' & ' + W.bride.short + ' · ' + pad(main.getDate()) + '.' + pad(main.getMonth() + 1) + '.' + main.getFullYear();
+  $('#footNames').innerHTML = esc(W.groom.short + ' & ' + W.bride.short) + '<br>' + pad(main.getDate()) + '.' + pad(main.getMonth() + 1) + '.' + main.getFullYear();
 
   /* Tiêu đề chữ T uốn lượn (Timeline, The Album, Thank you); chữ khác thì dùng chữ viết tay */
   $$('[data-swash]').forEach(function (el) {
@@ -300,7 +306,12 @@
     return 'https://img.vietqr.io/image/' + encodeURIComponent(a.bankId) + '-' + encodeURIComponent(a.number) +
       '-compact2.png?accountName=' + encodeURIComponent(a.holder || '') + '&addInfo=' + encodeURIComponent('Mung cuoi ' + W.groom.short + ' ' + W.bride.short);
   }
-  $('#giftCards').innerHTML = (W.gift.accounts || []).map(function (a) {
+  var giftAccounts = (W.gift.accounts || []).filter(function (a) { return a.qr || (a.bankId && a.number); });
+  if (!giftAccounts.length) {
+    $$('#qua-mung > .sec-title, #qua-mung > .sec-text, #giftEnv').forEach(function (el) { el.hidden = true; });
+    $('#qua-mung').setAttribute('data-nolink', '1');
+  }
+  $('#giftCards').innerHTML = giftAccounts.map(function (a) {
     var src = qrSrc(a);
     return '<div class="gcard"><p class="side">' + esc(a.side) + '</p>' +
       (src ? '<img src="' + esc(src) + '" alt="Mã QR ' + esc(a.side) + '" data-qr>' : '<div class="noqr">Mã QR đang được cập nhật</div>') +
@@ -496,6 +507,7 @@
   var sheet = $('#sheet');
   var links = [['#loi-moi', 'Lời mời'], ['#dem-nguoc', 'Đếm ngược'], ['#lich', 'Lịch cưới'], ['#chuyen-tinh', 'Chuyện tình'],
     ['#lich-trinh', 'Lịch trình'], ['#album', 'Album ảnh'], ['#xac-nhan', 'Xác nhận'], ['#qua-mung', 'Quà mừng']];
+  links = links.filter(function (l) { var t = $(l[0]); return t && !t.hidden && !t.hasAttribute('data-nolink'); });
   $('#sheetLinks').innerHTML = links.map(function (l) { return '<a href="' + l[0] + '">' + l[1] + '</a>'; }).join('');
   function openSheet() { sheet.hidden = false; requestAnimationFrame(function () { requestAnimationFrame(function () { sheet.classList.add('show'); }); }); }
   function closeSheet(cb) {
