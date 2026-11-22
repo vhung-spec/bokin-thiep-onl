@@ -52,8 +52,12 @@
   }
 
   /* ---------- Link thiệp ---------- */
-  // link mời: tên miền trong config.js (shareUrl), không có thì lấy thư mục của trang này
-  var autoBase = (function () { try { return new URL(W.shareUrl).href; } catch (e) { return new URL('./', location.href).href; } })();
+  // link mời: shareUrl trong config.js; để trống thì lấy trang gốc của trang web đang mở
+  // (trang này nằm trong xanh-pastel/, trang gốc tự chuyển thẳng vào thiệp nên link ngắn gọn hơn)
+  var autoBase = (function () {
+    try { return new URL(W.shareUrl).href; } catch (e) { /* để trống */ }
+    return new URL(/\/xanh-pastel\//.test(location.pathname) ? '../' : './', location.href).href;
+  })();
   function base() {
     var b = (S.base || autoBase).trim();
     try { b = new URL(b).href; } catch (e) { b = autoBase; }

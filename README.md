@@ -7,7 +7,7 @@ Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượ
 | **Đỏ rượu** — phong bì sáp, polaroid, tim rơi (thiệp mẫu Minh Khang & Thảo Vy) | `/mau-do-ruou.html` | `js/config.js` |
 | **Xanh pastel** — thiệp Văn Hùng & Tuyết Anh: giấy xanh xô thơm dập nổi lá cây, hai cánh mở, dấu sáp vàng | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
 
-Thiệp Văn Hùng & Tuyết Anh chạy ở tên miền **https://thiepmoihungtuyetanh.xyz/** — trang gốc mở thẳng mẫu xanh pastel (giữ nguyên `?to=…` của link mời riêng), ví dụ `https://thiepmoihungtuyetanh.xyz/?to=Ngọc%20Anh`.
+Thiệp Văn Hùng & Tuyết Anh đang chạy ở **https://vhung-spec.github.io/bokin-thiep-onl/** — trang gốc mở thẳng mẫu xanh pastel (giữ nguyên `?to=…` của link mời riêng), ví dụ `https://vhung-spec.github.io/bokin-thiep-onl/?to=Ngọc%20Anh`. Tên miền riêng `thiepmoihungtuyetanh.xyz` sẽ gắn sau (xem mục “Tên miền riêng”).
 
 ---
 
@@ -61,7 +61,7 @@ Mẹo: nén ảnh còn khoảng 200–400 KB mỗi tấm (rộng ~1200px) để 
 Thêm `?to=Tên` vào cuối link; thêm `&nha=trai` (hoặc `&nha=gai`) để mở sẵn đúng tab lễ của nhà mời:
 
 ```
-https://thiepmoihungtuyetanh.xyz/mau-do-ruou.html?to=Anh%20Thắng%20và%20người%20thương&nha=trai
+https://vhung-spec.github.io/bokin-thiep-onl/mau-do-ruou.html?to=Anh%20Thắng%20và%20người%20thương&nha=trai
 ```
 
 Phần lời mời sẽ hiện tên khách thay cho “Quý vị & Gia đình”, ô tên trong form được điền sẵn, và cột “Link mời” trong Google Sheets cho biết ai đã trả lời.
@@ -111,7 +111,7 @@ Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_b
 
 ### Tạo link mời riêng cho từng khách (`xanh-pastel/tao-link.html`)
 
-Mở **https://thiepmoihungtuyetanh.xyz/xanh-pastel/tao-link.html** trên điện thoại hoặc máy tính. Link mời tạo ra dùng tên miền gọn (`config.js` → `shareUrl`):
+Mở **https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/tao-link.html** trên điện thoại hoặc máy tính. Link mời tạo ra lấy theo địa chỉ trang web đang mở (gắn tên miền riêng rồi thì mở trang này qua tên miền để link mời dùng tên miền):
 
 1. **Nhạc nền** — dán link YouTube (`youtube.com/watch?v=…`, `youtu.be/…`, có thể chọn giây bắt đầu) hoặc đường dẫn file nhạc (`assets/nhac/ten-file.mp3` sau khi chép file vào `xanh-pastel/assets/nhac/`). Bấm **Nghe thử** để kiểm tra; video YouTube nào chặn phát trên trang khác thì chọn video khác.
 2. **Lời nhắn gửi kèm** — sửa tuỳ ý; `{ten}` là tên khách, `{link}` là link thiệp riêng.
@@ -165,18 +165,18 @@ rồi mở <http://localhost:8000/xanh-pastel/> (mẫu xanh pastel; <http://loca
 2. Vào **Settings → Pages**, *Build and deployment* chọn **Deploy from a branch**, chọn nhánh và thư mục `/ (root)`, bấm **Save**.
 3. Sau khoảng 1 phút, thiệp có ở `https://<tên-tài-khoản>.github.io/<tên-repo>/`.
 
-### Tên miền riêng (đang dùng: thiepmoihungtuyetanh.xyz, quản lý DNS ở Mắt Bão)
+### Tên miền riêng (sẽ gắn sau: thiepmoihungtuyetanh.xyz, DNS ở Mắt Bão)
 
-- DNS: bản ghi **A** `@` → `185.199.108.153` (thêm được `185.199.109.153`, `185.199.110.153`, `185.199.111.153` thì càng tốt) và **CNAME** `www` → `vhung-spec.github.io.`
-- GitHub: **Settings → Pages → Custom domain** = `thiepmoihungtuyetanh.xyz` (file `CNAME` ở gốc repo giữ tên miền này, đừng xoá). Khi GitHub báo *DNS check successful* thì tích **Enforce HTTPS**.
-- Trang gốc `index.html` chỉ chuyển thẳng vào `xanh-pastel/` và mang sẵn ảnh xem trước (`og:image`) cho Zalo/Facebook; mẫu đỏ rượu cũ ở `mau-do-ruou.html`.
-- Đổi tên miền khác: sửa file `CNAME`, `og:url` / `og:image` trong `index.html` và `xanh-pastel/index.html`, và `shareUrl` trong `xanh-pastel/js/config.js`.
+Hiện thiệp chạy ở `https://vhung-spec.github.io/bokin-thiep-onl/` (chưa khai báo tên miền). Khi muốn gắn tên miền:
+- DNS (đã làm): bản ghi **A** `@` → `185.199.108.153` (thêm được `185.199.109.153`, `185.199.110.153`, `185.199.111.153` thì càng tốt) và **CNAME** `www` → `vhung-spec.github.io.`
+- GitHub: **Settings → Pages → Custom domain** = `thiepmoihungtuyetanh.xyz` → **Save** (GitHub tự tạo file `CNAME` ở gốc repo). Khi báo *DNS check successful* thì tích **Enforce HTTPS**.
+- Sửa `og:url` / `og:image` trong `index.html` và `xanh-pastel/index.html` sang tên miền để Zalo/Facebook hiện ảnh xem trước. Link mời ở trang tạo link tự đổi theo tên miền khi mở trang đó qua tên miền.
+- Trang gốc `index.html` chỉ chuyển thẳng vào `xanh-pastel/` và mang sẵn ảnh xem trước; mẫu đỏ rượu cũ ở `mau-do-ruou.html`.
 
 ## Cấu trúc thư mục
 
 ```
 index.html                 trang gốc của tên miền: chuyển thẳng vào thiệp xanh pastel
-CNAME                      tên miền riêng cho GitHub Pages
 mau-do-ruou.html           mẫu đỏ rượu (khung trang)
 css/style.css              màu sắc, bố cục, hiệu ứng (mẫu đỏ rượu)
 js/config.js               ← nội dung mẫu đỏ rượu

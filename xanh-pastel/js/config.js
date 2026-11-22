@@ -115,8 +115,9 @@ window.WEDDING = {
     text: 'Cảm ơn bạn đã dành thời gian quý báu để chung vui cùng chúng mình. Sự hiện diện của bạn là món quà ý nghĩa nhất!',
   },
 
-  // ĐỊA CHỈ THIỆP dùng trong link mời riêng (trang tao-link.html). Tên miền gốc mở thẳng thiệp.
-  shareUrl: 'https://thiepmoihungtuyetanh.xyz/',
+  // ĐỊA CHỈ THIỆP dùng trong link mời riêng (trang tao-link.html).
+  // Để trống: tự lấy theo địa chỉ đang mở (github.io bây giờ, tên miền riêng khi gắn sau), trang gốc mở thẳng thiệp.
+  shareUrl: '',
 
   // NƠI NHẬN PHẢN HỒI: dán link ứng dụng web Google Apps Script vào đây (xem README, mục "Lưu phản hồi").
   // Để trống thì nút "Gửi phản hồi" sẽ báo chưa lưu được, không bao giờ báo thành công giả.
