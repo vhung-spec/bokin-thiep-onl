@@ -11,15 +11,16 @@
  * Mẫu xanh pastel chỉ báo khách "đã lưu" khi nhận được {"ok": true}.
  * Khách gửi lại xác nhận (cùng tên, cùng link mời) thì cập nhật dòng cũ, không thêm dòng trùng.
  * Trang tính "Thống kê" tự tạo: số phản hồi, số người tham dự, chia theo nhà trai / nhà gái.
- * Trang xanh-pastel/thong-ke.html xem danh sách khi nhập đúng mật khẩu:
- *   Apps Script → Cài đặt dự án (bánh răng) → Thuộc tính tập lệnh → thêm MAT_KHAU = mật khẩu của bạn.
- *   (Mật khẩu không nằm trong code, nên repo công khai vẫn an toàn.)
+ * Trang xanh-pastel/thong-ke.html xem danh sách khi nhập đúng mật khẩu. Đặt mật khẩu một trong hai cách:
+ *   - gõ vào dòng  var MAT_KHAU = '…'  bên dưới, NGAY TRONG trình soạn Apps Script (đừng đưa mật khẩu lên GitHub);
+ *   - hoặc Cài đặt dự án (bánh răng) → Thuộc tính tập lệnh → thêm MAT_KHAU = mật khẩu.
  * Cách cài: xem mục "Lưu dữ liệu vào Google Sheets" trong README.md
  */
 var RSVP_SHEET = 'Xác nhận tham dự';
 var WISH_SHEET = 'Lời chúc';
 var RSVP_HEAD = ['Thời gian', 'Tên', 'Khách của', 'Tham dự', 'Số người', 'Link mời (?to=)', 'Câu hỏi thêm'];
 var STAT_SHEET = 'Thống kê';
+var MAT_KHAU = ''; // ← mật khẩu xem trang thống kê (gõ trong Apps Script, để trống ở bản trên GitHub)
 var WISH_HEAD = ['Thời gian', 'Tên', 'Lời chúc', 'Chữ ký', 'Link mời (?to=)', 'Ẩn'];
 
 function sheet_(name, head) {
@@ -116,7 +117,7 @@ function statsSheet_() {
 
 // Danh sách phản hồi cho trang thong-ke.html (chỉ khi đúng mật khẩu MAT_KHAU)
 function stats_(key) {
-  var pass = PropertiesService.getScriptProperties().getProperty('MAT_KHAU');
+  var pass = MAT_KHAU || PropertiesService.getScriptProperties().getProperty('MAT_KHAU');
   if (!pass) return json_({ ok: false, error: 'no-password' });
   if (String(key || '') !== String(pass)) { Utilities.sleep(800); return json_({ ok: false, error: 'wrong-password' }); }
   var sh = sheet_(RSVP_SHEET, RSVP_HEAD);

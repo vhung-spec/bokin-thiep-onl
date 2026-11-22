@@ -16,7 +16,7 @@
   <header class="top">
     <p class="couple" id="couple"></p>
     <h1>Thống kê khách mời</h1>
-    <p class="sub">Ai sẽ tham dự, ai không, ai chưa phản hồi. Dữ liệu lấy từ Google Sheets, chỉ xem được khi có mật khẩu.</p>
+    <p class="sub">Ai sẽ tham dự, ai không, ai chưa phản hồi — cập nhật ngay khi khách gửi xác nhận. Chỉ xem được khi có mật khẩu.</p>
     <a class="btn ghost" href="tao-link.html">Trang tạo link mời</a>
   </header>
 
@@ -31,8 +31,14 @@
         <p class="hint" id="loginMsg" role="status" aria-live="polite"></p>
       </form>
       <div id="noEndpoint" hidden>
-        <p class="hint bad">Thiệp chưa kết nối Google Sheets nên chưa có dữ liệu thật.</p>
-        <p class="hint">Làm theo README, mục “Lưu dữ liệu vào Google Sheets”, rồi dán link Apps Script vào <code>endpoint</code> trong <code>xanh-pastel/js/config.js</code>. Sau đó đặt mật khẩu: trong Apps Script vào <b>Cài đặt dự án → Thuộc tính tập lệnh</b>, thêm <code>MAT_KHAU</code>.</p>
+        <p class="hint bad">Thiệp chưa có chỗ lưu phản hồi nên chưa có dữ liệu thật.</p>
+        <p class="hint">Trang thiệp chỉ là trang tĩnh, không tự lưu được xác nhận của khách. Cần kết nối <b>một lần</b> với Google Apps Script (miễn phí) làm chỗ lưu; sau đó mọi thống kê hiện ngay trên trang này, không phải mở Google Sheets:</p>
+        <ol class="steps">
+          <li>Tạo một Google Sheet mới → <b>Tiện ích mở rộng → Apps Script</b>.</li>
+          <li>Xoá code mẫu, dán toàn bộ file <code>google-apps-script/Code.gs</code> trong repo; ở dòng <code>var MAT_KHAU = ''</code> gõ mật khẩu bạn muốn, rồi bấm Lưu.</li>
+          <li><b>Triển khai → Tùy chọn triển khai mới → Ứng dụng web</b>, “Người có quyền truy cập”: <b>Bất kỳ ai</b> → Triển khai, cho phép quyền.</li>
+          <li>Chép link ứng dụng web (dạng <code>https://script.google.com/macros/s/…/exec</code>), dán vào <code>endpoint</code> trong <code>xanh-pastel/js/config.js</code> — hoặc gửi link cho người làm thiệp.</li>
+        </ol>
         <div class="btns"><button class="btn ghost" type="button" id="demoBtn">Xem thử với dữ liệu mẫu</button></div>
       </div>
     </section>
@@ -51,7 +57,6 @@
       <div class="btns">
         <button class="btn" type="button" id="exportCsv">Tải file thống kê (CSV)</button>
         <button class="btn ghost" type="button" id="reload">Tải lại</button>
-        <a class="btn ghost" id="openSheet" target="_blank" rel="noopener" hidden>Mở Google Sheets</a>
         <button class="btn ghost" type="button" id="logout">Thoát</button>
       </div>
     </section>

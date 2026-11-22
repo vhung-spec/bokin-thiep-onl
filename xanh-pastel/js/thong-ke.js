@@ -1,6 +1,6 @@
 /*
  * Trang thống kê khách mời (thong-ke.html)
- * Lấy danh sách xác nhận tham dự từ Google Apps Script (cần mật khẩu MAT_KHAU đặt trong Apps Script),
+ * Lấy danh sách xác nhận tham dự từ chỗ lưu phản hồi (Google Apps Script, cần mật khẩu MAT_KHAU),
  * ghép với danh sách khách ở trang tạo link (lưu trên máy này) để biết ai chưa phản hồi.
  */
 (function () {
@@ -33,7 +33,7 @@
   }
 
   /* ---------- Lấy dữ liệu ---------- */
-  var rows = [], sheetUrl = '', demo = false, tab = 'yes';
+  var rows = [], demo = false, tab = 'yes';
   function fetchStats(key) {
     var body = new URLSearchParams({ type: 'stats', key: key });
     return fetch(W.endpoint, { method: 'POST', body: body, redirect: 'follow' })
@@ -45,16 +45,16 @@
       });
   }
   var MSG = {
-    'no-password': 'Apps Script chưa có mật khẩu. Vào Cài đặt dự án → Thuộc tính tập lệnh, thêm MAT_KHAU = mật khẩu bạn muốn, rồi thử lại.',
+    'no-password': 'Chỗ lưu phản hồi chưa có mật khẩu. Trong Apps Script, gõ mật khẩu vào dòng var MAT_KHAU = \'\' rồi Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới.',
     'wrong-password': 'Sai mật khẩu.',
     'old-version': 'Apps Script đang chạy bản cũ. Dán lại file Code.gs mới, rồi Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới.',
-    'http': 'Không kết nối được Google Sheets. Kiểm tra mạng và link endpoint trong config.js.',
+    'http': 'Không kết nối được chỗ lưu phản hồi. Kiểm tra mạng và link endpoint trong config.js.',
   };
   function load(key, quiet) {
     var msg = $('#loginMsg'), btn = $('#loginBtn');
     msg.className = 'hint'; msg.textContent = 'Đang tải…'; btn.disabled = true;
     return fetchStats(key).then(function (j) {
-      rows = j.rows; sheetUrl = j.sheet || ''; demo = false;
+      rows = j.rows; demo = false;
       msg.textContent = '';
       show();
       if (!quiet) toast('Đã tải ' + rows.length + ' phản hồi.');
@@ -114,7 +114,6 @@
     }).join('');
     var now = new Date();
     $('#updated').textContent = demo ? 'Đây là dữ liệu mẫu để xem giao diện.' : 'Cập nhật lúc ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ', ' + pad(now.getDate()) + '/' + pad(now.getMonth() + 1);
-    var os = $('#openSheet'); os.hidden = !sheetUrl; if (sheetUrl) os.href = sheetUrl;
     // nhãn số lượng trên các tab
     var counts = { yes: yes.length, no: no.length, wait: m.hasInvites ? wait.length : null, all: list.length };
     $$('#tabs button').forEach(function (b) {
@@ -160,7 +159,7 @@
   });
   $('#search').addEventListener('input', function () { renderList(); });
 
-  /* ---------- Tải file thống kê (CSV, mở bằng Excel / Google Sheets) ---------- */
+  /* ---------- Tải file thống kê (CSV, mở bằng Excel) ---------- */
   function cell(v) { v = String(v == null ? '' : v); return /[",\n;]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
   $('#exportCsv').addEventListener('click', function () {
     var list = merged().list;
@@ -195,7 +194,7 @@
     $('#summaryCard').hidden = true; $('#listCard').hidden = true; $('#loginCard').hidden = false;
   });
   $('#demoBtn').addEventListener('click', function () {
-    demo = true; sheetUrl = '';
+    demo = true;
     var d = new Date(), iso = function (h) { var x = new Date(d.getTime() - h * 36e5); return x.getFullYear() + '-' + pad(x.getMonth() + 1) + '-' + pad(x.getDate()) + 'T' + pad(x.getHours()) + ':' + pad(x.getMinutes()); };
     rows = [
       { name: 'Anh Thắng', invitedAs: 'Anh Thắng và người thương', side: 'trai', attending: true, guests: 2, time: iso(30) },

@@ -123,9 +123,9 @@ Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` →
 
 ### Thống kê khách tham dự (`xanh-pastel/thong-ke.html`)
 
-Xem ai sẽ tham dự (kèm số người), ai báo vắng, ai chưa phản hồi; chia theo khách nhà trai / nhà gái; tìm tên; **Tải file thống kê (CSV)** để mở bằng Excel; nút **Mở Google Sheets**.
+Xem ngay trên trang: ai sẽ tham dự (kèm số người), ai báo vắng, ai chưa phản hồi; chia theo khách nhà trai / nhà gái; tìm tên; **Tải file thống kê (CSV)** để mở bằng Excel. Không cần mở Google Sheets — Google Apps Script chỉ làm chỗ lưu phản hồi phía sau (trang tĩnh không tự lưu được).
 
-- Cần cài Google Sheets (mục bên dưới) và **đặt mật khẩu**: trong Apps Script vào **Cài đặt dự án (biểu tượng bánh răng) → Thuộc tính tập lệnh → Thêm thuộc tính**, tên `MAT_KHAU`, giá trị là mật khẩu bạn muốn. Mật khẩu không nằm trong code nên repo công khai vẫn an toàn; không có mật khẩu thì không ai xem được danh sách.
+- Cần kết nối chỗ lưu một lần (mục “Lưu dữ liệu vào Google Sheets” bên dưới) và **đặt mật khẩu**: gõ vào dòng `var MAT_KHAU = ''` trong trình soạn Apps Script (đừng đưa mật khẩu lên GitHub), hoặc **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`. Không có mật khẩu thì không ai xem được danh sách.
 - “Chưa phản hồi” lấy từ danh sách khách ở trang Tạo link trên máy bạn dùng để gửi (hoặc nhập file CSV danh sách khách vào trang Tạo link trên máy khác).
 - Trong Google Sheets có sẵn trang tính **“Thống kê”** (tự tạo khi có phản hồi đầu tiên): số phản hồi, tổng số người tham dự, chia theo nhà trai / nhà gái, số người vắng. Khách gửi lại xác nhận (cùng tên, cùng link) thì dòng cũ được cập nhật, không bị đếm trùng.
 - Chưa nối Google Sheets thì trang có nút **Xem thử với dữ liệu mẫu**.
@@ -149,7 +149,7 @@ Chưa cài thì mẫu đỏ rượu chạy ở **chế độ xem thử** (xác n
 
 Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
 Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
-Để xem trang thống kê, thêm mật khẩu: **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`.
+Để xem trang thống kê, đặt mật khẩu ở dòng `var MAT_KHAU = ''` trong Apps Script (hoặc **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`).
 
 ## Xem thử trên máy
 
