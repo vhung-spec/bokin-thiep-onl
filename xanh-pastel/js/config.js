@@ -42,7 +42,7 @@ window.WEDDING = {
 
   // Ảnh cưới của mẫu này nằm trong xanh-pastel/assets/anh/ (ảnh dài nhất ~1600px, đã nén).
   photos: {
-    hero: 'assets/anh/anh-03.jpg',   // ảnh lớn trên phần Countdown (ảnh dọc, khung 4:5)
+    hero: 'assets/anh/anh-07.jpg',   // ảnh lớn trên phần Countdown (ảnh dọc, khung 4:5)
     thanks: 'assets/anh/anh-05.jpg', // ảnh dưới phong bì quà mừng (ảnh ngang)
   },
 
@@ -74,8 +74,12 @@ window.WEDDING = {
     title: 'The Album',
     photos: [
       // Thêm/bớt dòng tuỳ ý. Ảnh dọc hiển thị trọn khung; ảnh ngang được cắt phần giữa (xem lớn thì thấy đủ).
-      'assets/anh/anh-01.jpg', 'assets/anh/anh-04.jpg', 'assets/anh/anh-02.jpg',
-      'assets/anh/anh-03.jpg', 'assets/anh/anh-05.jpg',
+      'assets/anh/anh-01.jpg', // nhà thờ, ô kính màu
+      'assets/anh/anh-06.jpg', // áo dài trước hiệu thuốc
+      'assets/anh/anh-02.jpg', // ngồi trong studio
+      'assets/anh/anh-03.jpg', // lật khăn voan ngoài trời
+      'assets/anh/anh-04.jpg', // đứng trong studio
+      'assets/anh/anh-08.jpg', // toàn cảnh vịnh Hạ Long
     ],
   },
 
