@@ -5,7 +5,7 @@ Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượ
 | Mẫu | Link | Sửa nội dung ở |
 |---|---|---|
 | **Đỏ rượu** — phong bì sáp, polaroid, tim rơi | `/` (trang chính) | `js/config.js` |
-| **Xanh pastel** — thiệp Văn Hùng & Tuyết Anh: bìa giấy màu nước hai cánh, dấu sáp xanh, hoa dâm bụt, sóng nước | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
+| **Xanh pastel** — thiệp Văn Hùng & Tuyết Anh: giấy xanh xô thơm dập nổi lá cây, hai cánh mở, dấu sáp vàng | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
 
 Gửi khách link của mẫu bạn chọn (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/xanh-pastel/?to=Ngọc%20Anh`).
 
@@ -84,18 +84,18 @@ Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **
 
 Thư mục `xanh-pastel/`. Một trang cuộn dọc cho điện thoại, theo bản thiết kế PDF 12 trang (bỏ các khoảng trống lớn giữa các trang):
 
-1. **Bìa** — giấy màu nước xanh trời (#91CFF2) gấp hai cánh, đường gáp ở giữa có bóng rất nhẹ; hoa trắng nhiều lớp và dấu sáp xanh, dòng “Chạm để mở thiệp” (kèm tên khách nếu link có `?to=`). Chạm hoa hoặc dòng chữ: dấu sáp nhấc nhẹ, hai cánh mở sang hai bên trong ~0,8 giây, rồi “Văn Hùng”, trái tim, “Tuyết Anh”, “28 . 11 . 2026” hiện dần. Cuộn được ngay sau khi mở. Điện thoại bật *giảm chuyển động* thì vào thẳng nội dung.
+1. **Bìa** — giấy xanh xô thơm dập nổi lá cây gấp hai cánh, cánh phải đè lên cánh trái với bóng rất nhẹ; dấu sáp vàng có cành lá nổi ở đường gáp, dòng “Chạm để mở thiệp” (kèm tên khách nếu link có `?to=`). Chạm dấu sáp hoặc dòng chữ: dấu sáp nhấc nhẹ, hai cánh mở sang hai bên trong ~0,8 giây, rồi “Văn Hùng”, trái tim, “Tuyết Anh”, “28 . 11 . 2026” hiện dần. Cuộn được ngay sau khi mở. Điện thoại bật *giảm chuyển động* thì vào thẳng nội dung.
 2. **Lời mời** — hai cột nhà trai / nhà gái, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), số 28 lớn, *Thứ Bảy · 10:30*, ngày âm lịch tự tính, tên địa điểm được tô nổi, địa chỉ và nút **Xem đường đi** (mở Google Maps).
 3. **Ảnh cầu thang + Countdown** — đếm ngày/giờ/phút/giây tới đúng 10:30 giờ Việt Nam (khách ở múi giờ khác vẫn đúng); tới giờ thì hiện “Đã đến giờ chung vui cùng chúng mình”.
-4. **Save The Date** — lịch tháng 11/2026 trên giấy ngà, Chủ nhật đầu tuần, ngày 28 trong trái tim xanh; sóng nước khép phần lịch.
-5. **Love Story** — chữ Lora dễ đọc trên khung giấy sáng, ký tên viết tay.
+4. **Save The Date** — lịch tháng 11/2026 trên giấy ngà, Chủ nhật đầu tuần, ngày 28 trong trái tim vàng; dải lá vàng khép phần lịch.
+5. **Love Story** — chữ Lora dễ đọc trên khung giấy sáng (kèm chữ ký) đặt trên giấy xô thơm.
 6. **Timeline** — 10:00 đón khách, 10:30 khai tiệc, trục mảnh nối các chấm.
 7. **The Album** — ảnh lớn lướt ngang (ảnh kế tiếp ló ra), có nút ‹ › trên máy tính, chạm để xem ảnh lớn.
 8. **Xác Nhận Tham Dự** — tên, “Mình sẽ tham dự” / “Rất tiếc, mình không thể tham dự”; ô số người chỉ hiện khi chọn tham dự. **Chỉ báo gửi thành công khi Google Sheets thật sự lưu xong** (xem mục bên dưới).
-9. **Gửi Quà Mừng** — phong bì xanh; chạm để mở hộp có đúng ảnh mã QR, VPBank 3646866, nút sao chép số tài khoản và nút Đóng.
-10. **Thank you!** — ảnh bên vịnh, lời cảm ơn, chữ ký, ngày cưới, sóng nước kết thúc.
+9. **Gửi Quà Mừng** — phong bì xanh xô thơm đóng dấu sáp vàng; chạm để mở hộp có đúng ảnh mã QR, VPBank 3646866, nút sao chép số tài khoản và nút Đóng.
+10. **Thank you!** — ảnh bên vịnh, lời cảm ơn, chữ ký, ngày cưới, dải lá vàng kết thúc.
 
-Màu: nền nội dung #EAF6FB, mặt giấy #FFFDF8, chữ #193A53, nút #245486. Chữ viết tay (Ephesis) chỉ dùng cho tên, chữ ký và tiêu đề ngắn; chữ đọc dùng Lora 17–18px.
+Màu: giấy xô thơm #A6A882, nền nội dung kem #EFF0E8, mặt giấy #FFFDF8, chữ xanh rêu #2D3826, nút xanh ô liu #55633F, vàng đồng #B48A55. Giấy dập nổi, dấu sáp và cành lá vàng được vẽ bằng code (xem [`tools/hoa-tiet/`](tools/hoa-tiet/)). Chữ viết tay (Ephesis) chỉ dùng cho tên, chữ ký và tiêu đề ngắn; chữ đọc dùng Lora 17–18px.
 
 Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, lịch trình, album, tài khoản mừng cưới…). Ảnh cưới nằm trong `xanh-pastel/assets/anh/` (`anh-01.jpg` …). Trong `config.js`:
 - `photos.hero` / `photos.heroFocus`: ảnh lớn đầu tiên và điểm giữ trong khung khi cắt (mặc định `50% 88%` để giữ cả gương mặt và váy);
@@ -150,6 +150,7 @@ js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
 google-apps-script/Code.gs lưu xác nhận, lời chúc, lượt thả tim vào Google Sheets (dùng chung)
+tools/hoa-tiet/            code vẽ giấy dập nổi, dấu sáp vàng, cành lá vàng của mẫu xanh pastel
 assets/anh/                ảnh mẫu của mẫu đỏ rượu
 assets/og-image.jpg        ảnh xem trước khi chia sẻ link
 
@@ -160,15 +161,15 @@ xanh-pastel/               mẫu xanh pastel
   js/art.js                hình vẽ SVG: hoa trắng, dấu sáp, giấy xé, phong bì, chữ T uốn lượn
   js/main.js               mở bìa, đếm ngược giờ VN, lịch, album, xác nhận tham dự, hộp QR
   assets/anh/              ảnh cưới của mẫu xanh pastel
-  assets/nen-mau-nuoc.webp nền màu nước (ô lặp dọc liền mạch); phần nền nhạt là ảnh này phủ #EAF6FB 95%
+  assets/giay-xo-tham.webp, giay-kem.webp  giấy dập nổi lá cây (ô lặp liền mạch)
+  assets/dau-sap-vang.webp, canh-la-vang.webp, day-la-vang.webp  dấu sáp, cành lá, dải lá vàng
   assets/qr-mung-cuoi.png  mã VietQR VPBank 3646866
-  assets/hoa-dam-but.webp, song-nuoc.webp  hoạ tiết hoa dâm bụt và sóng nước (nền trong suốt)
   assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
 
 ## Ghi chú
 
-- Nền màu nước, hoa dâm bụt và sóng nước của mẫu xanh pastel lấy từ ảnh do chủ thiệp cung cấp; nếu ảnh đó tải từ trang ảnh/thiết kế, hãy kiểm tra giấy phép trước khi đăng thiệp công khai.
+- Tông xanh xô thơm & vàng của mẫu xanh pastel lấy cảm hứng từ một ghim Pinterest (bìa thiệp của Petit Moments); giấy dập nổi, dấu sáp và cành lá đều **tự vẽ lại bằng code** trong `tools/hoa-tiet/`, không dùng ảnh gốc. Bản nền màu nước + hoa dâm bụt trước đó còn trong lịch sử git, commit `4d4db84`.
 - Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền giấy thủ công, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
 - Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Ephesis, Lora, Playfair Display, Be Vietnam Pro (mẫu xanh pastel).
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.

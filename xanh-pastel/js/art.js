@@ -1,7 +1,7 @@
 /*
- * Hình vẽ SVG tự vẽ cho mẫu thiệp "Xanh pastel":
- * hoa trắng giấy, con dấu sáp, mép giấy xé, biểu tượng màu nước, chữ T uốn lượn, phong bì ren.
- * Nền màu nước, hoa dâm bụt và sóng nước là ảnh trong assets/.
+ * Hình vẽ SVG tự vẽ cho mẫu thiệp "Xanh pastel" (tông xanh xô thơm & vàng):
+ * mép giấy xé, biểu tượng lịch trình, chữ T uốn lượn, phong bì ren, trái tim.
+ * Giấy dập nổi lá cây, dấu sáp vàng, cành lá vàng là ảnh trong assets/ (tạo bằng tools/hoa-tiet/*.py).
  */
 (function () {
   /* ---------- Số ngẫu nhiên có hạt giống (hình giống nhau mỗi lần tải) ---------- */
@@ -36,13 +36,13 @@
     lin('wp3', '#e8ecf5', '#ffffff');
     lin('sage', '#b9c3b4', '#8b9a88', 1, 0);
     lin('sageB', '#c8d0dc', '#93a1b8', 1, 0);
-    g += '<radialGradient id="waxG" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#e2f2ff"/><stop offset=".5" stop-color="#9fd0f7"/><stop offset="1" stop-color="#5a9fe0"/></radialGradient>';
+    g += '<radialGradient id="waxG" cx=".38" cy=".3" r=".85"><stop offset="0" stop-color="#f6e6c8"/><stop offset=".5" stop-color="#d3ac74"/><stop offset="1" stop-color="#9c6d3a"/></radialGradient>';
     g += '<radialGradient id="ctrB" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fbf6e6"/><stop offset="1" stop-color="#d9e2f5"/></radialGradient>';
-    g += '<linearGradient id="icoB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a6d8fb"/><stop offset="1" stop-color="#2f7fd0"/></linearGradient>';
-    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b4defc"/><stop offset="1" stop-color="#78bcf2"/></linearGradient>';
+    g += '<linearGradient id="icoB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dcb983"/><stop offset="1" stop-color="#8f6332"/></linearGradient>';
+    g += '<linearGradient id="envB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c3c8a6"/><stop offset="1" stop-color="#8f9872"/></linearGradient>';
     g += '<filter id="wc" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".3"/></filter>';
-    g += '<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="#2d4479" flood-opacity=".2"/></filter>';
-    g += '<filter id="shadowS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#3b4d7c" flood-opacity=".22"/></filter>';
+    g += '<filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="2.5" stdDeviation="3" flood-color="#3a3a1e" flood-opacity=".22"/></filter>';
+    g += '<filter id="shadowS" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="1.2" stdDeviation="1.4" flood-color="#3a3a1e" flood-opacity=".22"/></filter>';
     var wrap = document.createElement('div');
     wrap.innerHTML = '<svg id="art-defs" width="0" height="0" style="position:absolute" aria-hidden="true"><defs>' + g + '</defs></svg>';
     document.body.insertBefore(wrap.firstChild, document.body.firstChild);
@@ -111,10 +111,10 @@
       pts.push(f1(Math.cos(a) * r) + ' ' + f1(Math.sin(a) * r));
     }
     return '<g filter="url(#shadow)"><path d="M' + pts.join(' L') + 'Z" fill="url(#waxG)"/></g>' +
-      '<circle r="21.5" fill="none" stroke="#3d8ad2" stroke-opacity=".55" stroke-width="2"/>' +
+      '<circle r="21.5" fill="none" stroke="#8a6130" stroke-opacity=".55" stroke-width="2"/>' +
       '<circle r="20" fill="none" stroke="#f0f8ff" stroke-opacity=".7" stroke-width=".8"/>' +
-      '<circle r="18.6" fill="#b5dcfa" fill-opacity=".35"/>' +
-      sprig('#2f7fd0', .6, .8) + sprig('#f1f5fd', -.5, -.5) + sprig('#a3d3f7', 0, 0);
+      '<circle r="18.6" fill="#ead3a8" fill-opacity=".35"/>' +
+      sprig('#8a6130', .6, .8) + sprig('#f1f5fd', -.5, -.5) + sprig('#e3c999', 0, 0);
   }
   function sealFlower(opts) {
     opts = opts || {};
@@ -139,7 +139,7 @@
     var fiber = 'M' + pts.map(function (p) { return p[0] + ' ' + f1(+p[1] + 1.4 + R() * .8); }).join(' L');
     var tr = dir === 'down' ? ' transform="translate(0 ' + H + ') scale(1 -1)"' : '';
     return '<svg class="tear-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><g' + tr + '>' +
-      '<path d="' + d + '" fill="' + (color || '#EAF6FB') + '"/>' +
+      '<path d="' + d + '" fill="' + (color || '#EFF0E8') + '"/>' +
       '<path d="' + fiber + '" fill="none" stroke="#fff" stroke-width="2.6" stroke-opacity=".95"/></g></svg>';
   }
   /* =========================================================
@@ -148,12 +148,12 @@
   function mandala() {
     var s = '';
     for (var i = 0; i < 4; i++) s += '<path transform="rotate(' + i * 90 + ')" d="M0 -3 C-4.5 -6 -4.5 -12 0 -15 C4.5 -12 4.5 -6 0 -3Z" fill="url(#icoB)"/>';
-    for (var j = 0; j < 4; j++) s += '<path transform="rotate(' + (j * 90 + 45) + ')" d="M0 -3 C-2.5 -5 -2.5 -8 0 -9.5 C2.5 -8 2.5 -5 0 -3Z" fill="#9fb6ea"/>';
-    for (var k = 0; k < 8; k++) s += '<circle transform="rotate(' + k * 45 + ')" cy="' + (k % 2 ? -12 : -18) + '" r="' + (k % 2 ? 1 : 1.3) + '" fill="#6f8ed6"/>';
-    return '<svg class="art mandala" viewBox="-20 -20 40 40" aria-hidden="true">' + s + '<circle r="2.4" fill="#6f8ed6"/><circle r="1" fill="#fff"/></svg>';
+    for (var j = 0; j < 4; j++) s += '<path transform="rotate(' + (j * 90 + 45) + ')" d="M0 -3 C-2.5 -5 -2.5 -8 0 -9.5 C2.5 -8 2.5 -5 0 -3Z" fill="#d8bd8e"/>';
+    for (var k = 0; k < 8; k++) s += '<circle transform="rotate(' + k * 45 + ')" cy="' + (k % 2 ? -12 : -18) + '" r="' + (k % 2 ? 1 : 1.3) + '" fill="#a87c45"/>';
+    return '<svg class="art mandala" viewBox="-20 -20 40 40" aria-hidden="true">' + s + '<circle r="2.4" fill="#a87c45"/><circle r="1" fill="#fff"/></svg>';
   }
   function heartArrow() {
-    return '<svg class="art heart-arrow" viewBox="-36 -24 72 48" aria-hidden="true"><g fill="none" stroke="#193A53" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' +
+    return '<svg class="art heart-arrow" viewBox="-36 -24 72 48" aria-hidden="true"><g fill="none" stroke="#2D3826" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' +
       '<path d="M2 14 C-12 4 -15 -6 -9 -10 C-5 -13 -1 -10 0 -6 C1 -11 7 -14 11 -10 C17 -5 12 5 2 14Z"/>' +
       '<path d="M-6 -2 C-2 -6 3 -3 0 1 C-3 5 4 7 8 2"/>' +
       '<path d="M-30 14 C-18 9 -4 1 24 -14"/><path d="M24 -14 L17 -13.5 M24 -14 L20.5 -8"/>' +
@@ -171,15 +171,15 @@
   }
   // Biểu tượng màu nước cho lịch trình
   var WC_ICONS = {
-    cheers: '<g transform="rotate(-14 13 18)"><path d="M8 4h9l-1.4 9.5a3.2 3.2 0 0 1-6.2 0z" fill="url(#icoB)"/><path d="M12.5 16v8 M9 24h7" stroke="#5677c6" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>' +
-      '<g transform="rotate(14 27 18)"><path d="M22 4h9l-1.4 9.5a3.2 3.2 0 0 1-6.2 0z" fill="url(#icoB)"/><path d="M26.5 16v8 M23 24h7" stroke="#5677c6" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>' +
-      '<path d="M20 2.5c-1-1.6-3.2-.6-2.4 1 .4.8 2.4 2 2.4 2s2-1.2 2.4-2c.8-1.6-1.4-2.6-2.4-1z" fill="#7d98dc"/>',
+    cheers: '<g transform="rotate(-14 13 18)"><path d="M8 4h9l-1.4 9.5a3.2 3.2 0 0 1-6.2 0z" fill="url(#icoB)"/><path d="M12.5 16v8 M9 24h7" stroke="#8a6130" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>' +
+      '<g transform="rotate(14 27 18)"><path d="M22 4h9l-1.4 9.5a3.2 3.2 0 0 1-6.2 0z" fill="url(#icoB)"/><path d="M26.5 16v8 M23 24h7" stroke="#8a6130" stroke-width="1.4" fill="none" stroke-linecap="round"/></g>' +
+      '<path d="M20 2.5c-1-1.6-3.2-.6-2.4 1 .4.8 2.4 2 2.4 2s2-1.2 2.4-2c.8-1.6-1.4-2.6-2.4-1z" fill="#c19a63"/>',
     rings: '<circle cx="14" cy="18" r="7.5" fill="none" stroke="url(#icoB)" stroke-width="2.6"/><circle cx="23" cy="18" r="7.5" fill="none" stroke="url(#icoB)" stroke-width="2.6"/>' +
-      '<path d="M11 8.5l3-3.5 3 3.5-3 2.2z" fill="#a9bff0" stroke="#5677c6" stroke-width=".8"/>',
+      '<path d="M11 8.5l3-3.5 3 3.5-3 2.2z" fill="#e2cba2" stroke="#8a6130" stroke-width=".8"/>',
     music: '<path d="M12 22V7l13-3.5v15" fill="none" stroke="url(#icoB)" stroke-width="2.2" stroke-linejoin="round"/><ellipse cx="8.8" cy="22.4" rx="4" ry="3" fill="url(#icoB)"/><ellipse cx="21.8" cy="19" rx="4" ry="3" fill="url(#icoB)"/>',
-    camera: '<rect x="5" y="9" width="26" height="16" rx="3" fill="url(#icoB)"/><circle cx="18" cy="17" r="4.6" fill="#e9effb"/><circle cx="18" cy="17" r="2.6" fill="#7d98dc"/><path d="M12 9l2-3.5h8L24 9z" fill="#7d98dc"/>',
+    camera: '<rect x="5" y="9" width="26" height="16" rx="3" fill="url(#icoB)"/><circle cx="18" cy="17" r="4.6" fill="#f6eedd"/><circle cx="18" cy="17" r="2.6" fill="#c19a63"/><path d="M12 9l2-3.5h8L24 9z" fill="#c19a63"/>',
     heart: '<path d="M18 27C8 20 4 14 6 9.5c2-4.5 8-5 12 0 4-5 10-4.5 12 0 2 4.5-2 10.5-12 17.5z" fill="url(#icoB)"/>',
-    cake: '<rect x="7" y="16" width="22" height="10" rx="2" fill="url(#icoB)"/><rect x="11" y="9" width="14" height="7" rx="1.5" fill="#a9bff0"/><path d="M18 9V5" stroke="#5677c6" stroke-width="1.4"/><circle cx="18" cy="4" r="1.3" fill="#e9b45a"/>',
+    cake: '<rect x="7" y="16" width="22" height="10" rx="2" fill="url(#icoB)"/><rect x="11" y="9" width="14" height="7" rx="1.5" fill="#e2cba2"/><path d="M18 9V5" stroke="#8a6130" stroke-width="1.4"/><circle cx="18" cy="4" r="1.3" fill="#e9b45a"/>',
   };
   function tlIcon(name) {
     return '<svg class="tl-ico" viewBox="0 0 36 30" aria-hidden="true"><g filter="url(#wc)">' + (WC_ICONS[name] || WC_ICONS.heart) + '</g></svg>';
@@ -188,7 +188,7 @@
 
   /* Chữ T uốn lượn + hoa vẽ nét (tiêu đề Timeline / The Album / Thank you) */
   function swashT() {
-    return '<svg class="swash-t" viewBox="0 0 220 150" aria-hidden="true"><g fill="none" stroke="#193A53" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' +
+    return '<svg class="swash-t" viewBox="0 0 220 150" aria-hidden="true"><g fill="none" stroke="#2D3826" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' +
       '<path d="M30 44 C14 40 12 28 26 26 C60 20 120 10 214 6"/>' +
       '<path d="M112 13 C110 48 104 92 92 124 C86 138 76 144 70 138"/>' +
       '<g transform="translate(42 70)"><path d="M0 0 C-7 -4 -7 -13 0 -14 C7 -13 7 -4 0 0Z M0 0 C4 -7 13 -7 14 0 C13 7 4 7 0 0Z M0 0 C7 4 7 13 0 14 C-7 13 -7 4 0 0Z M0 0 C-4 7 -13 7 -14 0 C-13 -7 -4 -7 0 0Z"/>' +
@@ -206,14 +206,14 @@
     var holes = '';
     for (var k = 1; k < n; k++) {
       var tt = k / n, hx = 200 - tt * 200, hy = 18 + Math.sin(tt * Math.PI) * 62 - 7;
-      holes += '<circle cx="' + f1(hx) + '" cy="' + f1(hy) + '" r="2.1" fill="#b2c8f0"/>';
-      if (k % 2) holes += '<circle cx="' + f1(hx) + '" cy="' + f1(hy - 9) + '" r="1.2" fill="#c3d4f3"/>';
+      holes += '<circle cx="' + f1(hx) + '" cy="' + f1(hy) + '" r="2.1" fill="#cfd2b6"/>';
+      if (k % 2) holes += '<circle cx="' + f1(hx) + '" cy="' + f1(hy - 9) + '" r="1.2" fill="#dcdec8"/>';
     }
     return {
       back: '<svg class="art" viewBox="0 0 200 140" preserveAspectRatio="none"><rect width="200" height="140" fill="url(#envB)"/></svg>',
-      front: '<svg class="art" viewBox="0 0 200 140" preserveAspectRatio="none"><path d="M0 40 L100 96 L200 40 L200 140 L0 140Z" fill="url(#envB)"/><path d="M0 140 L84 88 M200 140 L116 88" stroke="#7f9bd8" stroke-opacity=".4" fill="none"/></svg>',
+      front: '<svg class="art" viewBox="0 0 200 140" preserveAspectRatio="none"><path d="M0 40 L100 96 L200 40 L200 140 L0 140Z" fill="url(#envB)"/><path d="M0 140 L84 88 M200 140 L116 88" stroke="#6d7652" stroke-opacity=".4" fill="none"/></svg>',
       flap: '<svg class="art" viewBox="0 0 200 92" preserveAspectRatio="none"><path d="' + scal + '" fill="#fbfcff" filter="url(#shadowS)"/>' + holes +
-        '<path d="M20 18 Q100 30 180 18" stroke="#cbd8f3" fill="none" stroke-width="1"/></svg>',
+        '<path d="M20 18 Q100 30 180 18" stroke="#dcdcc6" fill="none" stroke-width="1"/></svg>',
       seal: '<svg class="art" viewBox="-34 -34 68 68">' + waxSeal(23) + '</svg>',
     };
   }

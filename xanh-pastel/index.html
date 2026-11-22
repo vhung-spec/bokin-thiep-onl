@@ -10,8 +10,8 @@
   <meta property="og:description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình, 10:30 Thứ Bảy 28.11.2026.">
   <meta property="og:url" content="https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/">
   <meta property="og:image" content="https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/assets/og-image.jpg">
-  <meta name="theme-color" content="#91CFF2">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%23245486'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#A6A882">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%2355633F'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Ephesis&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@400;500;600&family=Be+Vietnam+Pro:wght@500;600;700&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
 </head>
 <body class="locked">
 
-  <!-- ===== 1. BÌA: hai cánh giấy, chạm vào hoa để mở ===== -->
+  <!-- ===== 1. BÌA: hai cánh giấy dập nổi lá, chạm dấu sáp để mở ===== -->
   <section class="gate" id="gate" aria-label="Bìa thiệp">
     <div class="doors" aria-hidden="true">
-      <div class="door l"><span class="door-flower fl-bl" data-art="flowerF"></span><span class="shade"></span></div>
-      <div class="door r"><span class="door-flower fl-tr" data-art="flower"></span><span class="shade"></span></div>
+      <div class="door l"><span class="shade"></span></div>
+      <div class="door r"><span class="shade"></span></div>
     </div>
     <button class="gate-open" id="gateOpen" type="button">
       <span class="gate-seal" id="gateSeal"></span>
@@ -34,8 +34,7 @@
 
   <main class="shell">
     <!-- Mở đầu: hiện ra sau khi mở bìa -->
-    <section class="hero sky" id="dau-trang">
-      <span class="fl fl-hero" data-art="flower"></span>
+    <section class="hero sage" id="dau-trang">
       <div class="hero-seal hi" id="heroSeal"></div>
       <h1 class="hero-names">
         <span class="script name hi" id="n1"></span>
@@ -47,7 +46,7 @@
     </section>
 
     <!-- ===== 3. LỜI MỜI ===== -->
-    <section class="invite sky" id="loi-moi">
+    <section class="invite sage" id="loi-moi">
       <div class="veil">
         <div class="parents rv">
           <div><p class="fam-label" id="famTraiLabel"></p><p id="famTrai"></p></div>
@@ -76,7 +75,7 @@
     </section>
 
     <!-- ===== 4. ẢNH CẦU THANG + ĐẾM NGƯỢC ===== -->
-    <section class="cd mist" id="dem-nguoc">
+    <section class="cd cream" id="dem-nguoc">
       <figure class="hero-photo">
         <img id="heroImg" alt="Văn Hùng và Tuyết Anh ngồi trên bậc cầu thang">
         <div class="tear up in-photo" data-tear="5"></div>
@@ -93,35 +92,37 @@
     </section>
 
     <!-- Lịch tháng -->
-    <section class="cal mist" id="lich">
+    <section class="cal cream" id="lich">
       <h2 class="script sec-title lt" data-text="calendar.title"></h2>
       <div class="cal-card rv">
-        <span class="cal-flower" data-art="flower"></span>
+        <span class="cal-flower" data-art="sprig"></span>
         <div class="cal-head"><span class="cal-m" id="calMonth"></span><span class="cal-y" id="calYear"></span></div>
         <div class="cal-grid" id="calGrid"></div>
         <p class="cal-note" id="calNote"></p>
       </div>
-      <div class="wave-end rv" data-art="wave"></div>
+      <div class="wave-end rv" data-art="garland"></div>
       <div class="tear down" data-tear="17"></div>
     </section>
 
     <!-- ===== 5. CÂU CHUYỆN ===== -->
-    <section class="story sky" id="chuyen-tinh">
+    <section class="story sage" id="chuyen-tinh">
       <h2 class="script sec-title lt" data-text="loveStory.title"></h2>
-      <div class="story-panel rv" id="storyText"></div>
-      <p class="story-sign rv"><span class="closing" data-text="loveStory.closing"></span><span class="script sig" id="storySign"></span></p>
+      <div class="story-panel rv">
+        <div id="storyText"></div>
+        <p class="story-sign"><span class="closing" data-text="loveStory.closing"></span><span class="script sig" id="storySign"></span></p>
+      </div>
     </section>
 
     <!-- Lịch trình -->
-    <section class="timeline mist" id="lich-trinh">
+    <section class="timeline cream" id="lich-trinh">
       <div class="tear up" data-tear="23"></div>
       <h2 class="swash" data-swash="timeline.title"></h2>
       <ol class="tl rv" id="tlList"></ol>
     </section>
 
     <!-- Album -->
-    <section class="album mist" id="album">
-      <span class="fl fl-album" data-art="flower"></span>
+    <section class="album cream" id="album">
+      <span class="fl fl-album" data-art="sprig"></span>
       <h2 class="swash" data-swash="album.title"></h2>
       <div class="car-wrap">
         <div class="carousel" id="carousel" tabindex="0" role="region" aria-label="Album ảnh cưới, vuốt ngang để xem thêm"></div>
@@ -132,7 +133,7 @@
     </section>
 
     <!-- ===== 6. XÁC NHẬN THAM DỰ ===== -->
-    <section class="rsvp mist" id="xac-nhan">
+    <section class="rsvp cream" id="xac-nhan">
       <h2 class="script sec-title lt" data-text="rsvp.title"></h2>
       <p class="sec-text rv" data-text="rsvp.text"></p>
       <form id="rsvpForm" class="paper-card rv" novalidate>
@@ -159,7 +160,7 @@
     </section>
 
     <!-- Quà mừng -->
-    <section class="gift mist" id="qua-mung">
+    <section class="gift cream" id="qua-mung">
       <h2 class="script sec-title lt" data-text="gift.title"></h2>
       <p class="sec-text rv" data-text="gift.text"></p>
       <button class="gift-env rv" type="button" id="giftEnv" aria-haspopup="dialog" aria-label="Mở phong bì quà mừng">
@@ -170,7 +171,7 @@
     </section>
 
     <!-- Lời cảm ơn -->
-    <section class="ending mist" id="cam-on">
+    <section class="ending cream" id="cam-on">
       <figure class="end-photo">
         <div class="tear down in-photo top" data-tear="29"></div>
         <img id="endImg" alt="Văn Hùng và Tuyết Anh trên núi nhìn ra vịnh">
@@ -180,7 +181,7 @@
       <p class="sec-text thanks-text rv" data-text="thanks.text"></p>
       <p class="script end-sign rv" id="endSign"></p>
       <p class="end-date rv" id="endDate"></p>
-      <div class="wave-end last rv" data-art="wave"></div>
+      <div class="wave-end last rv" data-art="garland"></div>
     </section>
   </main>
 

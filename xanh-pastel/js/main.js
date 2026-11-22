@@ -30,17 +30,18 @@
   function motif(file, flip) {
     return '<img class="motif' + (flip ? ' flip' : '') + '" src="assets/' + file + '" alt="" aria-hidden="true" decoding="async">';
   }
+  // Cành lá vàng (góc lịch, góc album) và dải lá vàng (kết phần lịch, kết thiệp)
   var arts = {
-    flower: function () { return motif('hoa-dam-but.webp'); },
-    flowerF: function () { return motif('hoa-dam-but.webp', true); },
-    wave: function () { return motif('song-nuoc.webp'); },
+    sprig: function () { return motif('canh-la-vang.webp'); },
+    garland: function () { return motif('day-la-vang.webp'); },
   };
+  var SEAL = '<img class="seal-img" src="assets/dau-sap-vang.webp" alt="" aria-hidden="true" decoding="async">';
   $$('[data-art]').forEach(function (el) { var f = arts[el.getAttribute('data-art')]; el.innerHTML = f ? f() : ''; });
   $$('[data-tear]').forEach(function (el) {
     el.innerHTML = A.tear(+el.getAttribute('data-tear'), el.classList.contains('down') ? 'down' : 'up');
   });
-  $('#gateSeal').innerHTML = A.sealFlower({ seed: 7 }) + '<span class="sheen"></span>';
-  $('#heroSeal').innerHTML = A.sealFlower({ seed: 11 });
+  $('#gateSeal').innerHTML = SEAL + '<span class="sheen"></span>';
+  $('#heroSeal').innerHTML = SEAL;
   $('#ornHeart').innerHTML = A.heartArrow();
   $('#scrollHint').innerHTML = A.icon('down');
   $('#musicBtn').innerHTML = A.icon('music');
@@ -367,7 +368,7 @@
   $('.g-back', env).innerHTML = envArt.back;
   $('.g-front', env).innerHTML = envArt.front;
   $('.g-flap', env).innerHTML = envArt.flap;
-  $('.g-seal', env).innerHTML = envArt.seal;
+  $('.g-seal', env).innerHTML = SEAL;
   var accounts = (W.gift.accounts || []).filter(function (a) { return a.qr || a.number; });
   if (!accounts.length) $('#qua-mung').hidden = true;
   $('#giftCards').innerHTML = accounts.map(function (a) {
@@ -461,7 +462,7 @@
   if ('ResizeObserver' in window) new ResizeObserver(function () { requestAnimationFrame(alignBg); }).observe($('.shell'));
 
   /* ---------- Mở bìa ----------
-     Chạm hoa hoặc dòng chữ: dấu sáp nhấc nhẹ, hai cánh giấy mở sang hai bên (~0,8 giây),
+     Chạm dấu sáp hoặc dòng chữ: dấu sáp nhấc nhẹ, hai cánh giấy mở sang hai bên (~0,8 giây),
      rồi tên, trái tim, ngày cưới lần lượt hiện ra. Cuộn được ngay khi hai cánh mở xong.
      Mọi animation dựng sẵn ở trạng thái tạm dừng, chỉ đổi transform/opacity (chạy trên GPU). */
   var gate = $('#gate'), opened = false, openAnims = null;
@@ -478,7 +479,7 @@
     if (openAnims || reduce || !root.animate) return;
     openAnims = [];
     function add(el, frames, timing) { var a = el.animate(frames, timing); a.pause(); openAnims.push(a); return a; }
-    // dấu sáp + hoa nhấc nhẹ lên rồi mờ đi
+    // dấu sáp nhấc nhẹ lên rồi mờ đi
     add($('#gateSeal'), [
       { transform: 'none', opacity: 1 },
       { transform: 'translateY(-8px) scale(1.04)', opacity: 1, offset: .4 },
