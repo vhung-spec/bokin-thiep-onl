@@ -25,11 +25,16 @@
     <!-- 1. Nhạc nền -->
     <section class="card" aria-labelledby="h-music">
       <h2 id="h-music"><span class="n">1</span>Nhạc nền</h2>
-      <label class="lbl" for="musicInput">Link YouTube hoặc file nhạc</label>
+      <div class="songs" id="songs" hidden>
+        <p class="lbl">Chọn bài (chạm để chọn)</p>
+        <div class="song-list" id="songList" role="radiogroup" aria-label="Chọn bài nhạc nền"></div>
+      </div>
+      <label class="lbl" for="musicInput">Hoặc dán link YouTube / file nhạc khác</label>
       <input class="inp" id="musicInput" inputmode="url" autocomplete="off" placeholder="https://www.youtube.com/watch?v=…">
-      <div class="row">
+      <div class="row start-row">
         <label class="lbl inline" for="musicStart">Bắt đầu từ giây</label>
-        <input class="inp short" id="musicStart" type="number" min="0" step="1" inputmode="numeric" placeholder="0">
+        <input class="inp short" id="musicStart" type="text" inputmode="numeric" autocomplete="off" placeholder="0">
+        <span class="hint">ví dụ 45 hoặc 1:05</span>
       </div>
       <p class="hint" id="musicInfo" aria-live="polite"></p>
       <div class="btns">
@@ -61,10 +66,6 @@
           </details>
         </div>
         <button class="link" type="button" id="tokenToggle" hidden>Đổi mã GitHub</button>
-        <div class="songs" id="songs" hidden>
-          <p class="lbl">Nhạc đã tải lên</p>
-          <div class="song-list" id="songList"></div>
-        </div>
         <p class="hint">Nên dùng nhạc bạn có quyền sử dụng. File tối đa 20 MB.</p>
       </div>
     </section>

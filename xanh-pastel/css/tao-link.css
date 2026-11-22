@@ -124,9 +124,13 @@ details.help p { font-size: 14.5px; color: var(--ink-2); }
 .steps { margin: 6px 0 8px; padding-left: 22px; font-size: 14.5px; color: var(--ink-2); }
 .steps li { margin: 4px 0; }
 .steps a { color: var(--btn); font-weight: 600; }
-.songs { margin-top: 14px; }
+.songs { margin: 0 0 14px; }
+.song small { font-weight: 500; opacity: .75; }
+.start-row .hint { margin: 0; flex: 1 1 auto; }
 .song-list { display: flex; flex-wrap: wrap; gap: 8px; }
-.song { min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid rgba(85, 99, 63, .3); background: #fff; color: var(--btn); font-weight: 600; font-size: 14px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.song { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1.5px solid rgba(85, 99, 63, .3); background: #fff; color: var(--btn); font-weight: 600; font-size: 14px; max-width: 100%; white-space: nowrap; }
+.song .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.song small { flex: none; }
 .song.on { background: var(--btn); border-color: var(--btn); color: #fff; }
 #tokenToggle { margin-top: 10px; }
 

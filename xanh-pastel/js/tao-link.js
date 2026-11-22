@@ -64,12 +64,15 @@
     return b.split('#')[0].split('?')[0];
   }
   var defaultMusic = N.toParam(N.parse(W.music)); // nhạc trong config.js: link nào dùng đúng nhạc này thì không cần gắn
+  // giây bắt đầu (45 hoặc 1:05) áp cho cả YouTube lẫn file nhạc
   function musicSpec(raw, start) {
     var sp = N.parse(raw);
-    if (sp && sp.type === 'yt' && start !== '' && start != null && !isNaN(+start)) sp.start = Math.max(0, Math.floor(+start));
+    if (sp && (sp.type === 'yt' || sp.type === 'audio') && String(start == null ? '' : start).trim() !== '') sp.start = N.seconds(start);
     return sp;
   }
-  function chosenMusic() { return musicSpec(S.music, S.start); }
+  // bài đang chọn: bài trong ô (hoặc bài mặc định trong config.js) + giây bắt đầu
+  function effRaw() { return (S.music || '').trim() || W.music || ''; }
+  function chosenMusic() { return musicSpec(effRaw(), S.start); }
   function linkFor(g) {
     var p = new URLSearchParams();
     p.set('to', g.name);
@@ -90,11 +93,13 @@
   musicStart.value = S.start;
   function showMusicInfo() {
     var raw = musicInput.value.trim();
-    var sp = musicSpec(raw, musicStart.value);
-    musicStart.closest('.row').hidden = !(sp && sp.type === 'yt');
+    var sp = musicSpec(raw || W.music, musicStart.value);
+    musicStart.closest('.row').hidden = !(sp && (sp.type === 'yt' || sp.type === 'audio'));
     musicInfo.className = 'hint';
+    renderSongs();
     if (!raw) {
-      musicInfo.textContent = W.music ? 'Đang dùng nhạc mặc định trong config.js: ' + N.describe(N.parse(W.music)) : 'Chưa chọn nhạc: thiệp sẽ không phát nhạc.';
+      musicInfo.className = sp ? 'hint ok' : 'hint';
+      musicInfo.textContent = sp ? '✓ Bài mặc định: ' + N.describe(sp) + ' — phát trên mọi link mời.' : 'Chưa chọn nhạc: thiệp sẽ không phát nhạc.';
       return;
     }
     if (!sp) {
@@ -107,8 +112,9 @@
   }
   function onMusicChange() {
     var sp = musicSpec(musicInput.value, musicStart.value);
-    // tự lấy giây bắt đầu từ link YouTube có ?t=
-    if (sp && sp.type === 'yt' && sp.start && !musicStart.value) musicStart.value = sp.start;
+    // tự lấy giây bắt đầu từ link YouTube có ?t= (hoặc file có #t=)
+    if (sp && sp.start && !musicStart.value.trim()) musicStart.value = sp.start;
+    if (sp && sp.type === 'audio' && /#t=\d+$/.test(musicInput.value.trim())) musicInput.value = sp.src;
     S.music = musicInput.value.trim();
     S.start = musicStart.value;
     save(); showMusicInfo(); renderList();
@@ -131,7 +137,13 @@
     } else {
       var src = /^https?:/i.test(sp.src) ? sp.src : new URL(sp.src, location.href).href; // file nhạc nằm cạnh trang này
       preview.innerHTML = '<audio controls autoplay src="' + esc(src) + '"></audio>';
-      $('audio', preview).addEventListener('error', function () { musicInfo.className = 'hint bad'; musicInfo.textContent = 'Không mở được file nhạc này. Kiểm tra lại đường dẫn.'; });
+      var au = $('audio', preview);
+      var sought = !sp.start;
+      function seek() { if (!sought && sp.start < au.duration - 1) { au.currentTime = sp.start; if (au.currentTime >= sp.start - .5) sought = true; } }
+      au.addEventListener('loadedmetadata', seek);
+      au.addEventListener('progress', seek);
+      au.addEventListener('timeupdate', function () { if (!sought && au.currentTime < sp.start - 1) seek(); });
+      au.addEventListener('error', function () { musicInfo.className = 'hint bad'; musicInfo.textContent = 'Không mở được file nhạc này. Kiểm tra lại đường dẫn.'; });
     }
   });
   showMusicInfo();
@@ -176,17 +188,27 @@
     onMusicChange();
     if (!quiet) toast('Đã chọn nhạc ' + rel.split('/').pop() + ' cho mọi link mời.');
   }
+  // danh sách bài: các file đã tải lên (lấy từ GitHub) + bài mặc định trong config.js
+  var songsCache = [];
+  function renderSongs() {
+    var list = (songsCache || []).slice(), def = N.parse(W.music), cur = chosenMusic();
+    if (def && def.type === 'audio' && list.indexOf(def.src) < 0) list.unshift(def.src);
+    $('#songs').hidden = !list.length;
+    $('#songList').innerHTML = list.map(function (rel) {
+      var on = !!(cur && cur.type === 'audio' && cur.src === rel), isDef = !!(def && def.type === 'audio' && def.src === rel);
+      return '<button type="button" role="radio" aria-checked="' + on + '" class="song' + (on ? ' on' : '') + '" data-rel="' + esc(rel) + '">' +
+        (on ? '✓ ' : '♪ ') + '<span class="nm">' + esc(decodeURIComponent(rel.split('/').pop())) + '</span>' + (isDef ? ' <small>(mặc định)</small>' : '') + '</button>';
+    }).join('');
+  }
   function loadSongs() {
+    renderSongs();
     if (!GH.repo) return Promise.resolve();
     return gh('/contents/' + GH.musicDir + '?ref=' + encodeURIComponent(GH.branch || ''), { auth: !!getToken() })
       .then(function (r) { return r.ok ? r.json() : []; })
       .then(function (list) {
-        var songs = (Array.isArray(list) ? list : []).filter(function (f) { return f.type === 'file' && AUDIO.test(f.name); });
-        $('#songs').hidden = !songs.length;
-        $('#songList').innerHTML = songs.map(function (f) {
-          var rel = relPath(f.name), on = musicInput.value.trim() === rel;
-          return '<button type="button" class="song' + (on ? ' on' : '') + '" data-rel="' + esc(rel) + '">♪ ' + esc(f.name) + '</button>';
-        }).join('');
+        songsCache = (Array.isArray(list) ? list : []).filter(function (f) { return f.type === 'file' && AUDIO.test(f.name); })
+          .map(function (f) { return relPath(f.name); });
+        renderSongs();
       }).catch(function () { /* không tải được danh sách: bỏ qua */ });
   }
   $('#songList').addEventListener('click', function (e) {

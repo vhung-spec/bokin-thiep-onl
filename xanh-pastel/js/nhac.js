@@ -3,7 +3,7 @@
  * Dùng chung cho thiệp (index.html) và trang tạo link (tao-link.html).
  *
  *   NHAC.parse('https://youtu.be/abcdefghijk?t=30')  → { type: 'yt', id: 'abcdefghijk', start: 30 }
- *   NHAC.parse('assets/nhac/bai-hat.mp3')            → { type: 'audio', src: 'assets/nhac/bai-hat.mp3' }
+ *   NHAC.parse('assets/nhac/bai-hat.mp3#t=30')       → { type: 'audio', src: 'assets/nhac/bai-hat.mp3', start: 30 }
  *   NHAC.toParam(spec)  → chuỗi gọn để gắn vào link mời (?nhac=yt:abcdefghijk@30)
  *   NHAC.player(spec, { onReady, onState, onError })  → { play(), pause(), toggle(), playing() }
  */
@@ -12,10 +12,12 @@
   var YT_ID = /^[A-Za-z0-9_-]{11}$/;
   var OFF = /^(tat|tắt|off|none|khong|không)$/i;
 
-  // "90", "90s", "1m30s", "1h2m3s" → số giây
+  // "90", "90s", "1m30s", "1h2m3s", "1:30", "1:02:03" → số giây
   function seconds(t) {
+    t = String(t == null ? '' : t).trim();
     if (!t) return 0;
     if (/^\d+$/.test(t)) return +t;
+    if (/^\d+(:\d{1,2}){1,2}$/.test(t)) return t.split(':').reduce(function (a, x) { return a * 60 + (+x); }, 0);
     var m = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/.exec(t);
     return m ? (+(m[1] || 0)) * 3600 + (+(m[2] || 0)) * 60 + (+(m[3] || 0)) : 0;
   }
@@ -42,11 +44,12 @@
         if (!YT_ID.test(id)) return null;
         return { type: 'yt', id: id, start: seconds(u.searchParams.get('t') || u.searchParams.get('start') || '') };
       }
-      if (/^https?:$/.test(u.protocol)) return { type: 'audio', src: u.href };
+      if (/^https?:$/.test(u.protocol)) { var at = u.hash.match(/^#t=(\d+)/); u.hash = ''; return { type: 'audio', src: u.href, start: at ? +at[1] : 0 }; }
       return null;
     }
-    // đường dẫn trong thư mục thiệp, ví dụ assets/nhac/bai-hat.mp3
-    if (/^[\w./%-]+\.(mp3|m4a|aac|ogg|oga|wav|webm|opus)$/i.test(s) && !/^\.\.|\/\.\./.test(s)) return { type: 'audio', src: s };
+    // đường dẫn trong thư mục thiệp, ví dụ assets/nhac/bai-hat.mp3 (thêm #t=30 để bắt đầu từ giây 30)
+    var fm = /^([\w./%-]+\.(?:mp3|m4a|aac|ogg|oga|wav|webm|opus))(?:#t=(\d+))?$/i.exec(s);
+    if (fm && !/^\.\.|\/\.\./.test(fm[1])) return { type: 'audio', src: fm[1], start: +(fm[2] || 0) };
     return null;
   }
 
@@ -54,14 +57,14 @@
     if (!spec) return '';
     if (spec.type === 'off') return 'tat';
     if (spec.type === 'yt') return 'yt:' + spec.id + (spec.start ? '@' + spec.start : '');
-    return spec.src;
+    return spec.src + (spec.start ? '#t=' + spec.start : '');
   }
 
   function describe(spec) {
     if (!spec) return 'Chưa có nhạc';
     if (spec.type === 'off') return 'Không phát nhạc';
     if (spec.type === 'yt') return 'YouTube · ' + spec.id + (spec.start ? ' · bắt đầu từ giây ' + spec.start : '');
-    return 'File nhạc · ' + spec.src.split('/').pop();
+    return 'File nhạc · ' + decodeURIComponent(spec.src.split('/').pop()) + (spec.start ? ' · bắt đầu từ giây ' + spec.start : '');
   }
 
   /* ---------- Tải YouTube IFrame API (một lần) ---------- */
@@ -92,14 +95,24 @@
     if (!spec || spec.type === 'off') return null;
 
     if (spec.type === 'audio') {
-      var a = new Audio();
-      a.loop = true; a.preload = 'metadata'; a.volume = .85;
-      a.addEventListener('loadedmetadata', function () { ready = true; if (cb.onReady) cb.onReady(); });
-      a.addEventListener('playing', function () { state(true); });
-      a.addEventListener('pause', function () { state(false); });
+      var a = new Audio(), start = spec.start || 0, begun = false, seeked = !start;
+      a.preload = 'metadata'; a.volume = .85;
+      // bắt đầu từ giây đã chọn; hết bài thì quay lại đúng giây đó (không dùng loop vì loop quay về giây 0)
+      function toStart() {
+        if (!start || !isFinite(a.duration) || start >= a.duration - 1) { seeked = true; return; }
+        try { a.currentTime = start; } catch (e) { /* bỏ qua */ }
+        if (a.currentTime >= start - .5) seeked = true;
+      }
+      // máy chủ không cho tải từng đoạn file: thử nhảy lại khi đã tải đủ tới giây cần phát
+      a.addEventListener('progress', function () { if (!seeked) toStart(); });
+      a.addEventListener('timeupdate', function () { if (!seeked && a.currentTime < start - 1) toStart(); });
+      a.addEventListener('loadedmetadata', function () { ready = true; if (!begun) toStart(); if (cb.onReady) cb.onReady(); });
+      a.addEventListener('playing', function () { begun = true; state(true); });
+      a.addEventListener('pause', function () { if (!a.ended) state(false); });
+      a.addEventListener('ended', function () { toStart(); if (!start) a.currentTime = 0; var p = a.play(); if (p && p.catch) p.catch(function () { state(false); }); });
       a.addEventListener('error', function () { fail(new Error('Không mở được file nhạc')); });
       a.src = spec.src;
-      api.play = function () { wantPlay = true; if (dead) return; var p = a.play(); if (p && p.catch) p.catch(function () { state(false); }); };
+      api.play = function () { wantPlay = true; if (dead) return; if (!begun && a.currentTime < start) toStart(); var p = a.play(); if (p && p.catch) p.catch(function () { state(false); }); };
       api.pause = function () { wantPlay = false; a.pause(); };
       return api;
     }
