@@ -7,6 +7,7 @@
  *    Đếm ngược luôn tính đến đúng giờ Việt Nam, dù khách mở thiệp ở múi giờ khác.
  *  • Thứ trong tuần và ngày âm lịch được tính tự động.
  *  • Mời riêng từng khách: thêm ?to=Tên vào link, ví dụ  .../xanh-pastel/?to=Anh%20Thắng
+ *  • Bản nhà trai (giờ, địa điểm khác): mục sides.trai ở dưới, mở bằng link .../nha-trai/
  */
 window.WEDDING = {
   groom: { name: 'Văn Hùng' },
@@ -38,12 +39,29 @@ window.WEDDING = {
     line: 'tới dự lễ thành hôn của gia đình chúng tôi',
   },
 
+  // BẢN CHÍNH (khách nhà gái và khách không ghi bên): ngày giờ ở dòng date phía trên, địa điểm dưới đây
   venue: {
     name: 'Nhà văn hoá Tổ 1 Ngọc Trục',
     address: 'P. Ngọc Trục, làng Ngọc Trục, Đại Mỗ, Hà Nội',
     // Liên kết Google Maps có sẵn của địa điểm (mã vị trí XQRF+254)
     map: 'https://www.google.com/maps?q=XQRF%2B254+Nh%C3%A0+V%C4%83n+Ho%C3%A1+T%E1%BB%95+1+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+P.+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+l%C3%A0ng+Ng%E1%BB%8Dc+Tr%E1%BB%A5c,+%C4%90%E1%BA%A1i+M%E1%BB%97,+H%C3%A0+N%E1%BB%99i&ftid=0x3134530024c79431:0x28d0367215a69c81',
     mapButton: 'Xem đường đi',
+  },
+
+  // BẢN NHÀ TRAI: khách ghi "Khách nhà trai" ở trang tạo link nhận link .../nha-trai/?to=Tên (thiệp có ?ben=trai).
+  // Chỉ ghi những gì khác bản chính; mục nào không ghi (lịch trình, lời mời, ảnh…) thì giống bản chính.
+  // Ngày âm lịch, thứ, đếm ngược, lịch tháng tự tính theo date ở đây.
+  // Đổi ngày / địa điểm thì sửa thêm lời xem trước trong nha-trai/index.html (ảnh xem trước: assets/og-image-nha-trai.jpg).
+  sides: {
+    trai: {
+      date: '2026-11-29T10:30',
+      venue: {
+        name: 'Tổ hợp Thể thao Vũ Tuấn Mobile',
+        address: 'Lôi Xá, Tuệ Tĩnh, Hải Phòng',
+        // Liên kết Google Maps của địa điểm (mã vị trí X75F+7P9)
+        map: 'https://www.google.com/maps?q=X75F%2B7P9+T%E1%BB%95+H%E1%BB%A3p+Th%E1%BB%83+Thao+V%C5%A9+Tu%E1%BA%A5n+Mobile,+L%C3%B4i+X%C3%A1,+Tu%E1%BB%87+T%C4%A9nh,+H%E1%BA%A3i+Ph%C3%B2ng&ftid=0x31359b00692b93bf:0xe8a5adadd48780c9',
+      },
+    },
   },
 
   // Ảnh cưới nằm trong xanh-pastel/assets/anh/ (cạnh dài ~1600px, đã nén).

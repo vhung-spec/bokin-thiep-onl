@@ -11,6 +11,17 @@
   function pad(n) { return (n < 10 ? '0' : '') + n; }
   function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : String(s); return d.innerHTML; }
 
+  // Bản theo bên: link có ?ben=trai lấy ngày giờ, địa điểm… trong config.js → sides.trai (mục không ghi thì giữ bản chính)
+  var qs = new URLSearchParams(location.search);
+  var side = { trai: 'trai', gai: 'gai' }[(qs.get('ben') || '').toLowerCase()] || ''; // khách của nhà trai / nhà gái
+  (function merge(a, b) {
+    Object.keys(b || {}).forEach(function (k) {
+      var v = b[k];
+      if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object') merge(a[k], v);
+      else a[k] = v;
+    });
+  })(W, (W.sides || {})[side]);
+
   // Ngày giờ cưới theo giờ Việt Nam, tách thành từng phần để không phụ thuộc múi giờ của máy khách
   var dm = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2}))?/.exec(String(W.date || ''));
   var D = { y: +dm[1], m: +dm[2], d: +dm[3], hh: +(dm[4] || 0), mm: +(dm[5] || 0) };
@@ -21,9 +32,7 @@
   var weekday = WD[dow(D.y, D.m, D.d)];
   var hhmm = pad(D.hh) + ':' + pad(D.mm);
 
-  var qs = new URLSearchParams(location.search);
   var guest = (qs.get('to') || '').trim().slice(0, 80);
-  var side = { trai: 'trai', gai: 'gai' }[(qs.get('ben') || '').toLowerCase()] || ''; // khách của nhà trai / nhà gái
   var couple = W.groom.name + ' & ' + W.bride.name;
 
   /* ---------- Hình vẽ & hoạ tiết ---------- */

@@ -15,17 +15,31 @@
   function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   var couple = W.groom.name + ' & ' + W.bride.name;
-  var dm = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2}))?/.exec(W.date);
   var WD = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'];
-  var weekday = WD[new Date(Date.UTC(+dm[1], dm[2] - 1, +dm[3])).getUTCDay()];
-  var when = pad(+(dm[4] || 0)) + ':' + pad(+(dm[5] || 0)) + ', ' + weekday + ' ' + pad(+dm[3]) + '.' + pad(+dm[2]) + '.' + dm[1];
+  // "2026-11-28T10:30" → "10:30, Thứ Bảy 28.11.2026"
+  function whenOf(date) {
+    var dm = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2}))?/.exec(String(date || ''));
+    if (!dm) return '';
+    var weekday = WD[new Date(Date.UTC(+dm[1], dm[2] - 1, +dm[3])).getUTCDay()];
+    return pad(+(dm[4] || 0)) + ':' + pad(+(dm[5] || 0)) + ', ' + weekday + ' ' + pad(+dm[3]) + '.' + pad(+dm[2]) + '.' + dm[1];
+  }
+  // giờ và nơi tổ chức theo bên của khách: nhà trai có bản riêng (config.js → sides.trai), còn lại dùng bản chính
+  function eventOf(side) {
+    var o = (W.sides || {})[side] || {}, v = o.venue || {};
+    return { when: whenOf(o.date || W.date), place: v.name || W.venue.name };
+  }
+  var when = whenOf(W.date);
+  var HAS_TRAI = !!(W.sides && W.sides.trai);
   var SIDE = { trai: 'Nhà trai', gai: 'Nhà gái' };
-  var DEFAULT_TPL = 'Thân gửi {ten} 💌\n\n' + couple + ' trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình vào lúc ' + when +
-    ' tại ' + W.venue.name + '.\n\nThiệp mời dành riêng cho bạn: {link}\n\nSự hiện diện của bạn là niềm vui của chúng mình!';
+  var DEFAULT_TPL = 'Thân gửi {ten} 💌\n\n' + couple + ' trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình vào lúc {thoigian}' +
+    ' tại {diadiem}.\n\nThiệp mời dành riêng cho bạn: {link}\n\nSự hiện diện của bạn là niềm vui của chúng mình!';
 
   /* ---------- Lưu trên máy ---------- */
   var KEY = 'tao-link:' + couple + ':' + W.date;
   var S = load();
+  // lời nhắn lưu từ trước còn ghi cứng giờ / nơi của bản chính: đổi thành {thoigian} / {diadiem} để khách nhà trai nhận đúng bản của mình
+  if (when && S.tpl.indexOf(when) >= 0) S.tpl = S.tpl.split(when).join('{thoigian}');
+  if (W.venue.name && S.tpl.indexOf(' tại ' + W.venue.name) >= 0) S.tpl = S.tpl.split(' tại ' + W.venue.name).join(' tại {diadiem}');
   function load() {
     var d = null;
     try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; }
@@ -81,6 +95,12 @@
   // bài đang chọn: bài trong ô (hoặc bài mặc định trong config.js) + giây bắt đầu
   function effRaw() { return (S.music || '').trim() || W.music || ''; }
   function chosenMusic() { return musicSpec(effRaw(), S.start); }
+  // khách nhà trai: link vào cửa nha-trai/ (ảnh và lời xem trước trên Zalo / Messenger ghi đúng ngày nhà trai)
+  function baseFor(side) {
+    var b = base();
+    if (side !== 'trai' || !HAS_TRAI) return b;
+    return new URL('nha-trai/', b.replace(/xanh-pastel\/(index\.html)?$/, '')).href;
+  }
   function linkFor(g) {
     var p = new URLSearchParams();
     p.set('to', g.name);
@@ -88,10 +108,12 @@
     var sp = g.music ? N.parse(g.music) : chosenMusic();
     var m = sp ? N.toParam(sp) : '';
     if (m && m !== defaultMusic) p.set('nhac', m);
-    return base() + '?' + p.toString();
+    return baseFor(g.side) + '?' + p.toString();
   }
   function message(g) {
-    return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{link}').join(linkFor(g));
+    var ev = eventOf(g.side);
+    return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{thoigian}').join(ev.when).split('{diadiem}').join(ev.place)
+      .split('{link}').join(linkFor(g));
   }
   function prettyLink(u) { try { return decodeURI(u).replace(/^https?:\/\//, ''); } catch (e) { return u; } }
   // link hiện trên thẻ khách: hiện đủ, tên khách được tô đậm để thấy rõ đây là link riêng
@@ -392,6 +414,7 @@
       (shown.length !== S.guests.length ? ' · đang hiện ' + shown.length : '') : '';
     if (editing) { var inp = $('.g-edit input', list); if (inp) inp.focus(); }
     $('#openCard').href = linkFor({ name: 'Khách quý', side: '' });
+    if (HAS_TRAI) $('#openCardTrai').href = linkFor({ name: 'Khách quý', side: 'trai' });
   }
 
   function share(g) {
@@ -668,6 +691,13 @@
   })();
 
   /* ---------- Bắt đầu ---------- */
+  if (HAS_TRAI) {
+    var evT = eventOf('trai'), evG = eventOf('');
+    $('#openCardTrai').hidden = false;
+    $('#sideHint').innerHTML = '<b>Khách nhà trai</b> nhận bản nhà trai: ' + esc(evT.when) + ' tại ' + esc(evT.place) + '.<br>' +
+      '<b>Khách nhà gái</b> và khách không ghi bên: ' + esc(evG.when) + ' tại ' + esc(evG.place) + '.';
+    $('#sideHint').hidden = false;
+  }
   $('#couple').textContent = couple;
   document.title = 'Tạo link mời · ' + couple;
   renderList();

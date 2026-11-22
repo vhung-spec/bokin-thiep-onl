@@ -18,6 +18,7 @@
     <h1>Tạo link mời riêng</h1>
     <p class="sub">Mỗi khách một link: thiệp hiện đúng tên khách và phát nhạc bạn chọn. <span id="storeNote">Danh sách chỉ lưu trên máy này.</span></p>
     <a class="btn ghost" id="openCard" target="_blank" rel="noopener">Xem thiệp mẫu</a>
+    <a class="btn ghost" id="openCardTrai" target="_blank" rel="noopener" hidden>Xem bản nhà trai</a>
     <a class="btn ghost" href="thong-ke.html">Thống kê khách</a>
   </header>
 
@@ -74,7 +75,7 @@
     <section class="card" aria-labelledby="h-msg">
       <h2 id="h-msg"><span class="n">2</span>Lời nhắn gửi kèm</h2>
       <textarea class="inp" id="tpl" rows="7" aria-describedby="tplHint"></textarea>
-      <p class="hint" id="tplHint"><code>{ten}</code> sẽ thay bằng tên khách, <code>{link}</code> bằng link thiệp riêng. <button class="link" type="button" id="tplReset">Dùng lại lời nhắn mẫu</button></p>
+      <p class="hint" id="tplHint"><code>{ten}</code> sẽ thay bằng tên khách, <code>{link}</code> bằng link thiệp riêng, <code>{thoigian}</code> và <code>{diadiem}</code> bằng giờ và nơi tổ chức theo bên của khách (nhà trai / nhà gái). <button class="link" type="button" id="tplReset">Dùng lại lời nhắn mẫu</button></p>
     </section>
 
     <!-- 3. Khách mời -->
@@ -119,6 +120,7 @@
           </select>
           <button class="btn" type="submit">Thêm khách</button>
         </div>
+        <p class="hint" id="sideHint" hidden></p>
       </form>
       <details class="help">
         <summary>Thêm nhiều khách một lúc</summary>

@@ -109,6 +109,14 @@ Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa đi�
 - `cream: 'assets/bia/giay-kem.jpg'` và `creamColor` — giấy kem lấy từ lòng khung của trang trong, nền các phần ở giữa (lời mời, đếm ngược, lịch, câu chuyện, album, xác nhận, quà mừng).
 Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_bia.py`; giấy kem làm bằng `tools/hoa-tiet/giay_be.py`. Để trống các dòng này thì thiệp quay về giấy và dấu sáp tự vẽ. Lưu ý: repo công khai nên ai cũng tải được file trong `assets/`.
 
+### Bản nhà trai (giờ, địa điểm riêng)
+
+- Bản chính (khách nhà gái và khách không ghi bên): **10:30 Thứ Bảy 28.11.2026**, Nhà văn hoá Tổ 1 Ngọc Trục — `date` và `venue` trong `xanh-pastel/js/config.js`.
+- Bản nhà trai: **10:30 Chủ Nhật 29.11.2026**, Tổ hợp Thể thao Vũ Tuấn Mobile (Lôi Xá, Tuệ Tĩnh, Hải Phòng) — mục `sides.trai` trong `config.js`. Chỉ ghi những gì khác bản chính; ngày âm lịch, thứ, đếm ngược, lịch tháng tự tính lại.
+- Link chung cho nhà trai: `https://vhung-spec.github.io/bokin-thiep-onl/nha-trai/`. Trang `nha-trai/index.html` mở thiệp với `?ben=trai` và có ảnh / lời xem trước riêng ghi 29.11 (`xanh-pastel/assets/og-image-nha-trai.jpg`) cho Zalo, Messenger.
+- Ở trang tạo link, khách ghi **Khách nhà trai** tự nhận link `…/nha-trai/?to=Tên&ben=trai`; lời nhắn dùng `{thoigian}` và `{diadiem}` nên tự ghi đúng giờ, nơi theo bên của khách.
+- Đổi ngày / địa điểm nhà trai: sửa `sides.trai` trong `config.js`, sửa lời xem trước trong `nha-trai/index.html` (và ảnh xem trước nếu đổi ngày).
+
 ### Tạo link mời riêng cho từng khách (`xanh-pastel/tao-link.html`)
 
 Mở **https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/tao-link.html** trên điện thoại hoặc máy tính. Link mời tạo ra lấy theo địa chỉ trang web đang mở (gắn tên miền riêng rồi thì mở trang này qua tên miền để link mời dùng tên miền):
