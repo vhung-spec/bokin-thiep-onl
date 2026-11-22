@@ -124,7 +124,7 @@ window.WEDDING = {
 
   // NƠI NHẬN PHẢN HỒI: dán link ứng dụng web Google Apps Script vào đây (xem README, mục "Lưu phản hồi").
   // Để trống thì nút "Gửi phản hồi" sẽ báo chưa lưu được, không bao giờ báo thành công giả.
-  endpoint: '',
+  endpoint: 'https://script.google.com/macros/s/AKfycbybLT0UEiIFTD7yIhHO_GE2XXiOX1HM-qDn9kD85w42AX1pDy20sx2r2SaamsPGvvCo/exec',
 
   // NHẠC NỀN MẶC ĐỊNH, phát khi khách chạm mở thiệp. Nhận:
   //   • link YouTube, ví dụ  music: 'https://www.youtube.com/watch?v=xxxxxxxxxxx',  (thêm &t=30 để bắt đầu từ giây 30)
