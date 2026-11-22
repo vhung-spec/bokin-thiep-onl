@@ -37,7 +37,12 @@
   };
   /* ---------- Ảnh bìa của chủ thiệp (config.js → cover) ---------- */
   var cov = W.cover || {};
-  function cssUrl(p) { return 'url("' + new URL(p, location.href).href.replace(/"/g, '%22') + '")'; }
+  // đường dẫn tuyệt đối để biến CSS không bị hiểu nhầm là tính từ thư mục css/
+  function cssUrl(p) {
+    var u = p;
+    try { u = new URL(p, document.baseURI).href; } catch (e) { /* giữ nguyên */ }
+    return 'url("' + String(u).replace(/"/g, '%22') + '")';
+  }
   var SEAL = '<img class="seal-img" src="' + esc(cov.seal || 'assets/dau-sap-vang.webp') + '" alt="" aria-hidden="true" decoding="async">';
   if (cov.seal) body.classList.add('custom-seal');
   if (cov.inner) { root.style.setProperty('--inner-paper', cssUrl(cov.inner)); body.classList.add('custom-inner'); }
