@@ -14,8 +14,7 @@ window.WEDDING = {
   bride: { name: 'Tuyết Anh', short: 'Tuyết Anh' },
 
   // Giờ lễ/tiệc chính: dùng cho lời mời, đếm ngược và lịch tháng
-  // CHƯA CÓ NGÀY CƯỚI: giờ 10:30 là thật, ngày 07/03/2027 chỉ là ngày tạm.
-  date: '2027-03-07T10:30',
+  date: '2026-11-28T10:30',
 
   cover: {
     hint: 'Chạm để mở thiệp',
