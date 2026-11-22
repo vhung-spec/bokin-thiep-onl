@@ -130,5 +130,5 @@ window.WEDDING = {
   //   • link YouTube, ví dụ  music: 'https://www.youtube.com/watch?v=xxxxxxxxxxx',  (thêm &t=30 để bắt đầu từ giây 30)
   //   • file nhạc chép vào xanh-pastel/assets/nhac/, ví dụ  music: 'assets/nhac/bai-hat.mp3',
   // Để trống thì không có nhạc. Trang tao-link.html có thể chọn nhạc khác và gắn vào từng link mời.
-  music: '',
+  music: 'assets/nhac/le-duong-dreamland-version-kai-dinh-official-mv.mp3',
 };
