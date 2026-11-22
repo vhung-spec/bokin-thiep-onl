@@ -15,6 +15,9 @@
  *   - gõ vào dòng  var MAT_KHAU = '…'  bên dưới, NGAY TRONG trình soạn Apps Script (đừng đưa mật khẩu lên GitHub);
  *   - hoặc Cài đặt dự án (bánh răng) → Thuộc tính tập lệnh → thêm MAT_KHAU = mật khẩu.
  * Cách cài: xem mục "Lưu dữ liệu vào Google Sheets" trong README.md
+ *   Dán file này vào Apps Script (tạo từ Google Sheet, hoặc tạo riêng ở script.google.com — khi đó
+ *   bảng tính lưu phản hồi được tạo tự động trong Google Drive của bạn), chọn hàm caiDat → Chạy
+ *   để cấp quyền, rồi Triển khai → Ứng dụng web (Bất kỳ ai).
  */
 var RSVP_SHEET = 'Xác nhận tham dự';
 var WISH_SHEET = 'Lời chúc';
@@ -23,8 +26,33 @@ var STAT_SHEET = 'Thống kê';
 var MAT_KHAU = ''; // ← mật khẩu xem trang thống kê (gõ trong Apps Script, để trống ở bản trên GitHub)
 var WISH_HEAD = ['Thời gian', 'Tên', 'Lời chúc', 'Chữ ký', 'Link mời (?to=)', 'Ẩn'];
 
-function sheet_(name, head) {
+// Bảng tính lưu dữ liệu: bảng tính chứa dự án này; nếu dự án tạo riêng thì tự tạo một bảng tính và nhớ lại
+function ss_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  if (ss) return ss;
+  var props = PropertiesService.getScriptProperties();
+  var id = props.getProperty('SHEET_ID');
+  if (id) {
+    try { return SpreadsheetApp.openById(id); } catch (e) { /* bảng tính đã bị xoá: tạo lại */ }
+  }
+  ss = SpreadsheetApp.create('Thiệp cưới – phản hồi của khách');
+  props.setProperty('SHEET_ID', ss.getId());
+  return ss;
+}
+
+// Chạy một lần trong trình soạn Apps Script (chọn caiDat → Chạy) để cấp quyền và tạo sẵn bảng tính
+function caiDat() {
+  var ss = ss_();
+  sheet_(RSVP_SHEET, RSVP_HEAD);
+  statsSheet_();
+  var pass = MAT_KHAU || PropertiesService.getScriptProperties().getProperty('MAT_KHAU');
+  Logger.log('Đã sẵn sàng. Bảng tính lưu phản hồi: ' + ss.getUrl());
+  Logger.log(pass ? 'Đã có mật khẩu xem thống kê.' : 'CHƯA có mật khẩu: gõ vào dòng var MAT_KHAU = \'\' rồi Lưu.');
+  Logger.log('Bước tiếp: Triển khai → Tùy chọn triển khai mới → Ứng dụng web → Người có quyền truy cập: Bất kỳ ai.');
+}
+
+function sheet_(name, head) {
+  var ss = ss_();
   var sh = ss.getSheetByName(name) || ss.insertSheet(name);
   if (sh.getLastRow() === 0) { sh.appendRow(head); sh.setFrozenRows(1); }
   return sh;
@@ -95,7 +123,7 @@ function findRsvp_(sh, name, invitedAs) {
 
 // Trang tính "Thống kê" (tạo một lần, công thức tự cập nhật)
 function statsSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = ss_();
   if (ss.getSheetByName(STAT_SHEET)) return;
   var sh = ss.insertSheet(STAT_SHEET);
   var R = "'" + RSVP_SHEET + "'!";
@@ -134,7 +162,7 @@ function stats_(key) {
       invitedAs: String(r[5] || ''),
     };
   });
-  return json_({ ok: true, rows: rows, sheet: SpreadsheetApp.getActiveSpreadsheet().getUrl() });
+  return json_({ ok: true, rows: rows, sheet: ss_().getUrl() });
 }
 
 function doGet(e) {
