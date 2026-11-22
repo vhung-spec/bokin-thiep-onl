@@ -1,7 +1,8 @@
 /*
  * Trang thống kê khách mời (thong-ke.html)
  * Lấy danh sách xác nhận tham dự từ chỗ lưu phản hồi (Google Apps Script, cần mật khẩu MAT_KHAU),
- * ghép với danh sách khách ở trang tạo link (lưu trên máy này) để biết ai chưa phản hồi.
+ * ghép với danh sách khách mời (trang tính "Khách mời" nếu trang tạo link đã lưu lên Google Sheet,
+ * không thì danh sách lưu trên máy này) để biết ai chưa phản hồi.
  */
 (function () {
   'use strict';
@@ -28,7 +29,9 @@
   function setStore(k, v, persist) {
     try { localStorage.removeItem(k); sessionStorage.removeItem(k); if (v) (persist ? localStorage : sessionStorage).setItem(k, v); } catch (e) { /* bỏ qua */ }
   }
+  var serverInv = null; // danh sách khách mời trên Google Sheet
   function invites() {
+    if (serverInv) return serverInv;
     try { var d = JSON.parse(localStorage.getItem(INVITES) || 'null'); return d && Array.isArray(d.guests) ? d.guests : null; } catch (e) { return null; }
   }
 
@@ -55,6 +58,7 @@
     msg.className = 'hint'; msg.textContent = 'Đang tải…'; btn.disabled = true;
     return fetchStats(key).then(function (j) {
       rows = j.rows; demo = false;
+      serverInv = Array.isArray(j.invites) ? j.invites : null;
       msg.textContent = '';
       show();
       if (!quiet) toast('Đã tải ' + rows.length + ' phản hồi.');
@@ -104,7 +108,7 @@
     $('#tResp').textContent = yes.length + no.length;
     $('#tWait').textContent = m.hasInvites ? wait.length : '—';
     $('#waitHint').textContent = m.hasInvites ? '' :
-      '“Chưa phản hồi” lấy từ danh sách ở trang Tạo link mời trên máy bạn dùng để gửi. Mở trang này trên máy đó (hoặc nhập file CSV danh sách khách ở trang Tạo link) để xem.';
+      '“Chưa phản hồi” cần danh sách khách mời: ở trang Tạo link mời, kết nối Google Sheet (mục Khách mời) để lưu danh sách lên, hoặc mở trang này trên máy bạn dùng để gửi link.';
     // theo bên
     var by = { trai: 0, gai: 0, '': 0 };
     yes.forEach(function (x) { by[x.side || ''] += x.guests; });
@@ -190,7 +194,7 @@
     load(key).then(function (okk) { if (!okk) { $('#loginCard').hidden = false; } });
   });
   $('#logout').addEventListener('click', function () {
-    setStore(KEY_PASS, ''); rows = []; demo = false; $('#pass').value = '';
+    setStore(KEY_PASS, ''); rows = []; serverInv = null; demo = false; $('#pass').value = '';
     $('#summaryCard').hidden = true; $('#listCard').hidden = true; $('#loginCard').hidden = false;
   });
   $('#demoBtn').addEventListener('click', function () {

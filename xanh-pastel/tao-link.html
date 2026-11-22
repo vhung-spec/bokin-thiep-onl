@@ -16,7 +16,7 @@
   <header class="top">
     <p class="couple" id="couple"></p>
     <h1>Tạo link mời riêng</h1>
-    <p class="sub">Mỗi khách một link: thiệp hiện đúng tên khách và phát nhạc bạn chọn. Danh sách chỉ lưu trên máy này.</p>
+    <p class="sub">Mỗi khách một link: thiệp hiện đúng tên khách và phát nhạc bạn chọn. <span id="storeNote">Danh sách chỉ lưu trên máy này.</span></p>
     <a class="btn ghost" id="openCard" target="_blank" rel="noopener">Xem thiệp mẫu</a>
     <a class="btn ghost" href="thong-ke.html">Thống kê khách</a>
   </header>
@@ -80,6 +80,34 @@
     <!-- 3. Khách mời -->
     <section class="card" aria-labelledby="h-guests">
       <h2 id="h-guests"><span class="n">3</span>Khách mời</h2>
+      <div class="sync" id="sync" hidden>
+        <div id="syncLogin">
+          <p class="lbl">Lưu danh sách lên Google Sheet</p>
+          <p class="hint">Nhập mật khẩu xem thống kê để lưu danh sách khách lên Google Sheet: không lo mất, và cô dâu chú rể dùng chung một danh sách trên nhiều máy.</p>
+          <form class="row" id="syncForm">
+            <input class="inp" id="syncPass" type="password" autocomplete="current-password" placeholder="Mật khẩu" aria-label="Mật khẩu xem thống kê" required>
+            <button class="btn" type="submit" id="syncBtn">Kết nối</button>
+          </form>
+          <label class="check"><input type="checkbox" id="syncRemember" checked> Nhớ trên máy này</label>
+          <p class="hint" id="syncMsg" aria-live="polite"></p>
+        </div>
+        <div id="syncOn" hidden>
+          <p class="sync-status" id="syncStatus" aria-live="polite"></p>
+          <div class="sync-old" id="syncOld" hidden>
+            <ol class="steps">
+              <li>Bấm <button class="link" type="button" id="copyGs">Chép mã Code.gs mới</button>, mở dự án Apps Script của thiệp, xoá hết mã cũ và dán mã mới vào.</li>
+              <li>Gõ lại mật khẩu vào dòng <code>var MAT_KHAU = ''</code> (giữa hai dấu nháy), bấm Lưu.</li>
+              <li><b>Triển khai → Quản lý các bản triển khai</b> → bấm bút chì (Chỉnh sửa) → <b>Phiên bản: Phiên bản mới</b> → <b>Triển khai</b>. Link /exec giữ nguyên.</li>
+              <li>Quay lại đây bấm <b>Đồng bộ ngay</b>.</li>
+            </ol>
+          </div>
+          <div class="sync-btns">
+            <button class="btn ghost sm" type="button" id="syncNow">Đồng bộ ngay</button>
+            <a class="btn ghost sm" id="syncSheet" target="_blank" rel="noopener" hidden>Mở Google Sheet</a>
+            <button class="link" type="button" id="syncOff">Ngắt kết nối</button>
+          </div>
+        </div>
+      </div>
       <form class="add" id="addForm">
         <label class="lbl" for="gName">Tên khách (hiện trên thiệp)</label>
         <input class="inp" id="gName" maxlength="80" autocomplete="off" placeholder="Ví dụ: Anh Thắng và người thương" required>

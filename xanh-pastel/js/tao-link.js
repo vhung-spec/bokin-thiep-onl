@@ -3,7 +3,8 @@
  * - Nhập tên khách (một hoặc nhiều), ghi khách nhà trai / nhà gái
  * - Chọn nhạc nền (YouTube hoặc mp3) gắn vào link
  * - Gửi lời mời kèm link riêng qua Zalo, Messenger, tin nhắn… (nút Chia sẻ của điện thoại)
- * Danh sách chỉ lưu trong trình duyệt của máy này (localStorage); tải CSV để lưu dự phòng.
+ * Danh sách lưu trong trình duyệt của máy này (localStorage). Kết nối Google Sheet (mật khẩu xem thống kê)
+ * thì danh sách được lưu lên trang tính "Khách mời" và dùng chung trên các máy đã kết nối.
  */
 (function () {
   'use strict';
@@ -29,9 +30,16 @@
     var d = null;
     try { d = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { d = null; }
     d = d || {};
-    return { guests: Array.isArray(d.guests) ? d.guests : [], music: d.music || '', start: d.start || '', tpl: d.tpl || DEFAULT_TPL, base: d.base || '' };
+    return {
+      guests: Array.isArray(d.guests) ? d.guests : [], music: d.music || '', start: d.start || '', tpl: d.tpl || DEFAULT_TPL, base: d.base || '',
+      // đồng bộ Google Sheet: rev = số lần sửa (khách có p là đang chờ lưu), dels = mã khách đã xoá chờ lưu, linked = máy đã từng kết nối
+      rev: d.rev || 0, dels: Array.isArray(d.dels) ? d.dels : [], linked: !!d.linked, setP: d.setP || 0,
+    };
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* trình duyệt chặn lưu: vẫn dùng được trong phiên này */ } }
+  function touch(g) { g.p = ++S.rev; } // khách vừa thêm / sửa: chờ lưu lên Google Sheet
+  function forget(ids) { if (S.linked) ids.forEach(function (id) { if (S.dels.indexOf(id) < 0) S.dels.push(id); }); }
+  function changed() { save(); renderList(); SYNC.soon(); }
 
   /* ---------- Thông báo nhỏ ---------- */
   var toastT = null;
@@ -127,7 +135,8 @@
     if (sp && sp.type === 'audio' && /#t=\d+$/.test(musicInput.value.trim())) musicInput.value = sp.src;
     S.music = musicInput.value.trim();
     S.start = musicStart.value;
-    save(); showMusicInfo(); renderList();
+    S.setP = ++S.rev; // nhạc chung: lưu lên Google Sheet để máy khác dùng cùng bài
+    save(); showMusicInfo(); renderList(); SYNC.soon(4000);
     preview.innerHTML = '';
   }
   musicInput.addEventListener('change', onMusicChange);
@@ -312,20 +321,20 @@
     if (!name) return false;
     var dup = S.guests.some(function (g) { return g.name.toLowerCase() === name.toLowerCase() && (g.side || '') === (side || ''); });
     if (dup) return false;
-    S.guests.unshift({ id: uid(), name: name, side: side || '', music: '', sent: false });
+    S.guests.unshift({ id: uid(), name: name, side: side || '', music: '', sent: false, p: ++S.rev });
     return true;
   }
   $('#addForm').addEventListener('submit', function (e) {
     e.preventDefault();
     var n = $('#gName');
-    if (addGuest(n.value, $('#gSide').value)) { save(); renderList(); toast('Đã thêm “' + n.value.trim() + '”.'); n.value = ''; }
+    if (addGuest(n.value, $('#gSide').value)) { changed(); toast('Đã thêm “' + n.value.trim() + '”.'); n.value = ''; }
     else toast(n.value.trim() ? 'Khách này đã có trong danh sách.' : 'Nhập tên khách trước nhé.');
     n.focus();
   });
   $('#bulkAdd').addEventListener('click', function () {
     var lines = $('#bulk').value.split(/\r?\n/), side = $('#bulkSide').value, added = 0;
     lines.reverse().forEach(function (l) { if (addGuest(l, side)) added++; });
-    save(); renderList();
+    changed();
     $('#bulk').value = '';
     toast(added ? 'Đã thêm ' + added + ' khách.' : 'Không có tên mới để thêm.');
   });
@@ -389,7 +398,8 @@
     var text = message(g);
     if (navigator.share) {
       navigator.share({ title: 'Thiệp cưới ' + couple, text: text }).then(function () {
-        g.sent = true; save(); renderList(); toast('Đã gửi lời mời cho ' + g.name + '.');
+        var cur = find(g.id) || g; // danh sách có thể vừa tải lại từ Google Sheet trong lúc chia sẻ
+        cur.sent = true; touch(cur); changed(); toast('Đã gửi lời mời cho ' + g.name + '.');
       }).catch(function (err) {
         if (err && err.name === 'AbortError') return; // khách bấm huỷ
         copy(text).then(function () { toast('Đã chép lời mời. Dán vào Zalo hoặc Messenger để gửi.'); });
@@ -410,7 +420,7 @@
     else if (act === 'copy-msg') copy(message(g)).then(function () { toast('Đã chép lời mời cho ' + g.name + '.'); }, function () { window.prompt('Chép lời mời này:', message(g)); });
     else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link riêng của ' + g.name + '. Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.'); }, function () { window.prompt('Chép link này:', linkFor(g)); });
     else if (act === 'more') { openMore = openMore === g.id ? null : g.id; renderList(); }
-    else if (act === 'toggle-sent') { g.sent = !g.sent; save(); renderList(); }
+    else if (act === 'toggle-sent') { g.sent = !g.sent; touch(g); changed(); }
     else if (act === 'edit') { editing = g.id; renderList(); }
     else if (act === 'cancel') { editing = null; renderList(); }
     else if (act === 'save') {
@@ -418,12 +428,12 @@
       var mus = $('[data-f="music"]', li).value.trim();
       if (!name) { toast('Tên khách không được để trống.'); return; }
       if (mus && !N.parse(mus)) { toast('Link nhạc riêng chưa đúng.'); return; }
-      g.name = name; g.side = $('[data-f="side"]', li).value; g.music = mus;
-      editing = null; save(); renderList(); toast('Đã lưu.');
+      g.name = name; g.side = $('[data-f="side"]', li).value; g.music = mus; touch(g);
+      editing = null; changed(); toast('Đã lưu.');
     } else if (act === 'delete') {
       if (!window.confirm('Xoá “' + g.name + '” khỏi danh sách?')) return;
       S.guests = S.guests.filter(function (x) { return x !== g; });
-      openMore = null; save(); renderList();
+      forget([g.id]); openMore = null; changed();
     }
   });
   list.addEventListener('keydown', function (e) {
@@ -481,7 +491,7 @@
           if (iMusic >= 0 && N.parse(r[iMusic] || '')) g.music = r[iMusic].trim();
         }
       });
-      save(); renderList();
+      changed();
       toast(added ? 'Đã nhập ' + added + ' khách.' : 'Không có khách mới trong file.');
     };
     reader.readAsText(f, 'utf-8');
@@ -494,16 +504,172 @@
   baseInp.addEventListener('change', function () {
     var v = baseInp.value.trim();
     try { new URL(v); S.base = v === autoBase ? '' : v; } catch (e) { S.base = ''; baseInp.value = autoBase; toast('Địa chỉ chưa đúng, đã dùng lại địa chỉ tự động.'); }
-    save(); renderList();
+    save(); renderList(); SYNC.soon(4000);
   });
   $('#clearAll').addEventListener('click', function () {
     if (!S.guests.length) { toast('Danh sách đang trống.'); return; }
-    if (!window.confirm('Xoá toàn bộ ' + S.guests.length + ' khách? Nên tải CSV dự phòng trước.')) return;
-    S.guests = []; save(); renderList(); toast('Đã xoá danh sách.');
+    if (!window.confirm('Xoá toàn bộ ' + S.guests.length + ' khách' + (SYNC.on() ? ', cả trên Google Sheet' : '') + '? Nên tải CSV dự phòng trước.')) return;
+    forget(S.guests.map(function (g) { return g.id; }));
+    S.guests = []; changed(); toast('Đã xoá danh sách.');
   });
+
+  /* ---------- Lưu danh sách lên Google Sheet (Apps Script, cùng mật khẩu với trang Thống kê) ---------- */
+  var SYNC = (function () {
+    var KEY_PASS = 'thong-ke:' + couple + ':key';
+    var stEl = $('#syncStatus'), msgEl = $('#syncMsg');
+    var busy = false, again = false, timer = null, retry = 0, gsText = '', follow = false;
+    function getKey() { try { return localStorage.getItem(KEY_PASS) || sessionStorage.getItem(KEY_PASS) || ''; } catch (e) { return ''; } }
+    function setKey(v, persist) {
+      try { localStorage.removeItem(KEY_PASS); sessionStorage.removeItem(KEY_PASS); if (v) (persist ? localStorage : sessionStorage).setItem(KEY_PASS, v); } catch (e) { /* bỏ qua */ }
+    }
+    function on() { return !!(W.endpoint && getKey()); }
+    function status(cls, text) { stEl.className = 'sync-status' + (cls ? ' ' + cls : ''); stEl.textContent = text; }
+    function view() {
+      var c = on();
+      $('#syncLogin').hidden = c;
+      $('#syncOn').hidden = !c;
+      $('#storeNote').textContent = c ? 'Danh sách lưu trên Google Sheet, dùng chung trên các máy đã kết nối.' : 'Danh sách chỉ lưu trên máy này.';
+    }
+    function post(params) {
+      var ctl = window.AbortController ? new AbortController() : null;
+      var t = ctl ? setTimeout(function () { ctl.abort(); }, 45000) : 0;
+      return fetch(W.endpoint, { method: 'POST', body: new URLSearchParams(params), redirect: 'follow', signal: ctl ? ctl.signal : undefined })
+        .then(function (r) { if (!r.ok) throw new Error('http'); return r.json(); })
+        .then(function (j) {
+          clearTimeout(t);
+          if (j && j.ok === true && Array.isArray(j.guests)) return j;
+          // bản Code.gs cũ không biết type=guests: coi như một xác nhận thiếu tên (không ghi gì)
+          throw new Error(!j || j.ok === true || j.error === 'missing name' ? 'old-version' : String(j.error));
+        }, function (e) { clearTimeout(t); throw e; });
+    }
+    // Danh sách trên Google Sheet là bản chính; khách sửa trên máy này trong lúc đang lưu thì vẫn giữ bản của máy
+    function apply(list, sentP, sentDels) {
+      var out = list.map(function (x) {
+        return { id: String(x.id), name: String(x.name), side: x.side || '', music: x.music || '', sent: !!x.sent, sl: x.link || '' };
+      }).reverse(); // mới thêm lên đầu
+      var pos = {};
+      out.forEach(function (g, i) { pos[g.id] = i; });
+      S.guests.forEach(function (g) {
+        if (!g.p || sentP[g.id] === g.p) return;
+        if (g.id in pos) { g.sl = out[pos[g.id]].sl; out[pos[g.id]] = g; } else out.unshift(g);
+      });
+      S.dels = S.dels.filter(function (id) { return sentDels.indexOf(id) < 0; });
+      S.guests = S.dels.length ? out.filter(function (g) { return S.dels.indexOf(g.id) < 0; }) : out;
+    }
+    // nhạc chung (bài + giây bắt đầu) dùng chung giữa các máy; máy vừa đổi nhạc mà chưa lưu xong thì giữ bản của máy
+    function applyMusic(j, setP) {
+      if (S.setP && S.setP === setP) S.setP = 0;
+      if (S.setP || !('settings' in j)) return;
+      var st = j.settings;
+      if (st && typeof st === 'object') {
+        var m = String(st.music || ''), t = String(st.start || '');
+        if (m === S.music && t === String(S.start || '')) return;
+        S.music = m; S.start = t;
+        musicInput.value = m; musicStart.value = t; preview.innerHTML = '';
+        showMusicInfo(); renderSongs();
+      } else if (S.music || S.start) { S.setP = ++S.rev; again = true; } // trên Google Sheet chưa có: đưa nhạc của máy này lên
+    }
+    function run() {
+      clearTimeout(timer); timer = null;
+      if (!on()) return;
+      if (busy) { again = true; return; }
+      busy = true; again = false;
+      var first = !S.linked;
+      if (first) S.guests.forEach(function (g) { if (!g.p) g.p = ++S.rev; }); // lần đầu: đưa cả danh sách trên máy lên
+      var sentP = {}, up = [], links = {};
+      S.guests.slice().reverse().forEach(function (g) { // cũ trước, mới sau: trang tính xếp theo thứ tự thêm
+        if (g.p) { sentP[g.id] = g.p; up.push({ id: g.id, name: g.name, side: g.side || '', sent: !!g.sent, music: g.music || '' }); }
+        var l = linkFor(g);
+        if (l !== g.sl) links[g.id] = l;
+      });
+      var dels = S.dels.slice(), failed = false, setP = S.setP || 0;
+      var data = { up: up, del: dels, links: links };
+      if (setP) data.set = { music: S.music, start: S.start };
+      status('', up.length || dels.length ? 'Đang lưu lên Google Sheet…' : 'Đang tải danh sách từ Google Sheet…');
+      post({ type: 'guests', key: getKey(), data: JSON.stringify(data) }).then(function (j) {
+        apply(j.guests, sentP, dels);
+        applyMusic(j, setP);
+        S.linked = true; retry = 0;
+        save();
+        if (!editing) renderList();
+        if (j.sheet) { $('#syncSheet').href = j.sheet; $('#syncSheet').hidden = false; }
+        $('#syncOld').hidden = true;
+        var now = new Date();
+        status('ok', '✓ Đã lưu trên Google Sheet lúc ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ' · ' + S.guests.length + ' khách');
+        if (first) toast('Đã kết nối Google Sheet: ' + S.guests.length + ' khách.');
+        // khách mới từ máy khác / gõ tay trên trang tính chưa có link mời: gửi link ở lượt sau (chỉ một lượt)
+        var stale = S.guests.some(function (g) { return linkFor(g) !== g.sl; });
+        if (stale && !follow) { follow = true; soon(1500); } else follow = false;
+      }).catch(function (e) {
+        failed = true;
+        var c = e && e.message;
+        if (c === 'wrong-password' || c === 'no-password') {
+          setKey(''); view();
+          msgEl.className = 'hint bad';
+          msgEl.textContent = c === 'wrong-password' ? 'Sai mật khẩu. Đây là mật khẩu xem trang Thống kê (dòng MAT_KHAU trong Apps Script).'
+            : 'Apps Script chưa có mật khẩu: gõ mật khẩu vào dòng var MAT_KHAU = \'\' rồi triển khai phiên bản mới.';
+        } else if (c === 'old-version') {
+          status('bad', 'Apps Script đang chạy bản cũ nên chưa lưu được danh sách khách. Cập nhật theo 4 bước dưới đây (danh sách vẫn giữ trên máy này):');
+          $('#syncOld').hidden = false;
+          prefetchGs();
+        } else {
+          retry = Math.min(retry + 1, 5);
+          status('bad', 'Chưa lưu được lên Google Sheet (kiểm tra mạng). Sẽ tự thử lại; danh sách vẫn giữ trên máy này.');
+          timer = setTimeout(run, [5, 10, 20, 40, 60][retry - 1] * 1000);
+        }
+      }).then(function () {
+        busy = false;
+        if (again && !failed) soon(300);
+      });
+    }
+    function soon(ms) {
+      if (!on()) return;
+      clearTimeout(timer);
+      timer = setTimeout(run, ms == null ? 1500 : ms);
+    }
+    // mã Code.gs mới (cùng trang web) để chép dán vào Apps Script
+    function prefetchGs() {
+      if (gsText) return;
+      fetch(new URL('../google-apps-script/Code.gs', location.href).href, { cache: 'no-cache' })
+        .then(function (r) { return r.ok ? r.text() : ''; })
+        .then(function (t) { if (/function doPost/.test(t)) gsText = t; })
+        .catch(function () { /* bỏ qua */ });
+    }
+    $('#copyGs').addEventListener('click', function () {
+      var url = 'https://github.com/' + GH.repo + '/blob/' + GH.branch + '/google-apps-script/Code.gs';
+      if (!gsText) { window.open(url, '_blank', 'noopener'); return; }
+      copy(gsText).then(function () { toast('Đã chép mã Code.gs mới. Dán vào Apps Script nhé.'); }, function () { window.open(url, '_blank', 'noopener'); });
+    });
+    $('#syncForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = $('#syncPass').value;
+      if (!v) return;
+      setKey(v, $('#syncRemember').checked);
+      msgEl.textContent = '';
+      $('#syncPass').value = '';
+      view();
+      retry = 0; run();
+    });
+    $('#syncNow').addEventListener('click', function () { retry = 0; run(); });
+    $('#syncOff').addEventListener('click', function () {
+      if (!window.confirm('Ngắt kết nối Google Sheet trên máy này? Danh sách trên Google Sheet vẫn giữ nguyên.')) return;
+      setKey(''); clearTimeout(timer); view();
+      toast('Đã ngắt kết nối. Danh sách vẫn giữ trên máy này.');
+    });
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) soon(300); });
+    window.addEventListener('online', function () { soon(300); });
+    function start() {
+      if (!W.endpoint) return;
+      $('#sync').hidden = false;
+      view();
+      if (on()) run();
+    }
+    return { soon: soon, on: on, start: start };
+  })();
 
   /* ---------- Bắt đầu ---------- */
   $('#couple').textContent = couple;
   document.title = 'Tạo link mời · ' + couple;
   renderList();
+  SYNC.start();
 })();

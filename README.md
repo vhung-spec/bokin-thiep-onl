@@ -117,7 +117,14 @@ Mở **https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/tao-link.html** 
 2. **Lời nhắn gửi kèm** — sửa tuỳ ý; `{ten}` là tên khách, `{link}` là link thiệp riêng.
 3. **Khách mời** — thêm từng người hoặc nhiều người một lúc, ghi khách nhà trai / nhà gái. Mỗi khách có nút **Gửi lời mời** (mở bảng chia sẻ của điện thoại: Zalo, Messenger, tin nhắn…), **Chép lời mời**, **Chép link**, xem thử thiệp, gửi SMS, sửa (kể cả nhạc riêng cho từng khách), đánh dấu đã gửi.
 
-Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-video@30`: bìa và lời mời hiện đúng tên khách, phần xác nhận tham dự điền sẵn tên và ghi khách của bên nào vào Google Sheets, nhạc phát khi khách chạm mở thiệp (nút góc trên để tắt/bật). Danh sách khách chỉ lưu trong trình duyệt của máy đang dùng: bấm **Tải danh sách (CSV)** để lưu dự phòng hoặc chuyển sang máy khác (**Nhập từ file CSV**).
+Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-video@30`: bìa và lời mời hiện đúng tên khách, phần xác nhận tham dự điền sẵn tên và ghi khách của bên nào vào Google Sheets, nhạc phát khi khách chạm mở thiệp (nút góc trên để tắt/bật). Danh sách khách lưu trong trình duyệt của máy đang dùng. Muốn không lo mất và dùng chung trên nhiều máy (cô dâu và chú rể cùng thêm khách): ở mục **3. Khách mời**, nhập mật khẩu xem thống kê (`MAT_KHAU`) vào ô **Lưu danh sách lên Google Sheet** → **Kết nối**.
+
+- Lần đầu kết nối, danh sách đang có trên máy được đưa lên trang tính **Khách mời** (cùng bảng tính với phản hồi). Sau đó mỗi lần thêm / sửa / xoá / đánh dấu đã gửi, trang tự lưu sau khoảng 1 giây; mở lại trang (hoặc bấm **Đồng bộ ngay**) thì tải danh sách mới nhất về.
+- Các máy đã kết nối dùng chung danh sách **và** nhạc nền chung (bài + giây bắt đầu). Lời nhắn gửi kèm vẫn riêng từng máy.
+- Có thể sửa thẳng trên trang tính: tên, bên, cột **Đã gửi** (gõ `Có` hoặc `x`); thêm khách bằng cách gõ tên vào dòng trống cuối bảng. Đừng sửa cột **Mã** (đang ẩn) và đừng chèn cột vào giữa; muốn ghi chú thì thêm cột bên phải.
+- Mất mạng thì danh sách vẫn giữ trên máy và tự lưu lại khi có mạng.
+- Vẫn nên thỉnh thoảng bấm **Tải danh sách (CSV)** để lưu dự phòng. Chưa kết nối thì dùng **Nhập từ file CSV** để chuyển danh sách sang máy khác.
+- Trang báo “Apps Script đang chạy bản cũ”: bấm **Chép mã Code.gs mới**, dán đè vào Apps Script, gõ lại mật khẩu vào dòng `MAT_KHAU`, Lưu, rồi **Triển khai → Quản lý các bản triển khai → Chỉnh sửa → Phiên bản mới → Triển khai** (link `/exec` giữ nguyên).
 
 Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
 
@@ -126,7 +133,7 @@ Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` →
 Xem ngay trên trang: ai sẽ tham dự (kèm số người), ai báo vắng, ai chưa phản hồi; chia theo khách nhà trai / nhà gái; tìm tên; **Tải file thống kê (CSV)** để mở bằng Excel. Không cần mở Google Sheets — Google Apps Script chỉ làm chỗ lưu phản hồi phía sau (trang tĩnh không tự lưu được).
 
 - Cần kết nối chỗ lưu một lần (mục “Lưu dữ liệu vào Google Sheets” bên dưới) và **đặt mật khẩu**: gõ vào dòng `var MAT_KHAU = ''` trong trình soạn Apps Script (đừng đưa mật khẩu lên GitHub), hoặc **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`. Không có mật khẩu thì không ai xem được danh sách.
-- “Chưa phản hồi” lấy từ danh sách khách ở trang Tạo link trên máy bạn dùng để gửi (hoặc nhập file CSV danh sách khách vào trang Tạo link trên máy khác).
+- “Chưa phản hồi” lấy từ trang tính **Khách mời** nếu trang Tạo link đã kết nối Google Sheet (xem được trên mọi máy); chưa kết nối thì lấy danh sách khách trên máy bạn dùng để gửi.
 - Trong Google Sheets có sẵn trang tính **“Thống kê”** (tự tạo khi có phản hồi đầu tiên): số phản hồi, tổng số người tham dự, chia theo nhà trai / nhà gái, số người vắng. Khách gửi lại xác nhận (cùng tên, cùng link) thì dòng cũ được cập nhật, không bị đếm trùng.
 - Chưa nối Google Sheets thì trang có nút **Xem thử với dữ liệu mẫu**.
 
@@ -149,7 +156,7 @@ Chưa cài thì mẫu đỏ rượu chạy ở **chế độ xem thử** (xác n
 
 Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
 Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
-Để xem trang thống kê, đặt mật khẩu ở dòng `var MAT_KHAU = ''` trong Apps Script (hoặc **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`).
+Để xem trang thống kê, đặt mật khẩu ở dòng `var MAT_KHAU = ''` trong Apps Script (hoặc **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`). Mật khẩu gõ trong mã được Apps Script nhớ vào Thuộc tính tập lệnh ở lần chạy đầu, nên các lần dán bản Code.gs mới sau đó không cần gõ lại.
 
 ## Xem thử trên máy
 
