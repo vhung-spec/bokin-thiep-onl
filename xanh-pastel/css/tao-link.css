@@ -97,7 +97,10 @@ details.help p { font-size: 14.5px; color: var(--ink-2); }
 .chip.gai { background: rgba(135, 96, 47, .14); color: var(--gold); }
 .chip.done { background: var(--btn); color: #fff; }
 .chip.music { background: #f1ead9; color: var(--gold); }
-.g-link { display: block; margin-top: 6px; font: 400 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-decoration: none; }
+.g-link { display: block; margin-top: 6px; font-size: 13.5px; line-height: 1.45; font-weight: 400; color: var(--ink-2); overflow-wrap: anywhere; text-decoration: none; }
+.g-link .lk-base { opacity: .75; }
+.g-link .lk-q { white-space: normal; }
+.g-link b { font-weight: 700; color: var(--btn); }
 .g-actions { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
 .g-actions .btn { min-height: 42px; padding: 0 14px; font-size: 14.5px; }
 .g-actions .btn { flex: 1 1 auto; }

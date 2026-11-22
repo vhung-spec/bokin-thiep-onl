@@ -38,7 +38,7 @@
   function toast(msg) {
     var t = $('#toast');
     t.textContent = msg; t.classList.add('show');
-    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, 2600);
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove('show'); }, Math.max(2600, msg.length * 55));
   }
   function copy(text) {
     if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
@@ -86,6 +86,16 @@
     return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{link}').join(linkFor(g));
   }
   function prettyLink(u) { try { return decodeURI(u).replace(/^https?:\/\//, ''); } catch (e) { return u; } }
+  // link hiện trên thẻ khách: hiện đủ, tên khách được tô đậm để thấy rõ đây là link riêng
+  function linkHtml(u) {
+    var q = u.indexOf('?');
+    if (q < 0) return esc(prettyLink(u));
+    var html = '<span class="lk-base">' + esc(prettyLink(u.slice(0, q))) + '</span>';
+    new URLSearchParams(u.slice(q + 1)).forEach(function (v, k) {
+      html += '<span class="lk-q">' + (html.indexOf('lk-q') < 0 ? '?' : '&amp;') + esc(k) + '=' + (k === 'to' ? '<b>' + esc(v) + '</b>' : esc(v)) + '</span>';
+    });
+    return html;
+  }
 
   /* ---------- 1. Nhạc nền ---------- */
   var musicInput = $('#musicInput'), musicStart = $('#musicStart'), musicInfo = $('#musicInfo'), preview = $('#musicPreview');
@@ -350,7 +360,7 @@
         (g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
         (g.music ? '<span class="chip music">Nhạc riêng</span>' : '') +
         (g.sent ? '<span class="chip done">Đã gửi</span>' : '') + '</div>' +
-        '<a class="g-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(prettyLink(url)) + '</a>' +
+        '<a class="g-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + linkHtml(url) + '</a>' +
         '<div class="g-actions">' +
         '<button class="btn share" data-act="share">Gửi lời mời</button>' +
         '<button class="btn ghost" data-act="copy-msg">Chép lời mời</button>' +
@@ -398,7 +408,7 @@
     var act = b.getAttribute('data-act');
     if (act === 'share') share(g);
     else if (act === 'copy-msg') copy(message(g)).then(function () { toast('Đã chép lời mời cho ' + g.name + '.'); }, function () { window.prompt('Chép lời mời này:', message(g)); });
-    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link của ' + g.name + '.'); }, function () { window.prompt('Chép link này:', linkFor(g)); });
+    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link riêng của ' + g.name + '. Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.'); }, function () { window.prompt('Chép link này:', linkFor(g)); });
     else if (act === 'more') { openMore = openMore === g.id ? null : g.id; renderList(); }
     else if (act === 'toggle-sent') { g.sent = !g.sent; save(); renderList(); }
     else if (act === 'edit') { editing = g.id; renderList(); }
