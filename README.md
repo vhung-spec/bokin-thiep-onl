@@ -121,6 +121,15 @@ Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-vid
 
 Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
 
+### Thống kê khách tham dự (`xanh-pastel/thong-ke.html`)
+
+Xem ai sẽ tham dự (kèm số người), ai báo vắng, ai chưa phản hồi; chia theo khách nhà trai / nhà gái; tìm tên; **Tải file thống kê (CSV)** để mở bằng Excel; nút **Mở Google Sheets**.
+
+- Cần cài Google Sheets (mục bên dưới) và **đặt mật khẩu**: trong Apps Script vào **Cài đặt dự án (biểu tượng bánh răng) → Thuộc tính tập lệnh → Thêm thuộc tính**, tên `MAT_KHAU`, giá trị là mật khẩu bạn muốn. Mật khẩu không nằm trong code nên repo công khai vẫn an toàn; không có mật khẩu thì không ai xem được danh sách.
+- “Chưa phản hồi” lấy từ danh sách khách ở trang Tạo link trên máy bạn dùng để gửi (hoặc nhập file CSV danh sách khách vào trang Tạo link trên máy khác).
+- Trong Google Sheets có sẵn trang tính **“Thống kê”** (tự tạo khi có phản hồi đầu tiên): số phản hồi, tổng số người tham dự, chia theo nhà trai / nhà gái, số người vắng. Khách gửi lại xác nhận (cùng tên, cùng link) thì dòng cũ được cập nhật, không bị đếm trùng.
+- Chưa nối Google Sheets thì trang có nút **Xem thử với dữ liệu mẫu**.
+
 Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. 
 
 Phiên bản cũ của mẫu xanh pastel (có thanh lời chúc chạy, thả tim) vẫn còn trong lịch sử git, commit `14691db`.
@@ -140,6 +149,7 @@ Chưa cài thì mẫu đỏ rượu chạy ở **chế độ xem thử** (xác n
 
 Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
 Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
+Để xem trang thống kê, thêm mật khẩu: **Cài đặt dự án → Thuộc tính tập lệnh**, tên `MAT_KHAU`.
 
 ## Xem thử trên máy
 
@@ -181,6 +191,7 @@ xanh-pastel/               mẫu xanh pastel
   js/main.js               mở bìa, đếm ngược giờ VN, lịch, album, xác nhận tham dự, hộp QR
   js/nhac.js               nhạc nền: link YouTube hoặc file mp3 (dùng chung cho thiệp và trang tạo link)
   tao-link.html, js/tao-link.js, css/tao-link.css  trang tạo link mời riêng cho từng khách
+  thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel
