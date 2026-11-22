@@ -5,7 +5,7 @@ Repo có **2 mẫu thiệp**, dùng chung file Google Sheets. Mẫu đỏ rượ
 | Mẫu | Link | Sửa nội dung ở |
 |---|---|---|
 | **Đỏ rượu** — phong bì sáp, polaroid, tim rơi | `/` (trang chính) | `js/config.js` |
-| **Xanh pastel** — nền màu nước xanh da trời, hoa dâm bụt, sóng nước, dấu sáp xanh, lời chúc chạy như livestream, thả tim | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
+| **Xanh pastel** — thiệp Văn Hùng & Tuyết Anh: bìa giấy màu nước hai cánh, dấu sáp xanh, hoa dâm bụt, sóng nước | `/xanh-pastel/` | `xanh-pastel/js/config.js` |
 
 Gửi khách link của mẫu bạn chọn (ví dụ `https://ten-ban.github.io/bokin-thiep-onl/xanh-pastel/?to=Ngọc%20Anh`).
 
@@ -78,32 +78,37 @@ Chưa điền gì thì ô QR hiện “Mã QR đang được cập nhật”. **
 
 Đặt file mp3 vào `assets/nhac-nen.mp3` (hoặc đổi `music` trong `config.js`). Nhạc phát khi khách mở phong bì; nút tròn góc dưới bên trái để bật/tắt. Không có file thì nút tự ẩn. Nên dùng nhạc có giấy phép miễn phí.
 
-## Mẫu xanh pastel — nền màu nước, hoa dâm bụt
+## Mẫu xanh pastel — thiệp Văn Hùng & Tuyết Anh
 
 ![Xem trước mẫu xanh pastel](docs/preview-xanh-pastel.jpg)
 
-Thư mục `xanh-pastel/`. Các phần:
+Thư mục `xanh-pastel/`. Một trang cuộn dọc cho điện thoại, theo bản thiết kế PDF 12 trang (bỏ các khoảng trống lớn giữa các trang):
 
-1. **Cửa đôi** nền màu nước xanh da trời (hai cánh đối xứng gương ở đường giữa), con dấu sáp xanh nhạt trên bông hoa trắng giấy, “Chạm để mở thiệp” (có tên khách nếu link có `?to=`). Chạm vào thì dấu sáp tan, hai cánh cửa mở vào trong.
-2. **Mở đầu** — dấu sáp, tên cô dâu chú rể, trái tim xuyên mũi tên, ngày cưới, hoạ tiết hoa xanh.
-3. **Lời mời** — bố mẹ hai bên, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), tên viết tay, giờ, thứ, ngày, **ngày âm lịch tự tính**, địa điểm (bấm để mở bản đồ). Chữ viết tay hiện dần từng ký tự.
-4. **Ảnh lớn mép giấy xé + Countdown**, cụm hoa xanh màu nước.
-5. **Save The Date** — lịch tháng dạng thẻ, chữ số dễ đọc (Be Vietnam Pro), Chủ nhật tô đỏ, ngày cưới nằm trong trái tim xanh, dòng thứ/ngày/giờ và ngày âm lịch bên dưới; Chủ nhật đầu tuần (đổi được trong `config.js`), sóng giấy màu nước.
-6. **Love Story** trên nền màu nước, chữ viết tay, hoạ tiết sóng nước và hoa dâm bụt.
-7. **Timeline** — tiêu đề chữ T uốn lượn tự vẽ ra, trục dọc, các mốc xen kẽ trái/phải kèm biểu tượng màu nước.
-8. **The Album** — ảnh lướt ngang, chạm để xem lớn (“1 / 6”, vuốt qua lại).
-9. **Xác Nhận Tham Dự** — tên, có tham dự không, số khách, một câu hỏi thêm tuỳ chỉnh (mặc định: có trẻ em đi cùng không).
-10. **Gửi Quà Mừng** — phong bì xanh nắp viền ren, chạm để mở rồi hiện mã QR của cô dâu và chú rể; ảnh mép giấy xé bên dưới.
-11. **Thank you!** — lời cảm ơn.
-12. **Thanh dưới cùng**: nút ☰ mục lục; nút 💬 xem tất cả lời chúc; nút ♥ thả tim có bộ đếm; ô **“Gửi lời chúc…”** (lần đầu sẽ hỏi tên). Thanh tự thu gọn khi cuộn xuống, hiện lại khi cuộn lên. Lời chúc của khách **chạy ở góc dưới như livestream**, có nút ✕ để ẩn.
+1. **Bìa** — giấy màu nước xanh trời (#91CFF2) gấp hai cánh, đường gáp ở giữa có bóng rất nhẹ; hoa trắng nhiều lớp và dấu sáp xanh, dòng “Chạm để mở thiệp” (kèm tên khách nếu link có `?to=`). Chạm hoa hoặc dòng chữ: dấu sáp nhấc nhẹ, hai cánh mở sang hai bên trong ~0,8 giây, rồi “Văn Hùng”, trái tim, “Tuyết Anh”, “28 . 11 . 2026” hiện dần. Cuộn được ngay sau khi mở. Điện thoại bật *giảm chuyển động* thì vào thẳng nội dung.
+2. **Lời mời** — hai cột nhà trai / nhà gái, “Trân trọng kính mời *Quý khách*” (hoặc tên khách), số 28 lớn, *Thứ Bảy · 10:30*, ngày âm lịch tự tính, tên địa điểm được tô nổi, địa chỉ và nút **Xem đường đi** (mở Google Maps).
+3. **Ảnh cầu thang + Countdown** — đếm ngày/giờ/phút/giây tới đúng 10:30 giờ Việt Nam (khách ở múi giờ khác vẫn đúng); tới giờ thì hiện “Đã đến giờ chung vui cùng chúng mình”.
+4. **Save The Date** — lịch tháng 11/2026 trên giấy ngà, Chủ nhật đầu tuần, ngày 28 trong trái tim xanh; sóng nước khép phần lịch.
+5. **Love Story** — chữ Lora dễ đọc trên khung giấy sáng, ký tên viết tay.
+6. **Timeline** — 10:00 đón khách, 10:30 khai tiệc, trục mảnh nối các chấm.
+7. **The Album** — ảnh lớn lướt ngang (ảnh kế tiếp ló ra), có nút ‹ › trên máy tính, chạm để xem ảnh lớn.
+8. **Xác Nhận Tham Dự** — tên, “Mình sẽ tham dự” / “Rất tiếc, mình không thể tham dự”; ô số người chỉ hiện khi chọn tham dự. **Chỉ báo gửi thành công khi Google Sheets thật sự lưu xong** (xem mục bên dưới).
+9. **Gửi Quà Mừng** — phong bì xanh; chạm để mở hộp có đúng ảnh mã QR, VPBank 3646866, nút sao chép số tài khoản và nút Đóng.
+10. **Thank you!** — ảnh bên vịnh, lời cảm ơn, chữ ký, ngày cưới, sóng nước kết thúc.
 
-Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, timeline, tài khoản mừng cưới…). Ảnh cưới nằm trong `xanh-pastel/assets/anh/` (`anh-01.jpg` … ); chọn ảnh nào cho phần Countdown, phần quà mừng và album trong mục `photos` và `album.photos` của `config.js`. Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px để thiệp mở nhanh. Nhạc nền dùng chung `assets/nhac-nen.mp3`. Biểu tượng timeline có sẵn: `cheers`, `rings`, `music`, `camera`, `heart`, `cake`.
+Màu: nền nội dung #EAF6FB, mặt giấy #FFFDF8, chữ #193A53, nút #245486. Chữ viết tay (Ephesis) chỉ dùng cho tên, chữ ký và tiêu đề ngắn; chữ đọc dùng Lora 17–18px.
 
-Hai mẫu dùng **chung một file Apps Script** (bên dưới): dán cùng URL vào `endpoint` của mẫu nào cũng được. Mẫu xanh pastel ghi thêm cột **Câu hỏi thêm** và lưu **lượt thả tim**.
+Sửa nội dung trong **`xanh-pastel/js/config.js`** (tên, giờ, địa điểm, bố mẹ, love story, lịch trình, album, tài khoản mừng cưới…). Ảnh cưới nằm trong `xanh-pastel/assets/anh/` (`anh-01.jpg` …). Trong `config.js`:
+- `photos.hero` / `photos.heroFocus`: ảnh lớn đầu tiên và điểm giữ trong khung khi cắt (mặc định `50% 88%` để giữ cả gương mặt và váy);
+- `photos.ending`: ảnh mở đầu phần cảm ơn;
+- `album.photos`: danh sách `{ src, alt }` (thêm `focus: '50% 30%'` nếu muốn chỉnh chỗ cắt một ảnh).
+
+Ảnh mới nên thu nhỏ còn cạnh dài khoảng 1600px. Muốn có nhạc nền: chép file mp3 vào `xanh-pastel/assets/` rồi ghi `music: 'assets/ten-file.mp3'`.
+
+Phiên bản cũ của mẫu xanh pastel (có thanh lời chúc chạy, thả tim) vẫn còn trong lịch sử git, commit `14691db`.
 
 ## Lưu dữ liệu vào Google Sheets
 
-Chưa cài thì thiệp chạy ở **chế độ xem thử**: xác nhận tham dự không gửi đi đâu, lời chúc mẫu được hiển thị và lời chúc bạn thử gửi chỉ lưu trên máy bạn.
+Chưa cài thì mẫu đỏ rượu chạy ở **chế độ xem thử** (xác nhận tham dự không gửi đi đâu, lời chúc chỉ lưu trên máy bạn). Mẫu xanh pastel thì **không bao giờ báo thành công giả**: chưa có `endpoint` nó báo khách là phản hồi *chưa được gửi*; có `endpoint` thì chỉ báo “đã lưu” khi Apps Script trả về `{"ok": true}`.
 
 1. Tạo một Google Sheet mới.
 2. Vào **Tiện ích mở rộng → Apps Script**, xoá code mẫu, dán nội dung file [`google-apps-script/Code.gs`](google-apps-script/Code.gs), bấm Lưu.
@@ -111,7 +116,8 @@ Chưa cài thì thiệp chạy ở **chế độ xem thử**: xác nhận tham d
    - *Thực thi với tư cách*: **Tôi**
    - *Người có quyền truy cập*: **Bất kỳ ai**
 4. Bấm **Triển khai**, cấp quyền, sao chép **URL ứng dụng web** (dạng `https://script.google.com/macros/s/.../exec`).
-5. Dán URL vào `endpoint` trong `js/config.js` (mẫu đỏ rượu) và/hoặc `xanh-pastel/js/config.js` (mẫu xanh pastel).
+5. Dán URL vào `endpoint` trong `js/config.js` (mẫu đỏ rượu) và/hoặc **`xanh-pastel/js/config.js` → dòng `endpoint: ''`** (mẫu xanh pastel), ví dụ `endpoint: 'https://script.google.com/macros/s/AKfy.../exec',`.
+6. Mở thiệp, gửi thử một phản hồi và kiểm tra dòng mới trong trang tính **“Xác nhận tham dự”**.
 
 Kết quả: trang tính **“Xác nhận tham dự”** và **“Lời chúc”** tự được tạo. Lời chúc mới hiện trên thiệp cho mọi khách. Muốn ẩn một lời chúc, gõ `x` vào cột **Ẩn** của dòng đó.
 Sửa code Apps Script sau này thì phải **Triển khai → Quản lý triển khai → Chỉnh sửa → Phiên bản mới** thì thay đổi mới có hiệu lực.
@@ -151,10 +157,11 @@ xanh-pastel/               mẫu xanh pastel
   index.html               khung trang
   css/style.css            màu sắc, bố cục, hiệu ứng
   js/config.js             ← nội dung mẫu xanh (sửa ở đây)
-  js/art.js                hình vẽ SVG: hoa trắng, dấu sáp, giấy xé, sóng, chữ T uốn lượn
-  js/main.js               cửa đôi, đếm ngược, lịch, form, lời chúc chạy, thả tim, QR
+  js/art.js                hình vẽ SVG: hoa trắng, dấu sáp, giấy xé, phong bì, chữ T uốn lượn
+  js/main.js               mở bìa, đếm ngược giờ VN, lịch, album, xác nhận tham dự, hộp QR
   assets/anh/              ảnh cưới của mẫu xanh pastel
-  assets/nen-mau-nuoc.webp nền màu nước (ô lặp dọc liền mạch); phần nền nhạt là ảnh này phủ trắng 80%
+  assets/nen-mau-nuoc.webp nền màu nước (ô lặp dọc liền mạch); phần nền nhạt là ảnh này phủ #EAF6FB 95%
+  assets/qr-mung-cuoi.png  mã VietQR VPBank 3646866
   assets/hoa-dam-but.webp, song-nuoc.webp  hoạ tiết hoa dâm bụt và sóng nước (nền trong suốt)
   assets/og-image.jpg      ảnh xem trước khi chia sẻ link
 ```
@@ -163,6 +170,6 @@ xanh-pastel/               mẫu xanh pastel
 
 - Nền màu nước, hoa dâm bụt và sóng nước của mẫu xanh pastel lấy từ ảnh do chủ thiệp cung cấp; nếu ảnh đó tải từ trang ảnh/thiết kế, hãy kiểm tra giấy phép trước khi đăng thiệp công khai.
 - Bố cục và tính năng của hai mẫu lấy cảm hứng từ các mẫu thiệp online thương mại. **Toàn bộ code và hình vẽ (hoa rum, mẫu đơn, phong bì, con dấu sáp, nền giấy thủ công, giấy xé, chữ lồng) đều tự vẽ bằng SVG** cho dự án này; không dùng ảnh, logo hay hình của mẫu gốc.
-- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Pinyon Script, Monsieur La Doulaise, Ms Madi, Playfair Display, Cormorant Garamond, Be Vietnam Pro (mẫu xanh pastel). Monsieur La Doulaise chỉ dùng cho chữ tiếng Anh (Countdown, Save The Date, Love Story) vì không có dấu tiếng Việt.
+- Font Google Fonts (giấy phép SIL OFL, hỗ trợ tiếng Việt): Corinthia, Oswald, Noto Serif, Cormorant Garamond (mẫu đỏ rượu); Ephesis, Lora, Playfair Display, Be Vietnam Pro (mẫu xanh pastel).
 - Hỗ trợ chế độ *giảm chuyển động* của điện thoại: tắt hiệu ứng và tim rơi.
 - Thiết kế cũ (tông xanh xô thơm, nét vẽ tay) vẫn còn trong lịch sử git, commit `63f5f7b`.

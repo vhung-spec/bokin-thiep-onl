@@ -4,252 +4,198 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Thiệp cưới Văn Hùng &amp; Tuyết Anh</title>
-  <meta name="description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của Văn Hùng &amp; Tuyết Anh.">
+  <meta name="description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của Văn Hùng &amp; Tuyết Anh, 10:30 Thứ Bảy 28.11.2026 tại Nhà văn hoá Tổ 1 Ngọc Trục.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Thiệp cưới Văn Hùng &amp; Tuyết Anh">
-  <meta property="og:description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình.">
+  <meta property="og:description" content="Trân trọng kính mời bạn tới dự lễ thành hôn của chúng mình, 10:30 Thứ Bảy 28.11.2026.">
   <meta property="og:url" content="https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/">
   <meta property="og:image" content="https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/assets/og-image.jpg">
-  <meta name="theme-color" content="#7fc9f9">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%236f8ed6'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#91CFF2">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%23245486'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Monsieur+La+Doulaise&family=Ms+Madi&family=Playfair+Display:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ephesis&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:wght@400;500;600&family=Be+Vietnam+Pro:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="locked">
 
-  <!-- ===== Cửa thiệp: chạm để mở ===== -->
-  <section class="gate" id="gate" role="button" tabindex="0" aria-label="Chạm để mở thiệp">
-    <div class="doors">
-      <div class="door l lace"><span class="shade"></span></div>
-      <div class="door r lace"><span class="shade"></span></div>
+  <!-- ===== 1. BÌA: hai cánh giấy, chạm vào hoa để mở ===== -->
+  <section class="gate" id="gate" aria-label="Bìa thiệp">
+    <div class="doors" aria-hidden="true">
+      <div class="door l"><span class="door-flower fl-bl" data-art="flowerF"></span><span class="shade"></span></div>
+      <div class="door r"><span class="door-flower fl-tr" data-art="flower"></span><span class="shade"></span></div>
     </div>
-    <div class="gate-seal" id="gateSeal"></div>
-    <div class="gate-foot">
-      <p class="gate-guest" id="gateGuest" hidden></p>
-      <p class="gate-hint" data-text="cover.hint"></p>
-    </div>
+    <button class="gate-open" id="gateOpen" type="button">
+      <span class="gate-seal" id="gateSeal"></span>
+      <span class="gate-guest" id="gateGuest" hidden></span>
+      <span class="gate-hint" data-text="cover.hint"></span>
+    </button>
   </section>
 
   <main class="shell">
-    <!-- ===== Mở đầu ===== -->
-    <section class="hero lace" id="dau-trang">
-      <div class="fl fl-hero-a" data-art="flower"></div>
-      <div class="fl fl-hero-b" data-art="wave"></div>
-      <div class="hero-seal" id="heroSeal"></div>
-      <h1 class="names">
-        <span class="n1" id="n1"></span>
-        <span class="orn" id="ornHeart"></span>
-        <span class="n2" id="n2"></span>
-        <span class="fline" id="fline"></span>
+    <!-- Mở đầu: hiện ra sau khi mở bìa -->
+    <section class="hero sky" id="dau-trang">
+      <span class="fl fl-hero" data-art="flower"></span>
+      <div class="hero-seal hi" id="heroSeal"></div>
+      <h1 class="hero-names">
+        <span class="script name hi" id="n1"></span>
+        <span class="orn hi" id="ornHeart"></span>
+        <span class="script name hi" id="n2"></span>
       </h1>
-      <p class="hero-date" id="heroDate"></p>
-      <div class="mandala-wrap" data-art="mandala" id="heroMandala"></div>
-      <a class="scroll-hint" href="#loi-moi" aria-label="Xem tiếp" id="scrollHint"></a>
+      <p class="hero-date hi" id="heroDate"></p>
+      <a class="scroll-hint hi" href="#loi-moi" id="scrollHint" aria-label="Xem lời mời"></a>
     </section>
 
-    <!-- ===== Lời mời ===== -->
-    <section class="invite lace" id="loi-moi">
-      <div class="parents rv">
-        <div><p class="fam-label" id="famTraiLabel"></p><p id="famTrai"></p></div>
-        <div><p class="fam-label" id="famGaiLabel"></p><p id="famGai"></p></div>
+    <!-- ===== 3. LỜI MỜI ===== -->
+    <section class="invite sky" id="loi-moi">
+      <div class="veil">
+        <div class="parents rv">
+          <div><p class="fam-label" id="famTraiLabel"></p><p id="famTrai"></p></div>
+          <div><p class="fam-label" id="famGaiLabel"></p><p id="famGai"></p></div>
+        </div>
+        <p class="kicker rv" data-text="invitation.kicker"></p>
+        <p class="script guest rv" id="guestName"></p>
+        <p class="line rv" data-text="invitation.line"></p>
+        <p class="big-names rv"><span class="script" id="bn1"></span><span class="script" id="bn2"></span></p>
+
+        <div class="date-block rv" id="dateBlock">
+          <span class="side" id="dMonth"></span>
+          <b id="dDay"></b>
+          <span class="side" id="dYear"></span>
+        </div>
+        <p class="when rv" id="whenTime"></p>
+        <p class="lunar rv" id="lunar"></p>
+
+        <div class="venue rv">
+          <p class="at">Tại</p>
+          <h2 class="venue-name"><span data-text="venue.name"></span></h2>
+          <p class="venue-addr" data-text="venue.address"></p>
+          <a class="btn-sea" id="mapBtn" target="_blank" rel="noopener"><span class="pin"></span><span data-text="venue.mapButton"></span></a>
+        </div>
       </div>
-      <p class="kicker rv" data-text="invitation.kicker"></p>
-      <p class="guest viet lt" id="guestName"></p>
-      <p class="line rv" data-text="invitation.line"></p>
-      <div class="big-names">
-        <span class="viet s1 lt" id="bn1"></span><span class="viet s2 lt" id="bn2"></span>
-      </div>
-      <p class="when rv"><span data-text="invitation.timeLabel"></span><b id="whenTime"></b></p>
-      <div class="date-row rv">
-        <span class="side" id="dMonth"></span>
-        <b id="dDay"></b>
-        <span class="side" id="dYear"></span>
-      </div>
-      <p class="lunar rv" id="lunar"></p>
-      <p class="at rv">Tại</p>
-      <a class="venue rv" id="venue" target="_blank" rel="noopener">
-        <b data-text="venue.name"></b>
-        <span data-text="venue.address"></span>
-        <small data-text="venue.mapHint"></small>
-      </a>
     </section>
 
-    <!-- ===== Ảnh + đếm ngược ===== -->
-    <section class="cd paper" id="dem-nguoc">
-      <div class="tear up" data-tear="11"></div>
+    <!-- ===== 4. ẢNH CẦU THANG + ĐẾM NGƯỢC ===== -->
+    <section class="cd mist" id="dem-nguoc">
       <figure class="hero-photo">
-        <img data-src="photos.hero" alt="Ảnh cưới">
+        <img id="heroImg" alt="Văn Hùng và Tuyết Anh ngồi trên bậc cầu thang">
         <div class="tear up in-photo" data-tear="5"></div>
       </figure>
-      <div class="cd-body">
-        <div class="fl fl-cd-l" data-art="side"></div>
-        <div class="fl fl-cd-r" data-art="smallF"></div>
-        <p class="fancy cd-title lt" data-text="countdown.title"></p>
-        <div class="cd-row rv">
-          <div><b data-cd="d">0</b><span>Ngày</span></div>
-          <div><b data-cd="h">00</b><span>Giờ</span></div>
-          <div><b data-cd="m">00</b><span>Phút</span></div>
-          <div><b data-cd="s">00</b><span>Giây</span></div>
-        </div>
-        <p class="fancy cd-sub lt" data-text="countdown.subtitle"></p>
+      <h2 class="script sec-title lt" data-text="countdown.title"></h2>
+      <div class="cd-row rv" id="cdRow">
+        <div><b data-cd="d">0</b><span>Ngày</span></div>
+        <div><b data-cd="h">00</b><span>Giờ</span></div>
+        <div><b data-cd="m">00</b><span>Phút</span></div>
+        <div><b data-cd="s">00</b><span>Giây</span></div>
       </div>
-      <div class="fl fl-cd-b" data-art="big"></div>
+      <p class="cd-done script" id="cdDone" hidden></p>
+      <p class="script cd-sub lt" data-text="countdown.subtitle"></p>
     </section>
 
-    <!-- ===== Lịch tháng ===== -->
-    <section class="cal paper" id="lich">
-      <div class="tear up plain" data-tear="31"></div>
-      <p class="fancy sec-title lt" data-text="calendar.title"></p>
+    <!-- Lịch tháng -->
+    <section class="cal mist" id="lich">
+      <h2 class="script sec-title lt" data-text="calendar.title"></h2>
       <div class="cal-card rv">
-        <div class="cal-flower" data-art="small"></div>
+        <span class="cal-flower" data-art="flower"></span>
         <div class="cal-head"><span class="cal-m" id="calMonth"></span><span class="cal-y" id="calYear"></span></div>
         <div class="cal-grid" id="calGrid"></div>
         <p class="cal-note" id="calNote"></p>
       </div>
-      <div class="cal-wave rv" data-art="wave"></div>
+      <div class="wave-end rv" data-art="wave"></div>
+      <div class="tear down" data-tear="17"></div>
     </section>
 
-    <!-- ===== Chuyện tình yêu ===== -->
-    <section class="story lace" id="chuyen-tinh">
-      <div class="fl fl-story" data-art="waveF"></div>
-      <div class="fl fl-story-b" data-art="flower"></div>
-      <div class="pflower rv" data-art="pflower"></div>
-      <p class="fancy sec-title lt" data-text="loveStory.title"></p>
-      <div class="story-text" id="storyText"></div>
-      <p class="story-sign rv"><span class="hand" data-text="loveStory.signature"></span><span class="viet" id="storySign"></span></p>
-      <div class="rings-wrap rv" data-art="rings"></div>
+    <!-- ===== 5. CÂU CHUYỆN ===== -->
+    <section class="story sky" id="chuyen-tinh">
+      <h2 class="script sec-title lt" data-text="loveStory.title"></h2>
+      <div class="story-panel rv" id="storyText"></div>
+      <p class="story-sign rv"><span class="closing" data-text="loveStory.closing"></span><span class="script sig" id="storySign"></span></p>
     </section>
 
-    <!-- ===== Lịch trình ===== -->
-    <section class="timeline paper" id="lich-trinh">
+    <!-- Lịch trình -->
+    <section class="timeline mist" id="lich-trinh">
       <div class="tear up" data-tear="23"></div>
       <h2 class="swash" data-swash="timeline.title"></h2>
-      <ol class="tl" id="tlList"></ol>
-      <div class="mandala-wrap rv" data-art="mandala"></div>
+      <ol class="tl rv" id="tlList"></ol>
     </section>
 
-    <!-- ===== Album ===== -->
-    <section class="album paper" id="album">
-      <div class="carousel" id="carousel"></div>
-      <div class="album-title">
-        <h2 class="swash" data-swash="album.title"></h2>
-        <div class="fl fl-album" data-art="small"></div>
+    <!-- Album -->
+    <section class="album mist" id="album">
+      <span class="fl fl-album" data-art="flower"></span>
+      <h2 class="swash" data-swash="album.title"></h2>
+      <div class="car-wrap">
+        <div class="carousel" id="carousel" tabindex="0" role="region" aria-label="Album ảnh cưới, vuốt ngang để xem thêm"></div>
+        <button class="car-btn prev" type="button" id="carPrev" aria-label="Ảnh trước"></button>
+        <button class="car-btn next" type="button" id="carNext" aria-label="Ảnh sau"></button>
       </div>
+      <p class="car-count" id="carCount" aria-live="polite"></p>
     </section>
 
-    <!-- ===== Xác nhận tham dự ===== -->
-    <section class="rsvp paper" id="xac-nhan">
-      <div class="tear up plain" data-tear="41"></div>
-      <div class="fl fl-rsvp" data-art="small"></div>
-      <p class="viet sec-title lt" data-text="rsvp.title"></p>
+    <!-- ===== 6. XÁC NHẬN THAM DỰ ===== -->
+    <section class="rsvp mist" id="xac-nhan">
+      <h2 class="script sec-title lt" data-text="rsvp.title"></h2>
       <p class="sec-text rv" data-text="rsvp.text"></p>
-      <form id="rsvpForm" class="rv" novalidate>
-        <input class="box-input" name="name" id="rsvpName" autocomplete="name" required maxlength="80" placeholder="Tên của bạn">
+      <form id="rsvpForm" class="paper-card rv" novalidate>
+        <label class="field-label" for="rsvpName">Tên của bạn</label>
+        <input class="box-input" id="rsvpName" name="name" autocomplete="name" maxlength="80" required>
         <fieldset class="field">
-          <legend>Bạn sẽ tham dự chứ? <em>*</em></legend>
-          <label class="radio"><input type="radio" name="attending" value="yes"><i></i><span data-text="rsvp.yes"></span></label>
-          <label class="radio"><input type="radio" name="attending" value="no"><i></i><span data-text="rsvp.no"></span></label>
+          <legend class="field-label">Bạn sẽ tham dự chứ?</legend>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="attending" value="yes" id="attYes"><span data-text="rsvp.yes"></span></label>
+            <label class="choice"><input type="radio" name="attending" value="no" id="attNo"><span data-text="rsvp.no"></span></label>
+          </div>
         </fieldset>
-        <label class="field" id="guestsField"><span data-text="rsvp.guestsLabel"></span>
-          <input class="box-input" name="guests" id="rsvpGuests" type="number" inputmode="numeric" min="1"></label>
-        <fieldset class="field" id="extraField">
-          <legend id="extraLabel"></legend>
-          <div id="extraOpts"></div>
-        </fieldset>
-        <p class="form-msg" id="rsvpMsg" role="status"></p>
-        <button class="btn-navy" type="submit" id="rsvpSubmit" data-text="rsvp.button"></button>
+        <div class="field" id="guestsField" hidden>
+          <span class="field-label" id="guestsLabel" data-text="rsvp.guestsLabel"></span>
+          <div class="stepper" role="group" aria-labelledby="guestsLabel">
+            <button type="button" data-step="-1" aria-label="Bớt một người">−</button>
+            <output id="guestCount" aria-live="polite">1</output>
+            <button type="button" data-step="1" aria-label="Thêm một người">+</button>
+          </div>
+        </div>
+        <p class="form-msg" id="rsvpMsg" role="status" aria-live="polite"></p>
+        <button class="btn-ink" type="submit" id="rsvpSubmit" data-text="rsvp.button"></button>
       </form>
     </section>
 
-    <!-- ===== Quà mừng ===== -->
-    <section class="gift paper" id="qua-mung">
-      <p class="viet sec-title lt" data-text="gift.title"></p>
+    <!-- Quà mừng -->
+    <section class="gift mist" id="qua-mung">
+      <h2 class="script sec-title lt" data-text="gift.title"></h2>
       <p class="sec-text rv" data-text="gift.text"></p>
-      <button class="gift-env rv" type="button" id="giftEnv" aria-label="Mở phong bì quà mừng">
+      <button class="gift-env rv" type="button" id="giftEnv" aria-haspopup="dialog" aria-label="Mở phong bì quà mừng">
         <span class="g-back"></span><span class="g-card"><span class="g-qr"></span></span>
         <span class="g-front"></span><span class="g-flap"></span><span class="g-seal"></span>
       </button>
-      <figure class="gift-photo">
-        <div class="tear down in-photo top" data-tear="29"></div>
-        <img data-src="photos.thanks" alt="Ảnh cưới">
-        <div class="tear up in-photo" data-tear="8"></div>
-        <span class="pf pf-l" data-art="pflower"></span>
-        <span class="pf pf-r" data-art="pflower"></span>
-      </figure>
+      <p class="gift-tap rv">Chạm vào phong bì để mở</p>
     </section>
 
-    <!-- ===== Lời cảm ơn ===== -->
-    <section class="thanks paper" id="cam-on">
+    <!-- Lời cảm ơn -->
+    <section class="ending mist" id="cam-on">
+      <figure class="end-photo">
+        <div class="tear down in-photo top" data-tear="29"></div>
+        <img id="endImg" alt="Văn Hùng và Tuyết Anh trên núi nhìn ra vịnh">
+        <div class="tear up in-photo" data-tear="8"></div>
+      </figure>
       <h2 class="swash" data-swash="thanks.title"></h2>
-      <p class="sec-text rv" data-text="thanks.text"></p>
-      <div class="fl-ty rv" data-art="wave"></div>
-      <div class="mandala-wrap rv" data-art="mandala"></div>
-      <p class="foot rv" id="footNames"></p>
+      <p class="sec-text thanks-text rv" data-text="thanks.text"></p>
+      <p class="script end-sign rv" id="endSign"></p>
+      <p class="end-date rv" id="endDate"></p>
+      <div class="wave-end last rv" data-art="wave"></div>
     </section>
   </main>
 
-  <!-- ===== Lớp nổi ===== -->
   <button class="music" id="musicBtn" type="button" aria-label="Bật/tắt nhạc" hidden></button>
-  <div class="live" id="live" aria-hidden="true"></div>
-  <button class="live-x" id="liveX" type="button" aria-label="Ẩn lời chúc chạy" hidden></button>
-  <div class="fly" id="fly" aria-hidden="true"></div>
 
-  <div class="dock" id="dock">
-    <div class="dock-row">
-      <button class="d-menu" type="button" id="menuBtn" aria-label="Mục lục"></button>
-      <div class="d-right">
-        <button class="d-chat" type="button" id="chatBtn" aria-label="Xem lời chúc"></button>
-        <button class="d-heart" type="button" id="heartBtn" aria-label="Thả tim"><span id="heartCount">0</span></button>
-      </div>
-    </div>
-    <form class="d-input" id="bar" autocomplete="off">
-      <input id="wishInput" maxlength="300" aria-label="Lời chúc">
-      <button class="d-send" type="submit" aria-label="Gửi lời chúc"></button>
-    </form>
-  </div>
-
-  <!-- Mục lục -->
-  <div class="sheet" id="sheet" hidden>
-    <div class="sheet-bg" data-close></div>
-    <nav class="sheet-body" aria-label="Mục lục">
-      <p class="viet sheet-title">Mục lục</p>
-      <div class="sheet-links" id="sheetLinks"></div>
-      <button class="sheet-wishes" type="button" id="openWishes"></button>
-      <label class="sheet-toggle"><input type="checkbox" id="liveToggle" checked><span>Hiện lời chúc chạy</span></label>
-    </nav>
-  </div>
-
-  <!-- Hỏi tên trước khi gửi lời chúc -->
-  <dialog class="dlg" id="nameDlg">
-    <form id="nameForm" novalidate>
-      <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
-      <p class="viet dlg-title">Gửi lời chúc</p>
-      <input class="box-input" id="wishName" maxlength="60" required placeholder="Tên của bạn">
-      <textarea class="box-input" id="wishText" rows="3" maxlength="300" required placeholder="Lời chúc của bạn"></textarea>
-      <p class="form-msg" id="nameMsg" role="status"></p>
-      <button class="btn-navy" type="submit" id="nameSubmit">Gửi lời chúc</button>
-    </form>
-  </dialog>
-
-  <!-- Tất cả lời chúc -->
-  <dialog class="dlg" id="wishesDlg">
+  <!-- Hộp quà mừng (mở khi chạm phong bì) -->
+  <dialog class="dlg" id="giftDlg" aria-labelledby="giftDlgTitle">
     <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
-    <p class="viet dlg-title">Lời chúc</p>
-    <div class="wish-list" id="wishList"></div>
-    <button class="btn-navy" type="button" id="writeWish">Viết lời chúc</button>
-  </dialog>
-
-  <!-- Quà mừng -->
-  <dialog class="dlg" id="giftDlg">
-    <button class="dlg-x" type="button" data-close aria-label="Đóng"></button>
-    <p class="viet dlg-title" data-text="gift.title"></p>
+    <p class="script dlg-title" id="giftDlgTitle" data-text="gift.title"></p>
     <div class="gift-cards" id="giftCards"></div>
+    <button class="btn-outline" type="button" data-close>Đóng</button>
   </dialog>
 
-  <!-- Xem ảnh -->
-  <dialog class="lightbox" id="lightbox">
+  <!-- Xem ảnh lớn -->
+  <dialog class="lightbox" id="lightbox" aria-label="Xem ảnh">
     <p class="lb-count" id="lbCount"></p>
     <img id="lbImg" alt="">
     <button class="lb-btn lb-prev" type="button" id="lbPrev" aria-label="Ảnh trước"></button>

@@ -7,6 +7,8 @@
  * Dùng chung cho cả mẫu đỏ rượu và mẫu xanh pastel.
  * Cột "Câu hỏi thêm" lưu câu trả lời cho câu hỏi tuỳ chọn của mẫu xanh pastel (vd. có trẻ em đi cùng không).
  * Muốn ẩn một lời chúc: gõ chữ x vào cột "Ẩn" của dòng đó.
+ * Luôn trả về JSON: {"ok": true} khi đã ghi xong, {"ok": false, "error": "..."} khi chưa ghi được.
+ * Mẫu xanh pastel chỉ báo khách "đã lưu" khi nhận được {"ok": true}.
  * Cách cài: xem mục "Lưu dữ liệu vào Google Sheets" trong README.md
  */
 var RSVP_SHEET = 'Xác nhận tham dự';
@@ -34,8 +36,8 @@ function json_(o) {
 function doPost(e) {
   var p = (e && e.parameter) || {};
   var lock = LockService.getScriptLock();
-  lock.waitLock(10000);
   try {
+    lock.waitLock(10000);
     if (p.type === 'heart') {
       var props = PropertiesService.getScriptProperties();
       var n = Math.max(0, Math.min(50, Number(p.n) || 0));
@@ -47,6 +49,7 @@ function doPost(e) {
         new Date(), clean_(p.name, 80), clean_(p.message, 800), sig, clean_(p.invitedAs, 80), '',
       ]);
     } else {
+      if (!String(p.name || '').trim()) return json_({ ok: false, error: 'missing name' });
       sheet_(RSVP_SHEET, RSVP_HEAD).appendRow([
         new Date(), clean_(p.name, 80),
         p.side === 'gai' ? 'Nhà gái' : p.side === 'trai' ? 'Nhà trai' : '',
@@ -55,9 +58,12 @@ function doPost(e) {
         clean_(p.extra, 120),
       ]);
     }
+    SpreadsheetApp.flush(); // ghi hẳn xuống trang tính trước khi báo thành công
     return json_({ ok: true });
+  } catch (err) {
+    return json_({ ok: false, error: String((err && err.message) || err) });
   } finally {
-    lock.releaseLock();
+    try { lock.releaseLock(); } catch (e2) {}
   }
 }
 

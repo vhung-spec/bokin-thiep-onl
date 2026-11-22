@@ -139,7 +139,7 @@
     var fiber = 'M' + pts.map(function (p) { return p[0] + ' ' + f1(+p[1] + 1.4 + R() * .8); }).join(' L');
     var tr = dir === 'down' ? ' transform="translate(0 ' + H + ') scale(1 -1)"' : '';
     return '<svg class="tear-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><g' + tr + '>' +
-      '<path d="' + d + '" fill="' + (color || '#e5f4fe') + '"/>' +
+      '<path d="' + d + '" fill="' + (color || '#EAF6FB') + '"/>' +
       '<path d="' + fiber + '" fill="none" stroke="#fff" stroke-width="2.6" stroke-opacity=".95"/></g></svg>';
   }
   /* =========================================================
@@ -153,7 +153,7 @@
     return '<svg class="art mandala" viewBox="-20 -20 40 40" aria-hidden="true">' + s + '<circle r="2.4" fill="#6f8ed6"/><circle r="1" fill="#fff"/></svg>';
   }
   function heartArrow() {
-    return '<svg class="art heart-arrow" viewBox="-36 -24 72 48" aria-hidden="true"><g fill="none" stroke="#2d3452" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' +
+    return '<svg class="art heart-arrow" viewBox="-36 -24 72 48" aria-hidden="true"><g fill="none" stroke="#193A53" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">' +
       '<path d="M2 14 C-12 4 -15 -6 -9 -10 C-5 -13 -1 -10 0 -6 C1 -11 7 -14 11 -10 C17 -5 12 5 2 14Z"/>' +
       '<path d="M-6 -2 C-2 -6 3 -3 0 1 C-3 5 4 7 8 2"/>' +
       '<path d="M-30 14 C-18 9 -4 1 24 -14"/><path d="M24 -14 L17 -13.5 M24 -14 L20.5 -8"/>' +
@@ -188,7 +188,7 @@
 
   /* Chữ T uốn lượn + hoa vẽ nét (tiêu đề Timeline / The Album / Thank you) */
   function swashT() {
-    return '<svg class="swash-t" viewBox="0 0 220 150" aria-hidden="true"><g fill="none" stroke="#2d3452" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' +
+    return '<svg class="swash-t" viewBox="0 0 220 150" aria-hidden="true"><g fill="none" stroke="#193A53" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">' +
       '<path d="M30 44 C14 40 12 28 26 26 C60 20 120 10 214 6"/>' +
       '<path d="M112 13 C110 48 104 92 92 124 C86 138 76 144 70 138"/>' +
       '<g transform="translate(42 70)"><path d="M0 0 C-7 -4 -7 -13 0 -14 C7 -13 7 -4 0 0Z M0 0 C4 -7 13 -7 14 0 C13 7 4 7 0 0Z M0 0 C7 4 7 13 0 14 C-7 13 -7 4 0 0Z M0 0 C-4 7 -13 7 -14 0 C-13 -7 -4 -7 0 0Z"/>' +
@@ -230,6 +230,7 @@
     left: '<path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     right: '<path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     copy: '<rect x="8" y="8" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3" fill="none" stroke="currentColor" stroke-width="1.7"/>',
+    pin: '<path d="M12 21.5s-6.5-6.1-6.5-11.2a6.5 6.5 0 0 1 13 0c0 5.1-6.5 11.2-6.5 11.2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="10.2" r="2.4" fill="currentColor"/>',
     check: '<path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
     chat: '<path d="M4 5.5h16v10.5H10l-4.5 3.8V16H4z" fill="currentColor"/><circle cx="8.5" cy="10.8" r="1.1" fill="#fff"/><circle cx="12" cy="10.8" r="1.1" fill="#fff"/><circle cx="15.5" cy="10.8" r="1.1" fill="#fff"/>',
   };
