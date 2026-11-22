@@ -95,6 +95,7 @@ section { position: relative; }
 .tear.down { bottom: 1px; transform: translateY(100%); }
 .tear.in-photo { transform: none; top: auto; bottom: -1px; }
 .tear.in-photo.top { top: -1px; bottom: auto; }
+.tear.in-photo.top .tear-svg { filter: drop-shadow(0 1.5px 1.5px rgba(45, 56, 38, .16)); } /* mép giấy phía trên ảnh đổ bóng xuống ảnh */
 
 /* ---------- Cành lá vàng & dải lá vàng ---------- */
 .motif { display: block; width: 100%; height: auto; }
