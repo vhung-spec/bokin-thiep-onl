@@ -30,9 +30,8 @@
 
   /* ---------- Nền & hình vẽ ---------- */
   A.installDefs();
-  root.style.setProperty('--lace-img', A.svgUrl(A.laceTile()));
-  root.style.setProperty('--mottle-img', A.svgUrl(A.mottleTile()));
-  root.style.setProperty('--paper-img', A.svgUrl(A.paperTile()));
+  root.style.setProperty('--sand-img', A.svgUrl(A.sandTile(null, 1.15)));
+  root.style.setProperty('--paper-img', A.svgUrl(A.sandTile([.3, .36, .55], .7)));
   var arts = {
     side: function () { return A.cluster('side'); }, sideF: function () { return A.cluster('side', true); },
     small: function () { return A.cluster('small'); }, smallF: function () { return A.cluster('small', true); },
@@ -170,15 +169,23 @@
   /* ---------- Lịch tháng ---------- */
   (function () {
     var y = main.getFullYear(), m = main.getMonth(), sun = (W.calendar.weekStart || 'sun') === 'sun';
-    $('#calMonth').textContent = 'Tháng ' + pad(m + 1) + ' / ' + y;
+    $('#calMonth').textContent = 'Tháng ' + (m + 1);
+    $('#calYear').textContent = y;
     var heads = sun ? ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'] : ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
-    var html = heads.map(function (d) { return '<span class="dow">' + d + '</span>'; }).join('');
+    var html = heads.map(function (d) { return '<span class="dow' + (d === 'CN' ? ' sun' : '') + '">' + d + '</span>'; }).join('');
     var first = new Date(y, m, 1).getDay(), off = sun ? first : (first + 6) % 7, days = new Date(y, m + 1, 0).getDate();
     for (var i = 0; i < off; i++) html += '<span></span>';
     for (var d = 1; d <= days; d++) {
-      html += d === main.getDate() ? '<span class="d wed" role="img" aria-label="Ngày ' + d + ' — ngày cưới">' + A.heartRings() + '</span>' : '<span class="d">' + d + '</span>';
+      var isSun = new Date(y, m, d).getDay() === 0;
+      html += d === main.getDate()
+        ? '<span class="d wed" role="img" aria-label="Ngày ' + d + ' — ngày cưới"><span class="wed-heart">' + A.heartSvg() + '</span><b>' + d + '</b></span>'
+        : '<span class="d' + (isSun ? ' sun' : '') + '">' + d + '</span>';
     }
     $('#calGrid').innerHTML = html;
+    var lu2 = L.solarToLunar(main.getDate(), m + 1, y);
+    $('#calNote').innerHTML = A.ringsIcon() + '<span><b>' + WD[main.getDay()] + ', ' + pad(main.getDate()) + '.' + pad(m + 1) + '.' + y +
+      ' · ' + pad(main.getHours()) + ':' + pad(main.getMinutes()) + '</b><small>Âm lịch: ngày ' + lu2.day + ' tháng ' + lu2.month +
+      (lu2.leap ? ' nhuận' : '') + ' năm ' + L.yearName(lu2.year) + '</small></span>';
   })();
 
   /* ---------- Lịch trình (xen kẽ trái/phải) ---------- */

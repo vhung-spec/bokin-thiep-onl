@@ -10,8 +10,12 @@
   --blue: #6f8ed6;
   --blue-d: #4e6cb8;
   --navy: #1f3366;
-  --lace-base: #b9c4e3;
-  --paper: #f6f2f4;
+  --sand: #bccbec;
+  --sand-2: #a9bce6;
+  --paper: #eef2fa;
+  --paper-2: #e4eaf7;
+  --cal: 'Be Vietnam Pro', system-ui, sans-serif;
+  --rose: #c0485e;
   --fancy: 'Monsieur La Doulaise', 'Pinyon Script', cursive;
   --viet: 'Pinyon Script', cursive;
   --hand: 'Ms Madi', cursive;
@@ -49,11 +53,11 @@ section { position: relative; }
 
 /* ---------- Nền ren & giấy (ảnh nền do main.js tạo) ---------- */
 .lace {
-  background-color: var(--lace-base);
-  background-image: linear-gradient(180deg, rgba(255, 255, 255, .16), rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .1)), var(--lace-img), var(--mottle-img);
+  background-color: var(--sand);
+  background-image: radial-gradient(120% 60% at 50% 0%, rgba(255, 255, 255, .26), rgba(255, 255, 255, 0) 62%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2));
   background-size: 100% 100%, 300px 300px, 520px 520px;
 }
-.paper { background-color: var(--paper); background-image: var(--paper-img); background-size: 300px 300px; }
+.paper { background-color: var(--paper); background-image: var(--paper-img), linear-gradient(180deg, var(--paper), var(--paper-2)); background-size: 240px 240px, 100% 100%; }
 
 /* ---------- Mép giấy xé ---------- */
 .tear { position: absolute; left: 0; right: 0; height: 24px; z-index: 4; pointer-events: none; }
@@ -88,17 +92,18 @@ section.vis .fl { animation-play-state: running; }
 .gate { position: fixed; inset: 0; z-index: 80; cursor: pointer; outline: none; }
 .doors { position: absolute; inset: 0; max-width: var(--col); margin: 0 auto; display: flex; perspective: 1500px; }
 .door { position: relative; flex: 1; will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-.door.l { transform-origin: 0 50%; background-position: 0 0, right 0 top 0, right 0 top 0; box-shadow: inset -10px 0 14px -10px rgba(35, 45, 90, .45); }
-.door.r { transform-origin: 100% 50%; background-position: 0 0, 0 0, 0 0; box-shadow: inset 10px 0 14px -10px rgba(35, 45, 90, .4); }
+.door { background-image: linear-gradient(90deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 55%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2)); background-size: 100% 100%, 240px 240px, 100% 100%; }
+.door.l { transform-origin: 0 50%; background-position: 0 0, right 0 top 0, 0 0; box-shadow: inset -10px 0 14px -10px rgba(35, 45, 90, .45); }
+.door.r { transform-origin: 100% 50%; background-image: linear-gradient(270deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, 0) 55%), var(--sand-img), linear-gradient(180deg, var(--sand), var(--sand-2)); background-position: 0 0, 0 0, 0 0; box-shadow: inset 10px 0 14px -10px rgba(35, 45, 90, .4); }
 .door.l::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: 1.5px; background: rgba(60, 60, 90, .55); }
 .shade { position: absolute; inset: 0; opacity: 0; will-change: opacity; }
 .door.l .shade { background: linear-gradient(90deg, rgba(25, 32, 70, .15), rgba(25, 32, 70, .5)); }
 .door.r .shade { background: linear-gradient(270deg, rgba(25, 32, 70, .15), rgba(25, 32, 70, .5)); }
 .gate-seal { position: absolute; z-index: 2; left: 50%; top: 47%; width: min(62vw, 260px); transform: translate(-50%, -50%); will-change: transform, opacity; }
 .gate-foot { position: absolute; z-index: 2; left: 0; right: 0; top: 70%; text-align: center; pointer-events: none; will-change: opacity; }
-.gate-guest { font: 500 15px var(--serif); color: #fff; text-shadow: 0 1px 3px rgba(30, 40, 80, .45), 0 0 14px rgba(30, 40, 80, .25); opacity: 0; }
+.gate-guest { font: 500 15px var(--serif); color: var(--ink); opacity: 0; }
 .gate-guest b { display: block; font: 400 34px/1.3 var(--viet); letter-spacing: 0; }
-.gate-hint { margin-top: 8px; font: 600 11.5px var(--title); letter-spacing: .34em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 3px rgba(30, 40, 80, .5), 0 0 14px rgba(30, 40, 80, .3); opacity: 0; }
+.gate-hint { margin-top: 8px; font: 600 11.5px var(--title); letter-spacing: .34em; text-transform: uppercase; color: var(--ink); opacity: 0; }
 
 .gate-seal .seal-float { opacity: 0; will-change: transform; }
 body.ready .gate-seal .seal-float { animation: sealIn 1.4s var(--ease-back) .15s both, float 5s ease-in-out 1.7s infinite; }
@@ -187,16 +192,35 @@ body.open .scroll-hint .icon { animation: nudge 2s ease-in-out 3s infinite; }
    ========================================================= */
 .cal { text-align: center; padding: 34px 22px 0; }
 .sec-title { font-size: clamp(40px, 13.6vw, 62px); white-space: nowrap; position: relative; z-index: 2; }
-.cal-month { font: 600 13px var(--serif); letter-spacing: .14em; text-transform: uppercase; color: var(--gray); }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); max-width: 330px; margin: 14px auto 0; }
-.cal-grid .dow { font: 600 12px var(--serif); color: var(--gray); padding-bottom: 6px; }
-.cal-grid .d { height: 38px; display: grid; place-items: center; font: 500 16px var(--serif); color: #6a6f87; position: relative; }
-.cal-grid .wed .hr { position: absolute; width: 42px; height: 38px; left: 50%; top: 50%; margin: -19px 0 0 -21px; }
+.cal-card {
+  position: relative; z-index: 2; max-width: 350px; margin: 16px auto 0; padding: 20px 12px 16px;
+  border-radius: 26px; background: rgba(255, 255, 255, .78);
+  box-shadow: 0 16px 36px rgba(60, 85, 150, .16), 0 2px 6px rgba(60, 85, 150, .08), inset 0 0 0 1px rgba(111, 142, 214, .2);
+}
+.cal-card::before { content: ''; position: absolute; inset: 7px; border: 1px dashed rgba(111, 142, 214, .38); border-radius: 20px; pointer-events: none; }
+.cal-flower { position: absolute; right: -24px; top: -40px; width: 104px; pointer-events: none; }
+.cal-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; }
+.cal-m { font: 600 22px var(--title); color: var(--ink); letter-spacing: .02em; }
+.cal-y { font: 600 13px var(--cal); color: var(--blue-d); letter-spacing: .16em; padding: 3px 11px; border-radius: 999px; background: rgba(111, 142, 214, .15); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); row-gap: 4px; }
+.cal-grid .dow { font: 600 11.5px/1 var(--cal); letter-spacing: .04em; color: var(--blue-d); padding: 9px 0; background: rgba(111, 142, 214, .13); }
+.cal-grid .dow:first-child { border-radius: 999px 0 0 999px; }
+.cal-grid .dow:nth-child(7) { border-radius: 0 999px 999px 0; }
+.cal-grid .dow:nth-child(7) + * { margin-top: 4px; }
+.cal-grid .d { height: 40px; display: grid; place-items: center; font: 500 15.5px var(--cal); color: var(--ink); position: relative; }
+.cal-grid .sun { color: var(--rose); }
+.cal-grid .wed b { position: relative; font: 700 15.5px var(--cal); color: #fff; margin-top: -2px; }
+.cal-grid .wed-heart { position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; margin: -22px 0 0 -22px; filter: drop-shadow(0 3px 6px rgba(78, 108, 184, .35)); }
+.cal-grid .wed-heart svg { display: block; width: 100%; height: 100%; }
+.cal-grid .wed-heart path { fill: url(#icoB); }
 .cal-grid .wed { animation: beat 1.8s ease-in-out infinite paused; }
 section.vis .cal-grid .wed { animation-play-state: running; }
 @keyframes beat { 0%, 60%, 100% { transform: scale(1); } 12% { transform: scale(1.14); } 24% { transform: scale(.97); } 36% { transform: scale(1.07); } }
-.cal-flower { width: 150px; margin: 8px auto -36px; position: relative; z-index: 2; }
-.waves-wrap { margin: 0 -22px; position: relative; z-index: 1; }
+.cal-note { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed rgba(111, 142, 214, .35); text-align: left; }
+.cal-note .rings-ico { width: 34px; flex: none; }
+.cal-note b { display: block; font: 600 14px/1.35 var(--cal); color: var(--ink); }
+.cal-note small { display: block; font: 400 12.5px/1.35 var(--cal); color: var(--ink-2); }
+.waves-wrap { margin: 22px -22px 0; position: relative; z-index: 1; }
 .waves-wrap .waves { height: 170px; }
 
 /* =========================================================

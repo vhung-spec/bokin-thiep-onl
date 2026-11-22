@@ -1,6 +1,6 @@
 /*
  * Hình vẽ SVG tự vẽ cho mẫu thiệp "Xanh pastel":
- * ren thêu hoa, giấy thủ công, hoa xanh màu nước, hoa trắng giấy, con dấu sáp,
+ * nền giấy nhám, hoa xanh màu nước, hoa trắng giấy, con dấu sáp,
  * mép giấy xé, sóng giấy màu nước, biểu tượng màu nước, chữ T uốn lượn, phong bì ren.
  */
 (function () {
@@ -49,9 +49,9 @@
   }
 
   /* =========================================================
-     Ren thêu hoa (một ô lặp liền mạch)
+     Nền giấy nhám
      ========================================================= */
-  // cánh hoa có mép gợn sóng, gốc ở (0,0) hướng lên
+  // Cánh hoa có mép gợn sóng, gốc ở (0,0) hướng lên (dùng cho hoa trắng sau dấu sáp)
   function ruffle(len, w, waves) {
     waves = waves || 3;
     var d = 'M0 0 C' + f1(-w * .9) + ' ' + f1(-len * .2) + ' ' + f1(-w * 1.05) + ' ' + f1(-len * .7) + ' ' + f1(-w * .8) + ' ' + f1(-len * .88);
@@ -62,115 +62,30 @@
     }
     return d + ' C' + f1(w * 1.05) + ' ' + f1(-len * .7) + ' ' + f1(w * .9) + ' ' + f1(-len * .2) + ' 0 0Z';
   }
-  function lFlower(r, R) {
-    var s = '', n = 7 + Math.floor(R() * 3), off = R() * 60;
-    for (var i = 0; i < n; i++) {
-      s += '<path class="pf" transform="rotate(' + f1(off + i * 360 / n) + ')" d="' + ruffle(r, r * .48, 3) + '"/>';
-      s += '<path class="pv" transform="rotate(' + f1(off + i * 360 / n) + ')" d="M0 ' + f1(-r * .22) + ' L0 ' + f1(-r * .8) + '"/>';
+
+  // Giấy nhám: hạt sáng + hạt tối li ti, vài sợi giấy, mảng sáng tối rất nhẹ.
+  // dark: màu hạt tối; k: độ đậm của hạt (1 = mặc định)
+  function sandTile(dark, k) {
+    var T = 240, R = rng(31), fib = '';
+    k = k || 1;
+    for (var i = 0; i < 26; i++) {
+      var x = R() * T, y = R() * T, a = R() * Math.PI, l = 6 + R() * 16, bx = Math.cos(a) * l, by = Math.sin(a) * l;
+      fib += '<path d="M' + f1(x) + ' ' + f1(y) + ' q' + f1(bx * .5 + (R() - .5) * 5) + ' ' + f1(by * .5 + (R() - .5) * 5) + ' ' + f1(bx) + ' ' + f1(by) +
+        '" stroke="#fff" stroke-opacity="' + f1(.25 + R() * .25) + '" stroke-width="' + f1(.4 + R() * .4) + '" fill="none"/>';
     }
-    for (var j = 0; j < 5; j++) s += '<path class="pf2" transform="rotate(' + f1(off + 20 + j * 72) + ')" d="' + ruffle(r * .55, r * .34, 2) + '"/>';
-    s += '<circle class="pf2" r="' + f1(r * .17) + '"/>';
-    for (var k = 0; k < 8; k++) {
-      var a = k / 8 * Math.PI * 2;
-      s += '<circle class="dt" cx="' + f1(Math.cos(a) * r * .26) + '" cy="' + f1(Math.sin(a) * r * .26) + '" r="' + f1(r * .035 + .4) + '"/>';
+    function speck(id, seed, freq, color, slope, cut) {
+      return '<filter id="' + id + '" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="' + freq + '" numOctaves="2" seed="' + seed + '" stitchTiles="stitch"/>' +
+        '<feColorMatrix values="0 0 0 0 ' + color[0] + '  0 0 0 0 ' + color[1] + '  0 0 0 0 ' + color[2] + '  ' + slope + ' 0 0 0 ' + cut + '"/></filter>';
     }
-    return s;
-  }
-  function lLeaf(len) {
-    var w = len * .28, d = 'M0 0 C' + f1(len * .25) + ' ' + f1(-w) + ' ' + f1(len * .72) + ' ' + f1(-w * .85) + ' ' + len + ' 0 C' + f1(len * .72) + ' ' + f1(w * .85) + ' ' + f1(len * .25) + ' ' + f1(w) + ' 0 0Z';
-    var v = '<path class="pv" d="M1 0 L' + f1(len * .93) + ' 0"/>';
-    for (var i = 1; i < 4; i++) {
-      var x = len * i / 4.4;
-      v += '<path class="pv" d="M' + f1(x) + ' 0 L' + f1(x + len * .14) + ' ' + f1(-w * .7) + ' M' + f1(x) + ' 0 L' + f1(x + len * .14) + ' ' + f1(w * .7) + '"/>';
-    }
-    return '<path class="lf" d="' + d + '"/>' + v;
-  }
-  function lSpray(len, R) {
-    var s = '', bend = (R() - .5) * len * .5;
-    s += '<path class="st" d="M0 0 Q' + f1(len * .5) + ' ' + f1(bend) + ' ' + len + ' 0"/>';
-    var n = 5 + Math.floor(R() * 4);
-    for (var i = 1; i <= n; i++) {
-      var t = i / (n + 1), x = len * t, y = bend * 2 * t * (1 - t), side = i % 2 ? 1 : -1;
-      s += '<g transform="translate(' + f1(x) + ' ' + f1(y) + ') rotate(' + f1(side * (40 + R() * 20)) + ')">' + lLeaf(len * (.22 + R() * .12)) + '</g>';
-    }
-    s += '<g transform="translate(' + len + ' 0)">' + lLeaf(len * .28) + '</g>';
-    return s;
-  }
-  function lFern(len, R) {
-    var s = '<path class="st" d="M0 0 L' + len + ' 0"/>';
-    for (var x = len * .08; x < len; x += 4 + R() * 2) {
-      var l = (len - x) * .22 + 3;
-      s += '<ellipse class="lf" cx="' + f1(x + l * .3) + '" cy="' + f1(-l * .45) + '" rx="' + f1(l * .5) + '" ry="' + f1(l * .18) + '" transform="rotate(-50 ' + f1(x) + ' 0)"/>';
-      s += '<ellipse class="lf" cx="' + f1(x + l * .3) + '" cy="' + f1(l * .45) + '" rx="' + f1(l * .5) + '" ry="' + f1(l * .18) + '" transform="rotate(50 ' + f1(x) + ' 0)"/>';
-    }
-    return s;
-  }
-  function lBlossom(r) {
-    var s = '';
-    for (var i = 0; i < 5; i++) s += '<path class="pf" transform="rotate(' + i * 72 + ')" d="' + ruffle(r, r * .55, 2) + '"/>';
-    return s + '<circle class="dt" r="' + f1(r * .2) + '"/>';
-  }
-  function lCurl(r) {
-    var d = '';
-    for (var k = 0; k <= 26; k++) {
-      var t = k / 26, a = t * Math.PI * 3, rr = r * (1 - t * .85);
-      d += (k ? ' L' : 'M') + f1(Math.cos(a) * rr) + ' ' + f1(Math.sin(a) * rr);
-    }
-    return '<path class="st" d="' + d + '"/>';
-  }
-  function laceTile() {
-    var T = 300, R = rng(2024), items = [];
-    function add(x, y, rot, size, body) { items.push({ x: x, y: y, rot: rot, size: size, body: body }); }
-    // hoa lớn trên lưới lệch
-    var grid = [[50, 60], [170, 40], [270, 120], [90, 180], [215, 230], [30, 270], [140, 110], [150, 285]];
-    grid.forEach(function (p, i) {
-      var r = i < 6 ? 22 + R() * 14 : 14 + R() * 6;
-      add(p[0] + (R() - .5) * 14, p[1] + (R() - .5) * 14, R() * 360, r * 1.1, lFlower(r, R));
-    });
-    for (var i = 0; i < 18; i++) add(R() * T, R() * T, R() * 360, 50, lSpray(34 + R() * 24, R));
-    for (var j = 0; j < 9; j++) add(R() * T, R() * T, R() * 360, 40, lFern(26 + R() * 16, R));
-    for (var k = 0; k < 26; k++) add(R() * T, R() * T, R() * 360, 10, lBlossom(4 + R() * 4));
-    for (var c = 0; c < 10; c++) add(R() * T, R() * T, R() * 360, 12, lCurl(5 + R() * 5));
-    var dots = '';
-    for (var d = 0; d < 70; d++) dots += '<circle class="dt" cx="' + f1(R() * T) + '" cy="' + f1(R() * T) + '" r="' + f1(.6 + R() * .9) + '"/>';
-    var body = '';
-    items.forEach(function (it) {
-      [-T, 0, T].forEach(function (dx) {
-        [-T, 0, T].forEach(function (dy) {
-          var x = it.x + dx, y = it.y + dy, m = it.size + 6;
-          if (x < -m || y < -m || x > T + m || y > T + m) return;
-          body += '<g transform="translate(' + f1(x) + ' ' + f1(y) + ') rotate(' + f1(it.rot) + ')">' + it.body + '</g>';
-        });
-      });
-    });
-    var css = '.pf{fill:#fff;fill-opacity:.2;stroke:#fff;stroke-opacity:.78;stroke-width:.75}' +
-      '.pf2{fill:#fff;fill-opacity:.34;stroke:#fff;stroke-opacity:.85;stroke-width:.7}' +
-      '.pv{fill:none;stroke:#fff;stroke-opacity:.5;stroke-width:.5}' +
-      '.lf{fill:#fff;fill-opacity:.16;stroke:#fff;stroke-opacity:.66;stroke-width:.65}' +
-      '.st{fill:none;stroke:#fff;stroke-opacity:.6;stroke-width:.8}' +
-      '.dt{fill:#fff;fill-opacity:.7}' +
-      '.sh .pf,.sh .pf2,.sh .lf,.sh .st,.sh .pv{stroke:#5d6d9e;stroke-opacity:.16;fill:none}.sh .dt{fill:#5d6d9e;fill-opacity:.12}';
-    var mesh = '<pattern id="m" width="6" height="10.4" patternUnits="userSpaceOnUse"><path d="M0 0 L3 5.2 L0 10.4 M6 0 L3 5.2 L6 10.4" fill="none" stroke="#fff" stroke-opacity=".13" stroke-width=".5"/></pattern>';
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + T + '" height="' + T + '" viewBox="0 0 ' + T + ' ' + T + '"><defs><style>' + css + '</style>' + mesh + '</defs>' +
-      '<rect width="' + T + '" height="' + T + '" fill="url(#m)"/>' +
-      '<g class="sh" transform="translate(.8 1.1)">' + body + '</g><g>' + body + '</g>' + dots + '</svg>';
-  }
-  // Mảng sáng tối mềm cho vải ren
-  function mottleTile() {
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="520" height="520"><filter id="n" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".006" numOctaves="3" seed="4" stitchTiles="stitch"/>' +
-      '<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 -1.6 .95"/></filter><rect width="520" height="520" filter="url(#n)"/></svg>';
-  }
-  // Giấy thủ công có sợi
-  function paperTile() {
-    var R = rng(77), fib = '';
-    for (var i = 0; i < 46; i++) {
-      var x = R() * 300, y = R() * 300, a = R() * Math.PI, l = 8 + R() * 22, bx = Math.cos(a) * l, by = Math.sin(a) * l;
-      fib += '<path d="M' + f1(x) + ' ' + f1(y) + ' q' + f1(bx * .5 + (R() - .5) * 6) + ' ' + f1(by * .5 + (R() - .5) * 6) + ' ' + f1(bx) + ' ' + f1(by) + '" stroke="' + (i % 3 ? '#fff' : '#bdb0bd') + '" stroke-opacity="' + (i % 3 ? .7 : .28) + '" stroke-width="' + f1(.4 + R() * .5) + '" fill="none"/>';
-    }
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300"><filter id="g"><feTurbulence type="fractalNoise" baseFrequency=".6" numOctaves="3" stitchTiles="stitch"/>' +
-      '<feColorMatrix values="0 0 0 0 .5  0 0 0 0 .45  0 0 0 0 .55  0 0 0 .09 0"/></filter>' +
-      '<filter id="m"><feTurbulence type="fractalNoise" baseFrequency=".018" numOctaves="2" seed="9" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .6  0 0 0 0 .55  0 0 0 0 .7  0 0 0 .12 -.02"/></filter>' +
-      '<rect width="300" height="300" filter="url(#m)"/><rect width="300" height="300" filter="url(#g)"/>' + fib + '</svg>';
+    var dk = dark || [.18, .22, .4];
+    return '<svg xmlns="http://www.w3.org/2000/svg" width="' + T + '" height="' + T + '">' +
+      speck('l', 3, .95, [1, 1, 1], 7, -4.05) +
+      speck('d', 8, .95, dk, -7, 2.9) +
+      '<filter id="m" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".012" numOctaves="2" seed="5" stitchTiles="stitch"/>' +
+      '<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1.1 0 0 0 -.45"/></filter>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#m)" opacity=".32"/>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#l)" opacity="' + f1(.55 * k) + '"/>' +
+      '<rect width="' + T + '" height="' + T + '" filter="url(#d)" opacity="' + f1(.32 * k) + '"/>' + fib + '</svg>';
   }
 
   /* =========================================================
@@ -304,7 +219,7 @@
     var fiber = 'M' + pts.map(function (p) { return p[0] + ' ' + f1(+p[1] + 1.4 + R() * .8); }).join(' L');
     var tr = dir === 'down' ? ' transform="translate(0 ' + H + ') scale(1 -1)"' : '';
     return '<svg class="tear-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true"><g' + tr + '>' +
-      '<path d="' + d + '" fill="' + (color || '#f6f2f4') + '"/>' +
+      '<path d="' + d + '" fill="' + (color || '#eef2fa') + '"/>' +
       '<path d="' + fiber + '" fill="none" stroke="#fff" stroke-width="2.6" stroke-opacity=".95"/></g></svg>';
   }
   function waves() {
@@ -420,7 +335,7 @@
   function heartSvg() { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + HEART + '"/></svg>'; }
 
   window.ART = {
-    rng: rng, svgUrl: svgUrl, installDefs: installDefs, laceTile: laceTile, mottleTile: mottleTile, paperTile: paperTile,
+    rng: rng, svgUrl: svgUrl, installDefs: installDefs, sandTile: sandTile,
     cluster: cluster, paperFlowerSvg: paperFlowerSvg, sealFlower: sealFlower, tear: tear, waves: waves,
     mandala: mandala, heartArrow: heartArrow, flourishLine: flourishLine, heartRings: heartRings,
     tlIcon: tlIcon, ringsIcon: ringsIcon, swashT: swashT, giftEnvelope: giftEnvelope, icon: icon, heartSvg: heartSvg,
