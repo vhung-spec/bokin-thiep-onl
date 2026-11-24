@@ -180,3 +180,10 @@ details.help p { font-size: 14.5px; color: var(--ink-2); }
 .sync-old code { font-size: 13px; }
 .sync-btns { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
 .btn.sm { min-height: 40px; padding: 0 16px; font-size: 14px; }
+
+/* Link ngắn có tên khách */
+.chip.pending { background: #F3E9D6; color: var(--gold); }
+.g-og { margin: 4px 0 0; font-size: 13px; color: var(--ink-2); }
+.g-og b { color: var(--ink); font-weight: 600; }
+.short .row .inp { flex: 1 1 180px; min-width: 0; }
+#shortTokenBox { margin-top: 12px; }

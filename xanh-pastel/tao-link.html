@@ -109,6 +109,22 @@
           </div>
         </div>
       </div>
+      <div class="sync short" id="short" hidden>
+        <p class="lbl">Link ngắn có tên khách</p>
+        <p class="hint">Gửi qua Facebook, Zalo sẽ hiện <b>“Thân gửi [tên khách] 💌”</b> và link gọn dạng <code>…/m/ab12cd</code>. Mỗi khách một trang nhỏ trên GitHub (cần mã GitHub như khi tải nhạc). Lưu ý: tên khách nằm trong các trang này, ai xem repo trên GitHub cũng thấy.</p>
+        <label class="check"><input type="checkbox" id="shortOn"> Dùng link ngắn</label>
+        <div id="shortTokenBox" hidden>
+          <label class="lbl" for="shortToken">Mã GitHub (token)</label>
+          <div class="row">
+            <input class="inp" id="shortToken" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…">
+            <button class="btn" type="button" id="shortTokenSave">Lưu mã</button>
+          </div>
+          <label class="check"><input type="checkbox" id="shortRemember" checked> Nhớ mã trên máy này</label>
+          <p class="hint">Cách lấy mã: xem “Lấy mã GitHub thế nào?” ở mục 1. Nhạc nền (Contents: Read and write cho repo bokin-thiep-onl).</p>
+        </div>
+        <p class="sync-status" id="shortStatus" aria-live="polite"></p>
+        <div class="sync-btns"><button class="btn ghost sm" type="button" id="shortNow" hidden>Cập nhật link ngắn</button></div>
+      </div>
       <form class="add" id="addForm">
         <label class="lbl" for="gName">Tên khách (hiện trên thiệp)</label>
         <input class="inp" id="gName" maxlength="80" autocomplete="off" placeholder="Ví dụ: Anh Thắng và người thương" required>

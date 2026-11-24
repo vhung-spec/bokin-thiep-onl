@@ -37,6 +37,7 @@
   /* ---------- Lưu trên máy ---------- */
   var KEY = 'tao-link:' + couple + ':' + W.date;
   var S = load();
+  var SHORT = null; // link ngắn (khai báo đầy đủ ở dưới)
   // lời nhắn lưu từ trước còn ghi cứng giờ / nơi của bản chính: đổi thành {thoigian} / {diadiem} để khách nhà trai nhận đúng bản của mình
   if (when && S.tpl.indexOf(when) >= 0) S.tpl = S.tpl.split(when).join('{thoigian}');
   if (W.venue.name && S.tpl.indexOf(' tại ' + W.venue.name) >= 0) S.tpl = S.tpl.split(' tại ' + W.venue.name).join(' tại {diadiem}');
@@ -48,12 +49,14 @@
       guests: Array.isArray(d.guests) ? d.guests : [], music: d.music || '', start: d.start || '', tpl: d.tpl || DEFAULT_TPL, base: d.base || '',
       // đồng bộ Google Sheet: rev = số lần sửa (khách có p là đang chờ lưu), dels = mã khách đã xoá chờ lưu, linked = máy đã từng kết nối
       rev: d.rev || 0, dels: Array.isArray(d.dels) ? d.dels : [], linked: !!d.linked, setP: d.setP || 0,
+      // link ngắn: short = máy này bật tạo link ngắn, pubQ = mã khách cần cập nhật trang nhỏ
+      short: !!d.short, pubQ: Array.isArray(d.pubQ) ? d.pubQ : [],
     };
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* trình duyệt chặn lưu: vẫn dùng được trong phiên này */ } }
   function touch(g) { g.p = ++S.rev; } // khách vừa thêm / sửa: chờ lưu lên Google Sheet
   function forget(ids) { if (S.linked) ids.forEach(function (id) { if (S.dels.indexOf(id) < 0) S.dels.push(id); }); }
-  function changed() { save(); renderList(); SYNC.soon(); }
+  function changed() { save(); renderList(); SYNC.soon(); if (SHORT) SHORT.kick(); }
 
   /* ---------- Thông báo nhỏ ---------- */
   var toastT = null;
@@ -101,15 +104,20 @@
     if (side !== 'trai' || !HAS_TRAI) return b;
     return new URL('nha-trai/', b.replace(/xanh-pastel\/(index\.html)?$/, '')).href;
   }
-  function linkFor(g) {
+  // trang gốc của trang web (bỏ đoạn xanh-pastel/ nếu địa chỉ thiệp trỏ thẳng vào thiệp)
+  function siteRoot() { return base().replace(/xanh-pastel\/(index\.html)?$/, ''); }
+  function params(g) {
     var p = new URLSearchParams();
     p.set('to', g.name);
     if (g.side) p.set('ben', g.side);
     var sp = g.music ? N.parse(g.music) : chosenMusic();
     var m = sp ? N.toParam(sp) : '';
     if (m && m !== defaultMusic) p.set('nhac', m);
-    return baseFor(g.side) + '?' + p.toString();
+    return p.toString();
   }
+  function longLink(g) { return baseFor(g.side) + '?' + params(g); }
+  // link gửi khách: link ngắn …/m/ab12cd khi trang nhỏ của khách đã chạy (Facebook / Zalo hiện "Thân gửi <tên>"), không thì link dài
+  function linkFor(g) { return (SHORT && SHORT.linkFor(g)) || longLink(g); }
   function message(g) {
     var ev = eventOf(g.side);
     return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{thoigian}').join(ev.when).split('{diadiem}').join(ev.place)
@@ -119,6 +127,8 @@
   // link hiện trên thẻ khách: hiện đủ, tên khách được tô đậm để thấy rõ đây là link riêng
   function linkHtml(u) {
     var q = u.indexOf('?');
+    var sm = /^(.*\/)([a-z0-9]{6})$/.exec(u);
+    if (q < 0 && sm) return '<span class="lk-base">' + esc(prettyLink(sm[1])) + '</span><b>' + sm[2] + '</b>';
     if (q < 0) return esc(prettyLink(u));
     var html = '<span class="lk-base">' + esc(prettyLink(u.slice(0, q))) + '</span>';
     new URLSearchParams(u.slice(q + 1)).forEach(function (v, k) {
@@ -158,6 +168,7 @@
     S.music = musicInput.value.trim();
     S.start = musicStart.value;
     S.setP = ++S.rev; // nhạc chung: lưu lên Google Sheet để máy khác dùng cùng bài
+    if (SHORT) SHORT.queue(S.guests.map(function (g) { return g.id; })); // link ngắn mang nhạc mới
     save(); showMusicInfo(); renderList(); SYNC.soon(4000);
     preview.innerHTML = '';
   }
@@ -390,8 +401,10 @@
         '<div class="g-top"><span class="g-name">' + esc(g.name) + '</span>' +
         (g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
         (g.music ? '<span class="chip music">Nhạc riêng</span>' : '') +
-        (g.sent ? '<span class="chip done">Đã gửi</span>' : '') + '</div>' +
+        (g.sent ? '<span class="chip done">Đã gửi</span>' : '') +
+        (SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : '') + '</div>' +
         '<a class="g-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + linkHtml(url) + '</a>' +
+        (SHORT && SHORT.state(g) === 'live' ? '<p class="g-og">Facebook, Zalo hiện: <b>' + esc(SHORT.title(g)) + '</b></p>' : '') +
         '<div class="g-actions">' +
         '<button class="btn share" data-act="share">Gửi lời mời</button>' +
         '<button class="btn ghost" data-act="copy-msg">Chép lời mời</button>' +
@@ -417,7 +430,13 @@
     if (HAS_TRAI) $('#openCardTrai').href = linkFor({ name: 'Khách quý', side: 'trai' });
   }
 
+  // link ngắn của khách chưa chạy: hỏi có gửi luôn link dài không (Facebook sẽ không hiện tên)
+  function ready(g) {
+    if (!SHORT || SHORT.state(g) !== 'wait') return true;
+    return window.confirm('Link ngắn có tên “' + g.name + '” đang được tạo (khoảng 1–2 phút). Facebook, Zalo chỉ hiện tên khách với link ngắn.\n\nVẫn gửi ngay bằng link dài?');
+  }
   function share(g) {
+    if (!ready(g)) return;
     var text = message(g);
     if (navigator.share) {
       navigator.share({ title: 'Thiệp cưới ' + couple, text: text }).then(function () {
@@ -440,8 +459,9 @@
     if (!g) return;
     var act = b.getAttribute('data-act');
     if (act === 'share') share(g);
+    else if ((act === 'copy-msg' || act === 'copy-link') && !ready(g)) return;
     else if (act === 'copy-msg') copy(message(g)).then(function () { toast('Đã chép lời mời cho ' + g.name + '.'); }, function () { window.prompt('Chép lời mời này:', message(g)); });
-    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link riêng của ' + g.name + '. Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.'); }, function () { window.prompt('Chép link này:', linkFor(g)); });
+    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link riêng của ' + g.name + '. ' + (SHORT && SHORT.state(g) === 'live' ? 'Gửi qua Facebook, Zalo sẽ hiện “' + SHORT.title(g) + '”.' : 'Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.')); }, function () { window.prompt('Chép link này:', linkFor(g)); });
     else if (act === 'more') { openMore = openMore === g.id ? null : g.id; renderList(); }
     else if (act === 'toggle-sent') { g.sent = !g.sent; touch(g); changed(); }
     else if (act === 'edit') { editing = g.id; renderList(); }
@@ -451,7 +471,7 @@
       var mus = $('[data-f="music"]', li).value.trim();
       if (!name) { toast('Tên khách không được để trống.'); return; }
       if (mus && !N.parse(mus)) { toast('Link nhạc riêng chưa đúng.'); return; }
-      g.name = name; g.side = $('[data-f="side"]', li).value; g.music = mus; touch(g);
+      g.name = name; g.side = $('[data-f="side"]', li).value; g.music = mus; touch(g); SHORT.queue([g.id]);
       editing = null; changed(); toast('Đã lưu.');
     } else if (act === 'delete') {
       if (!window.confirm('Xoá “' + g.name + '” khỏi danh sách?')) return;
@@ -527,6 +547,7 @@
   baseInp.addEventListener('change', function () {
     var v = baseInp.value.trim();
     try { new URL(v); S.base = v === autoBase ? '' : v; } catch (e) { S.base = ''; baseInp.value = autoBase; toast('Địa chỉ chưa đúng, đã dùng lại địa chỉ tự động.'); }
+    SHORT.queue(S.guests.map(function (g) { return g.id; }));
     save(); renderList(); SYNC.soon(4000);
   });
   $('#clearAll').addEventListener('click', function () {
@@ -620,6 +641,7 @@
         var now = new Date();
         status('ok', '✓ Đã lưu trên Google Sheet lúc ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ' · ' + S.guests.length + ' khách');
         if (first) toast('Đã kết nối Google Sheet: ' + S.guests.length + ' khách.');
+        SHORT.kick();
         // khách mới từ máy khác / gõ tay trên trang tính chưa có link mời: gửi link ở lượt sau (chỉ một lượt)
         var stale = S.guests.some(function (g) { return linkFor(g) !== g.sl; });
         if (stale && !follow) { follow = true; soon(1500); } else follow = false;
@@ -690,6 +712,216 @@
     return { soon: soon, on: on, start: start };
   })();
 
+  /* ---------- Link ngắn có tên khách ----------
+   * Facebook / Zalo đọc thẻ xem trước của đúng trang được gửi, nên mỗi khách cần một trang riêng:
+   * m/<mã>.html trên GitHub (mã 6 ký tự tính từ mã khách, máy nào cũng ra cùng mã), tiêu đề "Thân gửi <tên> 💌",
+   * mở ra là chuyển ngay tới thiệp của khách. Trang tạo link ghi các trang này lên GitHub bằng mã GitHub (như tải nhạc).
+   */
+  SHORT = (function () {
+    var DIR = String(GH.shortDir || 'm').replace(/^\/+|\/+$/g, '');
+    var files = null;   // file trong thư mục m/ trên GitHub: tên → blob sha (null = chưa tải danh sách)
+    var live = {};      // mã → trang nhỏ đã mở được
+    var waiting = {};   // mã → vừa ghi lên GitHub, chờ GitHub Pages cập nhật
+    var busy = false, deploying = false, timer = null, outdated = [], err = '';
+    var stEl = $('#shortStatus');
+    function on() { return !!(S.short && GH.repo); }
+    function pad3(n) { return ('00' + n.toString(36)).slice(-3); }
+    function code(g) {
+      if (!g || !g.id) return '';
+      var s = String(g.id), h1 = 2166136261, h2 = 5381;
+      for (var i = 0; i < s.length; i++) { var c = s.charCodeAt(i); h1 = Math.imul(h1 ^ c, 16777619); h2 = (Math.imul(h2, 33) + c) | 0; }
+      return pad3((h1 >>> 0) % 46656) + pad3((h2 >>> 0) % 46656);
+    }
+    function url(c) { return siteRoot() + DIR + '/' + c; }
+    function title(g) { return ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + ' 💌'; }
+    function linkFor(g) { var c = code(g); return c && live[c] ? url(c) : ''; }
+    function state(g) {
+      var c = code(g);
+      if (!c) return '';
+      if (live[c]) return 'live';
+      if (waiting[c] || (on() && files && !files[c + '.html'])) return 'wait';
+      return '';
+    }
+    function attr(v) { return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function page(g) {
+      var ev = eventOf(g.side), root = siteRoot();
+      var target = root + 'xanh-pastel/?' + params(g);
+      var img = root + 'xanh-pastel/assets/' + (g.side === 'trai' && HAS_TRAI ? 'og-image-nha-trai.jpg' : 'og-image.jpg');
+      var t = title(g), desc = couple + ' trân trọng kính mời bạn tới dự lễ thành hôn, ' + ev.when + ' tại ' + ev.place + '.';
+      return '<!doctype html>\n<html lang="vi">\n<head>\n<meta charset="utf-8">\n' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
+        '<title>' + attr(t + ' · Thiệp cưới ' + couple) + '</title>\n' +
+        '<meta name="robots" content="noindex">\n' +
+        '<meta name="description" content="' + attr(desc) + '">\n' +
+        '<meta property="og:type" content="website">\n' +
+        '<meta property="og:title" content="' + attr(t) + '">\n' +
+        '<meta property="og:description" content="' + attr(desc) + '">\n' +
+        '<meta property="og:url" content="' + attr(url(code(g))) + '">\n' +
+        '<meta property="og:image" content="' + attr(img) + '">\n' +
+        '<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">\n' +
+        '<script>location.replace(' + JSON.stringify(target).replace(/</g, '\\u003c') + ' + location.hash);</script>\n' +
+        '<noscript><meta http-equiv="refresh" content="0; url=' + attr(target) + '"></noscript>\n' +
+        '<style>html,body{margin:0;height:100%;background:#A7A680}</style>\n</head>\n' +
+        '<body><noscript><p style="font:18px Georgia,serif;text-align:center;padding:40vh 20px 0"><a href="' + attr(target) + '">Mở thiệp cưới</a></p></noscript></body>\n</html>\n';
+    }
+    // mã của file trên GitHub (git blob sha1), để biết trang nhỏ trên GitHub đã đúng nội dung chưa
+    function blobSha(text) {
+      var body = new TextEncoder().encode(text), head = new TextEncoder().encode('blob ' + body.length + '\0');
+      var all = new Uint8Array(head.length + body.length);
+      all.set(head); all.set(body, head.length);
+      return crypto.subtle.digest('SHA-1', all).then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+      });
+    }
+    function items(list) {
+      return Promise.all(list.map(function (g) {
+        var html = page(g);
+        return blobSha(html).then(function (sha) { return { g: g, c: code(g), html: html, sha: sha }; });
+      }));
+    }
+    function api(path, opts) {
+      return gh(path, opts).then(function (r) {
+        if (!r.ok) { var e = new Error(String(r.status)); e.status = r.status; throw e; }
+        return r.json();
+      });
+    }
+    // ghi nhiều trang nhỏ trong một lần (một commit): GitHub Pages chỉ phải cập nhật một lần
+    function commit(todo, tries) {
+      var head;
+      return api('/git/ref/heads/' + GH.branch).then(function (ref) {
+        head = ref.object.sha;
+        return api('/git/commits/' + head);
+      }).then(function (c) {
+        return api('/git/trees', { method: 'POST', body: JSON.stringify({ base_tree: c.tree.sha, tree: todo.map(function (it) {
+          return { path: DIR + '/' + it.c + '.html', mode: '100644', type: 'blob', content: it.html };
+        }) }) });
+      }).then(function (t) {
+        return api('/git/commits', { method: 'POST', body: JSON.stringify({ message: 'Link ngắn cho ' + todo.length + ' khách mời (từ trang tạo link)', tree: t.sha, parents: [head] }) });
+      }).then(function (c) {
+        return api('/git/refs/heads/' + GH.branch, { method: 'PATCH', body: JSON.stringify({ sha: c.sha }) });
+      }).catch(function (e) {
+        if ((e.status === 409 || e.status === 422) && (tries || 0) < 3) return commit(todo, (tries || 0) + 1); // vừa có commit khác: làm lại
+        throw e;
+      });
+    }
+    // chờ GitHub Pages cập nhật: mở thử trang nhỏ cuối cùng vừa ghi
+    function poll(last, fresh, n) {
+      n = n || 0;
+      fetch(url(last.c) + '?v=' + Date.now(), { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.text() : ''; }, function () { return ''; })
+        .then(function (t) {
+          if (t.trim() === last.html.trim() || n >= 50) {
+            fresh.forEach(function (it) { delete waiting[it.c]; live[it.c] = true; });
+            deploying = false;
+            if (n >= 50) err = 'GitHub Pages cập nhật chậm hơn thường lệ; link ngắn sẽ dùng được khi trang cập nhật xong.';
+            renderList(); show(); SYNC.soon(); kick(1500);
+            if (fresh.length && n < 50) toast('Link ngắn đã sẵn sàng cho ' + fresh.length + ' khách.');
+            return;
+          }
+          setTimeout(function () { poll(last, fresh, n + 1); }, 8000);
+        });
+    }
+    function publish() {
+      timer = null;
+      if (busy || deploying || files === null || !on()) return;
+      if (!getToken()) { show(); return; }
+      busy = true; err = '';
+      var q = S.pubQ.slice();
+      items(S.guests.slice()).then(function (all) {
+        var todo = all.filter(function (it) {
+          var cur = files[it.c + '.html'];
+          return !cur || (cur !== it.sha && q.indexOf(it.g.id) >= 0);
+        });
+        if (!todo.length) { S.pubQ = S.pubQ.filter(function (id) { return q.indexOf(id) < 0; }); save(); return; }
+        show('Đang tạo link ngắn cho ' + todo.length + ' khách…');
+        return commit(todo).then(function () {
+          var fresh = todo.filter(function (it) { return !files[it.c + '.html']; });
+          todo.forEach(function (it) { files[it.c + '.html'] = it.sha; });
+          fresh.forEach(function (it) { waiting[it.c] = true; });
+          S.pubQ = S.pubQ.filter(function (id) { return q.indexOf(id) < 0; });
+          save();
+          deploying = true;
+          poll(todo[todo.length - 1], fresh);
+        });
+      }).catch(function (e) {
+        var c = e && e.status;
+        if (c === 401) { setToken(''); ghToken.value = ''; err = 'Mã GitHub không đúng hoặc đã hết hạn. Nhập mã mới bên dưới.'; }
+        else if (c === 403 || c === 404) { err = 'Mã GitHub chưa có quyền ghi vào repo ' + GH.repo + ' (cần Contents: Read and write).'; }
+        else { err = 'Chưa tạo được link ngắn (' + (c || 'lỗi mạng') + '). Sẽ thử lại sau ít phút.'; timer = setTimeout(publish, 60000); }
+      }).then(function () { busy = false; renderList(); show(); });
+    }
+    function kick(ms) {
+      if (!on() || files === null) { show(); return; }
+      clearTimeout(timer);
+      timer = setTimeout(publish, ms == null ? 6000 : ms);
+      show();
+    }
+    function queue(ids) {
+      if (!on()) return;
+      ids.forEach(function (id) { if (S.pubQ.indexOf(id) < 0) S.pubQ.push(id); });
+      save(); kick();
+    }
+    // các trang nhỏ cũ hơn danh sách hiện tại (vd. sửa tên ở máy khác): đếm để nhắc cập nhật
+    function check() {
+      if (!files) return;
+      items(S.guests.filter(function (g) { return files[code(g) + '.html']; })).then(function (all) {
+        outdated = all.filter(function (it) { return files[it.c + '.html'] !== it.sha && S.pubQ.indexOf(it.g.id) < 0; }).map(function (it) { return it.g.id; });
+        show();
+      });
+    }
+    function show(msg) {
+      var box = $('#short');
+      if (!GH.repo) { box.hidden = true; return; }
+      box.hidden = false;
+      $('#shortOn').checked = on();
+      var tok = !!getToken();
+      $('#shortTokenBox').hidden = !on() || tok;
+      var n = S.guests.filter(function (g) { return live[code(g)]; }).length;
+      var w = S.guests.filter(function (g) { return state(g) === 'wait'; }).length;
+      $('#shortNow').hidden = !(on() && tok && outdated.length && !busy && !deploying);
+      $('#shortNow').textContent = 'Cập nhật ' + outdated.length + ' link ngắn';
+      var text = msg || err || (!on() ? (n ? n + ' khách đã có link ngắn.' : '') :
+        !tok ? 'Nhập mã GitHub để tạo link ngắn.' :
+          files === null ? 'Đang kiểm tra link ngắn…' :
+            w ? 'Đang tạo link ngắn cho ' + w + ' khách (khoảng 1–2 phút)…' :
+              outdated.length ? outdated.length + ' link ngắn chưa theo kịp thay đổi (tên, bên, nhạc).' :
+                '✓ ' + n + ' khách có link ngắn.');
+      stEl.className = 'sync-status' + (err && !msg ? ' bad' : text.charAt(0) === '✓' ? ' ok' : '');
+      stEl.textContent = text;
+    }
+    function load() {
+      if (!GH.repo) { show(); return; }
+      gh('/contents/' + DIR + '?ref=' + encodeURIComponent(GH.branch || ''), { auth: !!getToken() }).then(function (r) {
+        if (r.status === 404) return [];
+        if (!r.ok) throw new Error(String(r.status));
+        return r.json();
+      }).then(function (list) {
+        files = {};
+        (Array.isArray(list) ? list : []).forEach(function (f) {
+          if (f.type !== 'file' || !/\.html$/.test(f.name)) return;
+          files[f.name] = f.sha;
+          live[f.name.replace(/\.html$/, '')] = true;
+        });
+        renderList(); check(); kick(1500);
+        if (S.guests.some(function (g) { return live[code(g)]; })) SYNC.soon(2000);
+      }).catch(function () { show('Chưa kiểm tra được link ngắn (GitHub không trả lời). Tải lại trang để thử lại.'); });
+    }
+    $('#shortOn').addEventListener('change', function () {
+      S.short = this.checked; save();
+      if (S.short) kick(800);
+      renderList(); show();
+    });
+    $('#shortTokenSave').addEventListener('click', function () {
+      var v = $('#shortToken').value.trim();
+      if (!/^(github_pat_|ghp_)/.test(v)) { toast('Mã GitHub bắt đầu bằng github_pat_'); return; }
+      setToken(v, $('#shortRemember').checked); ghToken.value = v; $('#shortToken').value = '';
+      $('#tokenToggle').hidden = false; tokenBox.hidden = true;
+      err = ''; kick(300);
+    });
+    $('#shortNow').addEventListener('click', function () { queue(outdated); outdated = []; kick(300); });
+    return { linkFor: linkFor, state: state, title: title, queue: queue, kick: kick, load: load, check: check, show: show, on: on };
+  })();
+
   /* ---------- Bắt đầu ---------- */
   if (HAS_TRAI) {
     var evT = eventOf('trai'), evG = eventOf('');
@@ -702,4 +934,5 @@
   document.title = 'Tạo link mời · ' + couple;
   renderList();
   SYNC.start();
+  SHORT.load();
 })();

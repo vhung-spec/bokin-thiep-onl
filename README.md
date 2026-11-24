@@ -136,6 +136,15 @@ Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-vid
 
 Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
 
+### Link ngắn có tên khách (Facebook, Zalo hiện “Thân gửi …”)
+
+Facebook / Zalo chỉ đọc lời xem trước của đúng trang được gửi, nên link `?to=Tên` dài và không hiện tên khách. Bật **Dùng link ngắn** ở mục **3. Khách mời** của trang tạo link:
+
+- Mỗi khách có một trang nhỏ `m/<mã 6 ký tự>.html` trong repo (mã tính từ mã khách, máy nào cũng ra cùng mã). Link gửi khách dạng `https://vhung-spec.github.io/bokin-thiep-onl/m/ab12cd`; xem trước trên Facebook / Zalo có tiêu đề **“Thân gửi Tên khách 💌”**, ảnh và lời mời đúng bản (nhà trai: 29.11, còn lại: 28.11). Mở ra là chuyển ngay tới thiệp của khách.
+- Cần mã GitHub (fine-grained token, **Contents: Read and write** cho repo này) — cùng mã dùng để tải nhạc. Trang tự ghi các trang nhỏ lên GitHub (gộp nhiều khách vào một commit) sau khi thêm / sửa khách hoặc đổi nhạc; GitHub Pages cập nhật mất khoảng 1–2 phút, trong lúc đó thẻ khách ghi “Đang tạo link ngắn…”.
+- Máy không có mã GitHub vẫn dùng được các link ngắn đã tạo. Xoá khách không xoá trang nhỏ, nên link đã gửi vẫn mở được.
+- Lưu ý: repo công khai nên ai xem repo cũng thấy tên khách trong thư mục `m/` (các trang có `noindex` để không lên Google).
+
 ### Thống kê khách tham dự (`xanh-pastel/thong-ke.html`)
 
 Xem ngay trên trang: ai sẽ tham dự (kèm số người), ai báo vắng, ai chưa phản hồi; chia theo khách nhà trai / nhà gái; tìm tên; **Tải file thống kê (CSV)** để mở bằng Excel. Không cần mở Google Sheets — Google Apps Script chỉ làm chỗ lưu phản hồi phía sau (trang tĩnh không tự lưu được).
@@ -212,6 +221,8 @@ xanh-pastel/               mẫu xanh pastel
   js/nhac.js               nhạc nền: link YouTube hoặc file mp3 (dùng chung cho thiệp và trang tạo link)
   tao-link.html, js/tao-link.js, css/tao-link.css  trang tạo link mời riêng cho từng khách
   thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
+m/                                trang nhỏ của link ngắn (trang tạo link tự ghi lên GitHub)
+nha-trai/index.html               cửa vào bản nhà trai (ảnh, lời xem trước 29.11)
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel
