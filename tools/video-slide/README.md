@@ -25,6 +25,13 @@ node tools/video-slide/lam-video.mjs                 # video Full HD 30 hình/gi
 node tools/video-slide/lam-video.mjs --nhap          # bản nháp nhanh (nửa kích thước, 15 hình/giây) để xem thứ tự ảnh
 node tools/video-slide/lam-video.mjs --khung 9:16    # bản dọc cho điện thoại → video-cuoi-doc.mp4
 node tools/video-slide/lam-video.mjs --xem 3,12,20   # chỉ chụp ảnh tĩnh ở giây 3, 12, 20 để kiểm tra bố cục
+node tools/video-slide/lam-video.mjs --danh-sach --xem 0   # in danh sách cảnh: giây bắt đầu, loại cảnh, ảnh nào, chữ gì
+```
+
+**Tự chọn thứ tự và cách ghép ảnh:** ghi tên file vào `thuTu` trong `cau-hinh.mjs`, dùng dấu `'|'` để chia nhóm. Hai ảnh dọc cùng nhóm thành một cảnh đôi. Ảnh đứng một mình trong nhóm thành cảnh 1 ảnh kèm chữ viết tay. Ảnh ngang luôn phủ kín màn hình.
+
+```js
+thuTu: ['studio-1.jpg', 'studio-2.jpg', '|', 'pho-co-1.jpg', '|', 'pho-co-2.jpg', 'pho-co-3.jpg'],
 ```
 
 Thêm `--anh <thư mục>`, `--ra <file.mp4>` hoặc `--cau-hinh <file.mjs>` để dùng thư mục ảnh, file ra hay cấu hình khác.

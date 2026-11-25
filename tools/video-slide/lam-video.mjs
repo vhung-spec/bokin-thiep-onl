@@ -68,6 +68,18 @@ if (!photos.length && C.anhThu && !opt('--anh')) {
   photos = readPhotos(fromRoot(C.anhThu));
 }
 if (!photos.length) throw new Error('Không thấy ảnh nào (jpg, png, webp, heic) trong thư mục ảnh.');
+if (Array.isArray(C.thuTu) && C.thuTu.length) {
+  // xếp theo danh sách tên file; ảnh không có trong danh sách đứng sau, giữ thứ tự cũ
+  // dấu '|' giữa hai tên: không ghép đôi qua dấu đó (ảnh đứng một mình giữa hai dấu '|' thành cảnh 1 ảnh)
+  const names = C.thuTu.filter((n) => n !== '|');
+  const pos = new Map(names.map((n, i) => [n.toLowerCase(), i]));
+  const breaks = new Set(C.thuTu.flatMap((n, i) => (n === '|' && C.thuTu[i + 1] ? [C.thuTu[i + 1].toLowerCase()] : [])));
+  const at = (p) => pos.get(p.ten.toLowerCase()) ?? pos.size;
+  photos = photos.map((p, i) => ({ p, i })).sort((a, b) => at(a.p) - at(b.p) || a.i - b.i).map((x) => x.p);
+  photos.forEach((p) => (p.breakBefore = breaks.has(p.ten.toLowerCase())));
+  const missing = names.filter((n) => !photos.some((p) => p.ten.toLowerCase() === n.toLowerCase()));
+  if (missing.length) console.log(`Không thấy ảnh trong thuTu: ${missing.join(', ')}`);
+}
 photos.forEach((p) => (p.src = `/__anh__/${path.basename(p.file)}`));
 
 // ---------- 2. Chia cảnh ----------
@@ -80,7 +92,8 @@ let pairsInRow = 0;
 let capIdx = 0;
 for (let i = 0; i < photos.length; i++) {
   const p = photos[i];
-  const q = photos[i + 1];
+  const q = photos[i + 1]?.breakBefore ? null : photos[i + 1];
+  if (p.breakBefore) pairsInRow = 0;
   if (!off(p)) {
     scenes.push({ kind: 'full', photos: [p], caption: chuThich[p.ten] || '' });
     pairsInRow = 0;
@@ -138,9 +151,13 @@ for (const s of scenes) {
 const total = lenFor(D);
 
 const kinds = middle.reduce((a, s) => ((a[s.kind] = (a[s.kind] || 0) + 1), a), {});
-const mmss = (x) => `${Math.floor(x / 60)}:${String(Math.round(x % 60)).padStart(2, '0')}`;
+const mmss = (x) => { const r = Math.round(x); return `${Math.floor(r / 60)}:${String(r % 60).padStart(2, "0")}`; };
+if (argv.includes('--danh-sach')) {
+  const label = { intro: 'Mở đầu', outro: 'Kết thúc', full: 'Phủ kín', pair: '2 ảnh', single: '1 ảnh' };
+  for (const s of scenes) console.log(`${mmss(s.start).padStart(5)}  ${label[s.kind].padEnd(8)} ${s.photos.map((p) => p.ten).join(' + ')}${s.caption ? `  «${s.caption}»` : ''}`);
+}
 console.log(`${photos.length} ảnh → ${middle.length} cảnh (${kinds.full || 0} ảnh phủ kín, ${kinds.pair || 0} cảnh 2 ảnh, ${kinds.single || 0} cảnh 1 ảnh + chữ)`);
-console.log(`Mỗi cảnh ~${D.toFixed(1)} giây · video dài ${mmss(total)}${audioLen ? ` · nhạc dài ${mmss(audioLen)}${audioLen < total ? ' (nhạc sẽ phát lại từ đầu)' : ''}` : ' · không có nhạc'}`);
+console.log(`Mỗi cảnh ~${D.toFixed(1)} giây · video dài ${mmss(total)}${audioLen ? ` · nhạc dài ${mmss(audioLen)}${audioLen + 0.5 < total ? ' (nhạc sẽ phát lại từ đầu)' : ''}` : ' · không có nhạc'}`);
 
 // ---------- 4. Máy chủ tĩnh cho trang mẫu ----------
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.css': 'text/css', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.woff2': 'font/woff2' };

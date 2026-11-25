@@ -11,6 +11,9 @@ export default {
   anh: 'tools/video-slide/anh',
   anhThu: 'xanh-pastel/assets/anh', // thư mục trên chưa có ảnh thì dựng thử bằng 8 ảnh của thiệp
   sapXep: 'ten', // 'ten' = theo tên file, 'ngay-chup' = theo ngày chụp trong ảnh
+  // Hoặc ghi hẳn thứ tự (ảnh không ghi thì xếp sau). Dấu '|' chia nhóm: hai ảnh dọc cùng nhóm thành một cảnh,
+  // ảnh đứng một mình trong nhóm thành cảnh 1 ảnh + chữ. Ví dụ: ['a.jpg', 'b.jpg', '|', 'c.jpg', '|', 'd.jpg', 'e.jpg']
+  thuTu: [],
 
   // KHUNG HÌNH: '16:9' cho TV, máy chiếu, YouTube · '9:16' cho điện thoại, TikTok, Reels
   khung: '16:9',
