@@ -114,13 +114,27 @@
 
   /* ---------- Lộ trình cho lái xe ---------- */
   function viaPoint(v) { return typeof v === 'string' ? { ten: str(v), toaDo: '' } : { ten: str(v && v.ten), toaDo: str(v && v.toaDo) }; }
-  function routeHref(l) {
-    var dest = str(l.toaDoDen) || str(l.diemDen);
-    if (!str(l.diemDen)) return '';
-    var via = (l.quaDiem || []).map(viaPoint).map(function (v) { return v.toaDo || v.ten; }).filter(Boolean).slice(0, 3);
+  // Các đoạn dẫn đường Google Maps của một lượt (mỗi đoạn tối đa 3 điểm bắt buộc — giới hạn trên điện thoại)
+  function legSegments(l) {
+    if ((l.doanGoogle || []).length) return l.doanGoogle.map(function (d) {
+      return { ten: str(d.ten), batDau: str(d.batDau), den: viaPoint(d.den), qua: (d.quaDiem || []).map(viaPoint) };
+    });
+    // Kiểu dữ liệu cũ: một đoạn, quaDiem + toaDoDen
+    if (!str(l.diemDen)) return [];
+    return [{ ten: '', batDau: '', den: { ten: str(l.tenDiemDen) || str(l.diemDen), toaDo: str(l.toaDoDen) || str(l.diemDen) }, qua: (l.quaDiem || []).map(viaPoint) }];
+  }
+  function segHref(seg) {
+    var via = seg.qua.map(function (v) { return v.toaDo || v.ten; }).filter(Boolean).slice(0, 3);
     // Không ghi điểm xuất phát: Google Maps dẫn đường từ vị trí hiện tại của điện thoại
-    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(dest) +
+    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(seg.den.toaDo || seg.den.ten) +
       (via.length ? '&waypoints=' + via.map(encodeURIComponent).join('%7C') : '');
+  }
+  // Xem trước: điểm đi cố định + tất cả các điểm, mở ở đâu cũng ra đúng một tuyến
+  function previewHref(l, segs) {
+    var pts = [str(l.toaDoDi)];
+    segs.forEach(function (sg) { sg.qua.forEach(function (v) { pts.push(v.toaDo); }); pts.push(sg.den.toaDo); });
+    if (pts.some(function (x) { return !/^-?\d+(\.\d+)?,-?\d+(\.\d+)?$/.test(x); })) return '';
+    return 'https://www.google.com/maps/dir/' + pts.join('/') + '/data=!4m2!4m1!3e0';
   }
   function renderRoute(r) {
     if (!r || !(r.luot || []).length) return '';
@@ -136,17 +150,28 @@
         '<div class="acts map-acts"><button class="btn" type="button" data-gps="' + esc(l.id) + '">' + ICON.pin + 'Vị trí của tôi</button>' +
         '<button class="btn ghost" type="button" data-full="' + esc(l.id) + '">Phóng to bản đồ</button></div>' +
         '<p class="gps-msg" id="gps-' + esc(l.id) + '" role="status" aria-live="polite"></p>';
-      var via = (l.quaDiem || []).map(viaPoint).filter(function (v) { return v.ten; });
+      var segs = legSegments(l), via = [];
+      segs.forEach(function (sg, i) {
+        sg.qua.forEach(function (v) { if (v.ten) via.push(v.ten); });
+        if (i < segs.length - 1 && sg.den.ten) via.push(sg.den.ten);
+      });
       html += '<ol class="stops">';
       html += '<li><span class="lbl">Đi từ</span>' + esc(str(l.diemDi) || 'Vị trí hiện tại') + '</li>';
-      via.forEach(function (v) { html += '<li class="via"><span class="lbl">Qua</span>' + esc(v.ten) + '</li>'; });
+      via.forEach(function (v) { html += '<li class="via"><span class="lbl">Qua</span>' + esc(v) + '</li>'; });
       html += '<li class="end"><span class="lbl">Đến</span>' + esc(str(l.tenDiemDen) || str(l.diemDen) || 'Chưa có địa chỉ') + '</li></ol>';
       var steps = (l.cacBuoc || []).map(str).filter(Boolean);
       if (steps.length) html += '<ol class="steps">' + steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
-      var href = routeHref(l);
-      if (href) html += '<div class="acts"><a class="btn ghost" href="' + esc(href) + '" target="_blank" rel="noopener">' + ICON.map + 'Dẫn đường bằng Google Maps</a></div>' +
-        '<p class="leg-note">Google Maps buộc đi qua đúng các điểm trên nhưng vẫn có thể gợi ý đường khác khi tắc: khi đó đi theo đường kẻ trên bản đồ này và xe dẫn đoàn.</p>';
-      else if (str(l.khiThieuDiemDen)) html += '<p class="leg-note warn">' + esc(l.khiThieuDiemDen) + '</p>';
+      if (segs.length) {
+        html += '<div class="gmaps"><h4>' + ICON.map + 'Dẫn đường bằng Google Maps</h4>';
+        segs.forEach(function (sg, i) {
+          var label = segs.length > 1 ? (sg.ten || 'Đoạn ' + (i + 1)) : 'Bắt đầu dẫn đường';
+          html += '<div class="seg"><a class="btn' + (i ? ' ghost' : '') + '" href="' + esc(segHref(sg)) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' +
+            (sg.batDau ? '<p class="seg-when">Bấm ' + esc(sg.batDau) + '.</p>' : '') + '</div>';
+        });
+        var pv = previewHref(l, segs);
+        if (pv) html += '<p class="leg-note"><a href="' + esc(pv) + '" target="_blank" rel="noopener">Xem trước toàn tuyến trên Google Maps</a> — mở ở đâu cũng thấy đúng một tuyến; dùng để kiểm tra trước, không dùng để dẫn đường.</p>';
+        html += '<p class="leg-note">Nút dẫn đường lấy vị trí hiện tại của điện thoại làm điểm đi, nên chỉ bấm khi xe đã ở điểm xuất phát của đoạn đó. Nếu Google vẫn gợi ý đường khác khi tắc, đi theo đường kẻ trên bản đồ và xe dẫn đoàn.</p></div>';
+      } else if (str(l.khiThieuDiemDen)) html += '<p class="leg-note warn">' + esc(l.khiThieuDiemDen) + '</p>';
       html += '<p class="leg-note"><a href="' + esc(l.id) + '.gpx" download>Tải file lộ trình (GPX)</a> cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.</p>';
       html += '</article>';
     });

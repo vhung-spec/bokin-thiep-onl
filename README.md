@@ -158,7 +158,7 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 **Lộ trình xe cho lái xe** — cung đường cố định, hai lượt đi về cùng một đường: Phố Văn → Quốc lộ 5 → cầu Thanh Trì → Vành đai 3 trên cao → Tố Hữu → Ngọc Trục (khoảng 66 km). Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
 
 - **Bản đồ cố định** trên trang vẽ sẵn đường kẻ và 7 điểm mốc mỗi lượt (`lich-trinh/lo-trinh-co-dinh.geojson`), không đổi khi tắc đường. Nút *Vị trí của tôi* hiện chấm vị trí và báo “đang đi đúng cung đường” hoặc “đang cách cung đường … m/km”. Nút *Phóng to bản đồ* mở bản đồ toàn màn hình.
-- **Google Maps** chỉ để dẫn đường phụ: buộc đi qua 3 điểm lấy đúng trên đường kẻ (`quaDiem`, `toaDoDen`), nhưng Google vẫn có thể đổi đường khi tắc — khi đó đi theo đường kẻ và xe dẫn đoàn.
+- **Google Maps**: mỗi lượt chia thành đoạn (`doanGoogle`), mỗi đoạn một nút dẫn đường với đúng 3 điểm bắt buộc (`quaDiem`, giới hạn của link Google Maps trên điện thoại) lấy trên đường kẻ. Lượt đi 1 đoạn; lượt về 2 đoạn (nhà gái → vào QL5 ở Gia Lâm; QL5 → nhà trai) — người ngồi cạnh bấm *Đoạn 2* khi Google báo đã đến QL5. Nút dẫn đường lấy vị trí hiện tại làm điểm đi nên chỉ bấm khi xe đã ở điểm xuất phát; muốn kiểm tra ở nhà thì dùng *Xem trước toàn tuyến* (điểm đi cố định `toaDoDi`).
 - **File GPX** (`lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.
 - **Đổi cung đường**: sửa điểm trong `tools/lo-trinh/tao_lo_trinh.py` rồi chạy `python3 tools/lo-trinh/tao_lo_trinh.py` (cần mạng; tuyến tính bằng OSRM / OpenStreetMap, script tự báo nếu có chỗ quay đầu). Nhớ sửa chữ các bước (`cacBuoc`) và `quaDiem` cho khớp.
 - Thư viện bản đồ Leaflet 1.9.4 để sẵn trong `lich-trinh/vendor/leaflet/` (không phụ thuộc CDN).
