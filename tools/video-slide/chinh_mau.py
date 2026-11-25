@@ -23,12 +23,12 @@ def hue_weight(h, center, half, soft=20.0):
     return 1 - smooth(half, half + soft, d)
 
 
-# Mức chỉnh ban đầu theo kịch bản: tiết chế, giữ chất ảnh thật.
+# Mức chỉnh theo từng bộ: giữ chất ảnh thật, chỉ tiết chế những chỗ lệch.
 GRADE = {
-    'A': dict(warm=0.03),                                                    # studio: ấm nhẹ để phông bớt xanh
-    'B': dict(desat=[(345, 25, 0.09)], highlight=-0.2),                      # phố cổ: bớt hồng rực, hạ vùng nắng gắt
-    'C': dict(desat=[(38, 22, 0.13)], desat_bright=True, lift=0.035),       # toà nhà cổ: bớt ố vàng ở váy/hoa, giữ gỗ
-    'D': dict(desat=[(150, 45, 0.10)]),                                      # Hạ Long: bớt lục/lam cho người nổi hơn
+    'A': dict(warm=0.025),                                               # studio: trắng dịu, bớt ám xanh của phông
+    'B': dict(desat=[(345, 25, 0.03)], highlight=-0.12),                 # phố cổ: giữ hồng phấn áo dài, hạ nhẹ vùng nắng gắt
+    'C': dict(desat=[(38, 22, 0.06)], desat_bright=True),                # toà nhà cổ: giữ nắng vàng, gỗ sâu; váy/hoa bớt ố chút ít
+    'D': dict(desat=[(150, 45, 0.03)]),                                  # Hạ Long: giữ biển xanh lục và các lớp núi
 }
 
 
@@ -53,11 +53,11 @@ def grade(im, preset):
     if preset.get('highlight'):
         f = 2 ** (preset['highlight'] * smooth(0.62, 0.97, L))
         x *= f[..., None]
-    if preset.get('lift'):
-        x += preset['lift'] * (1 - smooth(0.0, 0.32, L))[..., None] * (1 - x)
-    # bóng tối hơi ấm, dùng chung cho cả phim để các bộ ảnh liền một tông
-    sh = (1 - smooth(0.05, 0.38, L))[..., None]
-    x += sh * np.array([0.010, 0.004, -0.008], dtype=np.float32)
+    # vai sáng mềm: vùng gần trắng (váy, voan) hạ rất nhẹ để còn thấy nếp vải
+    x *= (1 - 0.035 * smooth(0.82, 1.0, L))[..., None]
+    # bóng tối hơi ấm rất nhẹ, dùng chung cả phim để các bộ ảnh liền một tông (không phủ vàng cả ảnh)
+    sh = (1 - smooth(0.05, 0.35, L))[..., None]
+    x += sh * np.array([0.006, 0.002, -0.005], dtype=np.float32)
     return Image.fromarray((np.clip(x, 0, 1) * 255 + 0.5).astype(np.uint8))
 
 
@@ -68,10 +68,15 @@ def fill_color(im, studio):
     a = np.asarray(sm, dtype=np.float32)
     k = max(2, a.shape[1] // 25)
     edge = np.concatenate([a[:, :k].reshape(-1, 3), a[:, -k:].reshape(-1, 3)])
-    c = np.median(edge, axis=0) if not studio else edge.mean(axis=0)
-    if not studio:
+    if studio:
+        c = edge.mean(axis=0)
+    else:
+        # lấy nhóm điểm có độ sáng từ 15% đến 45% ở mép ảnh: ra màu nền trầm, đúng tông ảnh, không bị vệt sáng cửa kính kéo lệch
+        lum_e = edge @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+        lo, hi = np.percentile(lum_e, [15, 45])
+        c = edge[(lum_e >= lo) & (lum_e <= hi)].mean(axis=0)
         l = c.mean()
-        c = (l + (c - l) * 0.85) * 0.86  # lùi xuống một chút để ảnh nổi lên
+        c = (l + (c - l) * 0.9) * 0.92
     return '#%02x%02x%02x' % tuple(int(v) for v in np.clip(c, 0, 255))
 
 

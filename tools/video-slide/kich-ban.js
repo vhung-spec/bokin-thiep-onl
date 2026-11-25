@@ -8,6 +8,13 @@
   const lerp = (a, b, p) => a + (b - a) * p;
   const prog = (t, a, d) => (d > 0 ? clamp((t - a) / d) : t >= a ? 1 : 0);
   const sine = (t) => -(Math.cos(Math.PI * t) - 1) / 2;
+  const EASE = { linear: (t) => t, inout: sine, out: (t) => Math.sin((t * Math.PI) / 2), in: (t) => 1 - Math.cos((t * Math.PI) / 2) };
+  // Chuyển động mặc định chạy đều suốt thời gian ảnh còn trên màn hình (kể cả lúc đang hoà sang cảnh sau) để không khựng
+  function motion(spec, L, l) {
+    const t0 = spec.t0 ?? 0;
+    const t1 = spec.until ?? spec.t1 ?? L.span;
+    return EASE[spec.ease || 'linear'](prog(l, t0, t1 - t0));
+  }
   const px = (n) => `${Math.round(n * 100) / 100}px`;
   const ASSET = '../../xanh-pastel/assets/';
 
@@ -34,25 +41,33 @@
     let k = fit === 'height' ? bh / ih : fit === 'width' ? bw / iw : coverK;
     k *= L.scale ?? 1;
     const [fx, fy] = L.focus || [0.5, 0.5];
-    const [tx, ty] = L.to || L.focus || [0.5, 0.5];
+    // Không ghi 'to': ảnh đặt như object-position theo focus (ảnh dọc cao bằng khung thì nằm giữa),
+    // rồi điểm focus giữ nguyên chỗ đó khi zoom.
+    let [tx, ty] = L.to || [];
+    if (!L.to) {
+      const w0 = iw * k;
+      const h0 = ih * k;
+      tx = ((fit === 'height' ? 0.5 : fx) * (bw - w0) + fx * w0) / bw;
+      ty = ((fit === 'width' ? 0.5 : fy) * (bh - h0) + fy * h0) / bh;
+    }
     // lock: phóng vừa đủ để điểm focus nằm đúng vị trí 'to' mà ảnh vẫn phủ kín theo chiều đó
     if (L.lock && L.lock.includes('y')) k = Math.max(k, (ty * bh) / (fy * ih), ((1 - ty) * bh) / ((1 - fy) * ih));
     if (L.lock && L.lock.includes('x')) k = Math.max(k, (tx * bw) / (fx * iw), ((1 - tx) * bw) / ((1 - fx) * iw));
     if (L.zoom) {
-      const z = L.zoom;
-      k *= lerp(z.from, z.to, sine(prog(l, z.t0 ?? 0, (z.t1 ?? 0) - (z.t0 ?? 0))));
+      const z = Array.isArray(L.zoom) ? { from: L.zoom[0], to: L.zoom[1] } : L.zoom;
+      k *= lerp(z.from, z.to, motion(z, L, l));
     }
     const w = iw * k;
     const h = ih * k;
     let x = tx * bw - fx * w;
     let y = ty * bh - fy * h;
-    if (L.pan) x -= L.pan.dx * S.W * sine(prog(l, L.pan.t0 ?? 0, (L.pan.t1 ?? 0) - (L.pan.t0 ?? 0)));
+    if (L.pan) x -= L.pan.dx * S.W * motion(L.pan, L, l);
     // không để lộ mép ảnh theo chiều phải phủ kín
     const coverX = fit === 'cover' || fit === 'width';
     const coverY = fit === 'cover' || fit === 'height';
     if (coverX && w >= bw) x = clamp(x, bw - w, 0);
     if (coverY && h >= bh) y = clamp(y, bh - h, 0);
-    return { x, y, w, h };
+    return { x, y, w, h, fx: bx + x + fx * w, fy: by + y + fy * h };
   }
 
   function buildPhoto(shot, L, parent) {
@@ -75,9 +90,13 @@
       i.style.maskImage = m;
     }
     shot.waits.push(i.decode().catch(() => {}));
+    L.span = shot.showUntil - shot.at;
     return (l) => {
-      d.style.visibility = l >= (L.appear || 0) ? 'visible' : 'hidden';
+      const a = L.appear || 0;
+      d.style.visibility = l >= a ? 'visible' : 'hidden';
+      if (L.appearFade) d.style.opacity = sine(prog(l, a, L.appearFade));
       const g = photoGeom(L, l);
+      L.seen = [g.fx, g.fy];
       Object.assign(i.style, { width: px(g.w), height: px(g.h), transform: `translate(${px(g.x)}, ${px(g.y)})` });
     };
   }
@@ -172,6 +191,13 @@
     const ok = ['40px Ephesis', '40px Lora', 'italic 40px Lora', '500 40px "Be Vietnam Pro"'].every((f) => document.fonts.check(f, sample));
     return { shots: S.shots.length, fontsOk: ok };
   };
+
+  // Kiểm tra: điểm nhìn (focus) của lớp ảnh đầu tiên trên màn hình, theo từng cảnh đang hiện
+  window.debugFocus = () =>
+    S.shots.filter((s) => s.el && s.el.style.visibility === 'visible').map((s) => {
+      const L = (s.layers || []).filter((x) => x.img && x.seen).pop();
+      return { i: s.i, img: L ? L.img : null, at: L ? L.seen.map(Math.round) : null };
+    });
 
   window.render = async (t) => {
     const live = [];

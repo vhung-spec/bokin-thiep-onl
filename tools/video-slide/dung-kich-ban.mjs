@@ -34,7 +34,7 @@ const photoDir = path.resolve(opt('--anh') || path.join(HERE, 'anh'));
 const kbPath = path.resolve(opt('--kich-ban') || path.join(HERE, 'kich-ban/qua-nhung-o-cua.mjs'));
 const KB = (await import(pathToFileURL(kbPath).href)).default({ khung });
 const tag = khung === '9:16' ? '9x16' : '16x9';
-const out = path.resolve(opt('--ra') || path.join(HERE, 'ra', `${KB.ten}-${tag}${DRAFT ? '-nhap' : ''}.mp4`));
+const out = path.resolve(opt('--ra') || path.join(HERE, 'ra', `${KB.ten}_${tag}${DRAFT ? '_nhap' : ''}.mp4`));
 const mmss = (x) => `${Math.floor(x / 60)}:${(x % 60).toFixed(1).padStart(4, '0')}`;
 
 function run(cmd, args, input) {
@@ -65,7 +65,7 @@ const paperFile = path.join(cache, `giay-nga-${W}x${H}.jpg`);
 const papers = fs.existsSync(paperFile) ? [] : [{ out: paperFile, w: W, h: H }];
 if (jobs.length || papers.length) {
   console.log(`Chỉnh màu ${jobs.length} ảnh${papers.length ? ' + vẽ giấy ngà' : ''} …`);
-  const res = JSON.parse(run('python3', ['-I', path.join(HERE, 'chinh_mau.py')], JSON.stringify({ images: jobs, papers, maxEdge: 3000 })));
+  const res = JSON.parse(run('python3', ['-I', path.join(HERE, 'chinh_mau.py')], JSON.stringify({ images: jobs, papers, maxEdge: 3840 })));
   for (const j of jobs) meta[j.name] = { ...res[j.name], set: j.set, stamp: gradeStamp, srcTime: fs.statSync(j.src).mtimeMs };
   fs.writeFileSync(metaFile, JSON.stringify(meta, null, 1));
 }
@@ -103,7 +103,22 @@ const shot = async (format = 'jpeg') => {
 };
 fs.mkdirSync(path.dirname(out), { recursive: true });
 
-if (stills) {
+if (argv.includes('--kiem-tra')) {
+  // Mỗi điểm chuyển: điểm nhìn của ảnh trước (ngay trước khi chuyển) và ảnh sau (ngay khi hiện rõ)
+  console.log('  giây   cách vào     điểm nhìn trước → sau          lệch (px)');
+  for (let i = 1; i < KB.shots.length; i++) {
+    const s = KB.shots[i];
+    const d = s.in && s.in.type === 'dissolve' ? s.in.d : 0;
+    await page.evaluate((x) => window.render(x), s.at - 1 / 30);
+    const before = (await page.evaluate(() => window.debugFocus())).pop();
+    await page.evaluate((x) => window.render(x), s.at + d + 1 / 30);
+    const after = (await page.evaluate(() => window.debugFocus())).pop();
+    const a = before?.at;
+    const b = after?.at;
+    const dist = a && b ? Math.round(Math.hypot(a[0] - b[0], a[1] - b[1])) : '-';
+    console.log(`${mmss(s.at).padStart(7)}  ${(d ? `hoà ${d}s` : 'cắt').padEnd(9)} ${String(a ? `${a[0]},${a[1]}` : 'chữ').padStart(10)} → ${String(b ? `${b[0]},${b[1]}` : 'chữ').padEnd(10)} ${String(dist).padStart(6)}  ${before?.img || ''} → ${after?.img || ''}`);
+  }
+} else if (stills) {
   for (const s of stills) {
     await page.evaluate((x) => window.render(x), s);
     const f = out.replace(/\.mp4$/, `-giay-${s}.png`);
