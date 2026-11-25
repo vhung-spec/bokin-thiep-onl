@@ -182,6 +182,16 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 - Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
 - Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.
 
+### Link rút gọn is.gd (không cần mã GitHub)
+
+Ở mục **3. Khách mời** của trang tạo link, ô **Rút gọn link bằng is.gd** bật sẵn: trang tự rút gọn link của từng khách (chạy nền, mỗi khách khoảng 1 giây), không cần tài khoản hay mã GitHub.
+
+- Link dạng `https://is.gd/abc123`, mở ra thẳng thiệp có tên khách (đúng bản nhà trai / người nhà / bản chính).
+- Facebook, Zalo hiện ảnh và lời xem trước của thiệp chung (không có tên khách). Muốn hiện tên khách thì dùng link ngắn có tên (mục dưới, cần mã GitHub); khách đã có link đó thì trang giữ link đó.
+- Link rút gọn lưu trên máy; cùng một link dài thì is.gd trả cùng một link rút gọn, nên các máy ra cùng link.
+- is.gd giới hạn số link mỗi giờ: khi bị giới hạn hoặc không vào được is.gd, trang báo và tạm dùng link dài, rồi tự làm tiếp.
+- Tắt ô này thì khách nhận link dài như trước.
+
 ### Link ngắn có tên khách (Facebook, Zalo hiện “Thân gửi …”)
 
 Facebook / Zalo chỉ đọc lời xem trước của đúng trang được gửi, nên link `?to=Tên` dài và không hiện tên khách. Bật **Dùng link ngắn** ở mục **3. Khách mời** của trang tạo link:

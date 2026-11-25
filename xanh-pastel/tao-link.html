@@ -111,9 +111,14 @@
           </div>
         </div>
       </div>
-      <div class="sync short" id="short" hidden>
-        <p class="lbl">Link ngắn có tên khách</p>
-        <p class="hint">Gửi qua Facebook, Zalo sẽ hiện <b>“Thân gửi [tên khách] 💌”</b> và link gọn dạng <code>…/m/ab12cd</code>. Mỗi khách một trang nhỏ trên GitHub (cần mã GitHub như khi tải nhạc). Lưu ý: tên khách nằm trong các trang này, ai xem repo trên GitHub cũng thấy.</p>
+      <div class="sync short" id="short">
+        <p class="lbl">Link rút gọn</p>
+        <label class="check"><input type="checkbox" id="isgdOn" checked> Rút gọn link bằng is.gd (không cần mã GitHub)</label>
+        <p class="hint">Mỗi khách một link gọn dạng <code>is.gd/abc123</code>, mở ra thẳng thiệp có tên khách. Gửi qua Facebook, Zalo sẽ hiện thiệp chung (không hiện tên khách).</p>
+        <p class="sync-status" id="isgdStatus" aria-live="polite"></p>
+        <details class="help" id="ghShort" hidden>
+        <summary>Link ngắn hiện tên khách trên Facebook (cần mã GitHub)</summary>
+        <p class="hint">Gửi qua Facebook, Zalo sẽ hiện <b>“Thân gửi [tên khách] 💌”</b> và link gọn dạng <code>…/m/ab12cd</code>. Mỗi khách một trang nhỏ trên GitHub (cần mã GitHub như khi tải nhạc). Khách đã có link này thì vẫn dùng link này. Lưu ý: tên khách nằm trong các trang này, ai xem repo trên GitHub cũng thấy.</p>
         <label class="check"><input type="checkbox" id="shortOn"> Dùng link ngắn</label>
         <div id="shortTokenBox" hidden>
           <label class="lbl" for="shortToken">Mã GitHub (token)</label>
@@ -126,6 +131,7 @@
         </div>
         <p class="sync-status" id="shortStatus" aria-live="polite"></p>
         <div class="sync-btns"><button class="btn ghost sm" type="button" id="shortNow" hidden>Cập nhật link ngắn</button></div>
+        </details>
       </div>
       <form class="add" id="addForm">
         <label class="lbl" for="gName">Tên khách (hiện trên thiệp)</label>

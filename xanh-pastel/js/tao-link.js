@@ -57,7 +57,8 @@
   /* ---------- Lưu trên máy ---------- */
   var KEY = 'tao-link:' + couple + ':' + W.date;
   var S = load();
-  var SHORT = null; // link ngắn (khai báo đầy đủ ở dưới)
+  var SHORT = null; // link ngắn có tên khách trên GitHub (khai báo đầy đủ ở dưới)
+  var ISGD = null;  // link rút gọn is.gd (khai báo đầy đủ ở dưới)
   // lời nhắn lưu từ trước còn ghi cứng giờ / nơi của bản chính: đổi thành {thoigian} / {diadiem} để khách nhà trai nhận đúng bản của mình
   if (when && S.tpl.indexOf(when) >= 0) S.tpl = S.tpl.split(when).join('{thoigian}');
   if (W.venue.name && S.tpl.indexOf(' tại ' + W.venue.name) >= 0) S.tpl = S.tpl.split(' tại ' + W.venue.name).join(' tại {diadiem}');
@@ -71,12 +72,14 @@
       rev: d.rev || 0, dels: Array.isArray(d.dels) ? d.dels : [], linked: !!d.linked, setP: d.setP || 0,
       // link ngắn: short = máy này bật tạo link ngắn, pubQ = mã khách cần cập nhật trang nhỏ
       short: !!d.short, pubQ: Array.isArray(d.pubQ) ? d.pubQ : [],
+      // link rút gọn is.gd: isgdOn = bật (mặc định bật), isgd = link dài → link is.gd đã tạo
+      isgdOn: d.isgdOn !== false, isgd: d.isgd && typeof d.isgd === 'object' ? d.isgd : {},
     };
   }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* trình duyệt chặn lưu: vẫn dùng được trong phiên này */ } }
   function touch(g) { g.p = ++S.rev; } // khách vừa thêm / sửa: chờ lưu lên Google Sheet
   function forget(ids) { if (S.linked) ids.forEach(function (id) { if (S.dels.indexOf(id) < 0) S.dels.push(id); }); }
-  function changed() { save(); renderList(); SYNC.soon(); if (SHORT) SHORT.kick(); }
+  function changed() { save(); renderList(); SYNC.soon(); if (SHORT) SHORT.kick(); if (ISGD) ISGD.kick(); }
 
   /* ---------- Thông báo nhỏ ---------- */
   var toastT = null;
@@ -140,7 +143,13 @@
   }
   function longLink(g) { return baseFor(g) + '?' + params(g); }
   // link gửi khách: link ngắn …/m/ab12cd khi trang nhỏ của khách đã chạy (Facebook / Zalo hiện "Thân gửi <tên>"), không thì link dài
-  function linkFor(g) { return (SHORT && SHORT.linkFor(g)) || longLink(g); }
+  // thứ tự: link ngắn có tên trên GitHub (nếu đã có) → link rút gọn is.gd → link dài
+  function linkFor(g) {
+    var s = SHORT && SHORT.linkFor(g);
+    if (s) return s;
+    var L = longLink(g);
+    return (ISGD && ISGD.get(L)) || L;
+  }
   function message(g) {
     var ev = eventOf(g.side, g.ban);
     return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{thoigian}').join(ev.when).split('{diadiem}').join(ev.place)
@@ -150,7 +159,7 @@
   // link hiện trên thẻ khách: hiện đủ, tên khách được tô đậm để thấy rõ đây là link riêng
   function linkHtml(u) {
     var q = u.indexOf('?');
-    var sm = /^(.*\/)([a-z0-9]{6})$/.exec(u);
+    var sm = /^(.*\/)([A-Za-z0-9_]{4,10})$/.exec(u);
     if (q < 0 && sm) return '<span class="lk-base">' + esc(prettyLink(sm[1])) + '</span><b>' + sm[2] + '</b>';
     if (q < 0) return esc(prettyLink(u));
     var html = '<span class="lk-base">' + esc(prettyLink(u.slice(0, q))) + '</span>';
@@ -428,7 +437,7 @@
         (edOf(g) ? '<span class="chip ' + g.side + '">' + esc(edShort(edOf(g))) + '</span>' : g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
         (g.music ? '<span class="chip music">Nhạc riêng</span>' : '') +
         (g.sent ? '<span class="chip done">Đã gửi</span>' : '') +
-        (SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : '') + '</div>' +
+        (SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : ISGD && ISGD.pending(g) ? '<span class="chip pending">Đang rút gọn…</span>' : '') + '</div>' +
         '<a class="g-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + linkHtml(url) + '</a>' +
         (SHORT && SHORT.state(g) === 'live' ? '<p class="g-og">Facebook, Zalo hiện: <b>' + esc(SHORT.title(g)) + '</b></p>' : '') +
         '<div class="g-actions">' +
@@ -460,8 +469,11 @@
 
   // link ngắn của khách chưa chạy: hỏi có gửi luôn link dài không (Facebook sẽ không hiện tên)
   function ready(g) {
-    if (!SHORT || SHORT.state(g) !== 'wait') return true;
-    return window.confirm('Link ngắn có tên “' + g.name + '” đang được tạo (khoảng 1–2 phút). Facebook, Zalo chỉ hiện tên khách với link ngắn.\n\nVẫn gửi ngay bằng link dài?');
+    if (SHORT && SHORT.state(g) === 'wait')
+      return window.confirm('Link ngắn có tên “' + g.name + '” đang được tạo (khoảng 1–2 phút). Facebook, Zalo chỉ hiện tên khách với link ngắn.\n\nVẫn gửi ngay bằng link dài?');
+    if (ISGD && ISGD.pending(g))
+      return window.confirm('Link rút gọn của “' + g.name + '” đang được tạo (vài giây).\n\nVẫn gửi ngay bằng link dài?');
+    return true;
   }
   function share(g) {
     if (!ready(g)) return;
@@ -489,7 +501,7 @@
     if (act === 'share') share(g);
     else if ((act === 'copy-msg' || act === 'copy-link') && !ready(g)) return;
     else if (act === 'copy-msg') copy(message(g)).then(function () { toast('Đã chép lời mời cho ' + g.name + '.'); }, function () { window.prompt('Chép lời mời này:', message(g)); });
-    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link riêng của ' + g.name + '. ' + (SHORT && SHORT.state(g) === 'live' ? 'Gửi qua Facebook, Zalo sẽ hiện “' + SHORT.title(g) + '”.' : 'Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.')); }, function () { window.prompt('Chép link này:', linkFor(g)); });
+    else if (act === 'copy-link') copy(linkFor(g)).then(function () { toast('Đã chép link ' + (/^https:\/\/is\.gd\//.test(linkFor(g)) ? 'rút gọn' : 'riêng') + ' của ' + g.name + '. ' + (SHORT && SHORT.state(g) === 'live' ? 'Gửi qua Facebook, Zalo sẽ hiện “' + SHORT.title(g) + '”.' : 'Khách mở ra sẽ thấy “' + ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + '”.')); }, function () { window.prompt('Chép link này:', linkFor(g)); });
     else if (act === 'more') { openMore = openMore === g.id ? null : g.id; renderList(); }
     else if (act === 'toggle-sent') { g.sent = !g.sent; touch(g); changed(); }
     else if (act === 'edit') { editing = g.id; renderList(); }
@@ -762,7 +774,7 @@
     var files = null;   // file trong thư mục m/ trên GitHub: tên → blob sha (null = chưa tải danh sách)
     var live = {};      // mã → trang nhỏ đã mở được
     var waiting = {};   // mã → vừa ghi lên GitHub, chờ GitHub Pages cập nhật
-    var busy = false, deploying = false, timer = null, outdated = [], err = '';
+    var busy = false, deploying = false, timer = null, outdated = [], err = '', tried = false;
     var stEl = $('#shortStatus');
     function on() { return !!(S.short && GH.repo); }
     function pad3(n) { return ('00' + n.toString(36)).slice(-3); }
@@ -774,7 +786,12 @@
     }
     function url(c) { return siteRoot() + DIR + '/' + c; }
     function title(g) { return ((W.cover && W.cover.guestPrefix) || 'Thân gửi') + ' ' + g.name + ' 💌'; }
-    function linkFor(g) { var c = code(g); return c && live[c] ? url(c) : ''; }
+    function linkFor(g) {
+      var c = code(g);
+      if (!c || !live[c]) return '';
+      if (outdated.indexOf(g.id) >= 0 && !(on() && getToken())) return ''; // trang nhỏ cũ, máy này không sửa được
+      return url(c);
+    }
     function state(g) {
       var c = code(g);
       if (!c) return '';
@@ -908,13 +925,14 @@
       if (!files) return;
       items(S.guests.filter(function (g) { return files[code(g) + '.html']; })).then(function (all) {
         outdated = all.filter(function (it) { return files[it.c + '.html'] !== it.sha && S.pubQ.indexOf(it.g.id) < 0; }).map(function (it) { return it.g.id; });
-        show();
+        show(); renderList(); ISGD.kick();
       });
     }
     function show(msg) {
-      var box = $('#short');
+      var box = $('#ghShort');
       if (!GH.repo) { box.hidden = true; return; }
       box.hidden = false;
+      if (on()) box.open = true;
       $('#shortOn').checked = on();
       var tok = !!getToken();
       $('#shortTokenBox').hidden = !on() || tok;
@@ -932,7 +950,7 @@
       stEl.textContent = text;
     }
     function load() {
-      if (!GH.repo) { show(); return; }
+      if (!GH.repo) { tried = true; show(); return; }
       gh('/contents/' + DIR + '?ref=' + encodeURIComponent(GH.branch || ''), { auth: !!getToken() }).then(function (r) {
         if (r.status === 404) return [];
         if (!r.ok) throw new Error(String(r.status));
@@ -944,9 +962,10 @@
           files[f.name] = f.sha;
           live[f.name.replace(/\.html$/, '')] = true;
         });
-        renderList(); check(); kick(1500);
+        renderList(); check(); kick(1500); ISGD.kick();
         if (S.guests.some(function (g) { return live[code(g)]; })) SYNC.soon(2000);
-      }).catch(function () { show('Chưa kiểm tra được link ngắn (GitHub không trả lời). Tải lại trang để thử lại.'); });
+      }).catch(function () { show('Chưa kiểm tra được link ngắn (GitHub không trả lời). Tải lại trang để thử lại.'); })
+        .then(function () { tried = true; ISGD.kick(); });
     }
     $('#shortOn').addEventListener('change', function () {
       S.short = this.checked; save();
@@ -961,7 +980,89 @@
       err = ''; kick(300);
     });
     $('#shortNow').addEventListener('click', function () { queue(outdated); outdated = []; kick(300); });
-    return { linkFor: linkFor, state: state, title: title, queue: queue, kick: kick, load: load, check: check, show: show, on: on };
+    function known() { return tried; } // đã hỏi GitHub xong (được hay không)
+    return { linkFor: linkFor, state: state, title: title, queue: queue, kick: kick, load: load, check: check, show: show, on: on, known: known };
+  })();
+
+  /* ---------- Link rút gọn is.gd (không cần mã GitHub) ----------
+   * Rút gọn link dài của từng khách bằng is.gd (miễn phí, không cần tài khoản), chạy nền từng khách một.
+   * Mở link rút gọn là tới thẳng thiệp có tên khách; Facebook / Zalo hiện thiệp chung (không có tên khách).
+   * Khách đã có link ngắn có tên trên GitHub (thư mục m/) thì giữ link đó.
+   */
+  ISGD = (function () {
+    var busy = false, timer = null, pauseUntil = 0, err = '', n = 0, failed = {};
+    var stEl = $('#isgdStatus');
+    function on() { return S.isgdOn !== false; }
+    function get(long) { return on() ? (S.isgd[long] || '') : ''; }
+    // khách cần rút gọn: chưa có link ngắn trên GitHub (hoặc đang chờ trang đó), chưa có link is.gd cho link dài hiện tại
+    function wants(g) {
+      if (!on() || !g || !g.id) return false;
+      if (SHORT && (SHORT.linkFor(g) || SHORT.state(g) === 'wait')) return false;
+      var L = longLink(g);
+      return !S.isgd[L] && !failed[L];
+    }
+    function pending(g) { return on() && wants(g) && Date.now() >= pauseUntil; }
+    // is.gd trả kết quả qua JSONP (gắn thẻ script), không cần máy chủ cho phép gọi từ trang khác
+    function jsonp(long) {
+      return new Promise(function (ok, fail) {
+        var cb = '__isgd' + Date.now().toString(36) + (++n), sc = document.createElement('script');
+        var t = setTimeout(function () { done(); fail(new Error('timeout')); }, 15000);
+        function done() { clearTimeout(t); try { delete window[cb]; } catch (e) { window[cb] = undefined; } sc.remove(); }
+        window[cb] = function (d) { done(); ok(d); };
+        sc.onerror = function () { done(); fail(new Error('network')); };
+        sc.src = 'https://is.gd/create.php?format=json&logstats=0&callback=' + cb + '&url=' + encodeURIComponent(long);
+        document.head.appendChild(sc);
+      });
+    }
+    function pump() {
+      timer = null;
+      if (busy || !on()) { show(); return; }
+      if (SHORT && !SHORT.known()) { kick(1500); return; } // chờ biết khách nào đã có link ngắn trên GitHub
+      var wait = pauseUntil - Date.now();
+      if (wait > 0) { kick(wait); return; }
+      var g = S.guests.filter(wants)[0];
+      if (!g) { prune(); show(); return; }
+      busy = true;
+      var long = longLink(g);
+      jsonp(long).then(function (d) {
+        if (d && /^https:\/\/is\.gd\/[A-Za-z0-9_]+$/.test(d.shorturl || '')) { S.isgd[long] = d.shorturl; err = ''; save(); renderList(); SYNC.soon(3000); }
+        else if (d && +d.errorcode === 3) { pauseUntil = Date.now() + 10 * 60000; err = 'is.gd đang giới hạn số link mỗi giờ: tự làm tiếp sau 10 phút. Trong lúc chờ, khách chưa rút gọn dùng link dài.'; }
+        else { failed[long] = true; err = 'is.gd không rút gọn được link của ' + g.name + ' (' + ((d && d.errormessage) || 'lỗi không rõ') + '): khách này dùng link dài.'; }
+      }, function () {
+        pauseUntil = Date.now() + 60000;
+        err = 'Chưa kết nối được is.gd (mạng chập chờn hoặc bị chặn). Tự thử lại sau 1 phút; trong lúc chờ dùng link dài.';
+      }).then(function () { busy = false; renderList(); kick(1200); });
+    }
+    function kick(ms) {
+      if (!on()) { show(); return; }
+      clearTimeout(timer);
+      timer = setTimeout(pump, ms == null ? 800 : ms);
+      show();
+    }
+    // bỏ link is.gd cũ không còn dùng (khách đã đổi tên, đổi nhạc, đã xoá…)
+    function prune() {
+      var keep = {};
+      S.guests.forEach(function (g) { keep[longLink(g)] = true; });
+      var changedAny = false;
+      Object.keys(S.isgd).forEach(function (k) { if (!keep[k]) { delete S.isgd[k]; changedAny = true; } });
+      if (changedAny) save();
+    }
+    function show() {
+      $('#isgdOn').checked = on();
+      var withId = S.guests.filter(function (g) { return g.id; });
+      var gh = withId.filter(function (g) { return SHORT && SHORT.linkFor(g); }).length;
+      var done = withId.filter(function (g) { return !(SHORT && SHORT.linkFor(g)) && get(longLink(g)); }).length;
+      var left = withId.filter(wants).length;
+      var text = !on() ? 'Đang tắt: khách nhận link dài.' :
+        err || (left ? 'Đang rút gọn link: còn ' + left + ' khách…' : withId.length ? '✓ Mọi khách đã có link gọn (' + done + ' is.gd' + (gh ? ', ' + gh + ' link ngắn có tên' : '') + ').' : '');
+      stEl.className = 'sync-status' + (err ? ' bad' : text.charAt(0) === '✓' ? ' ok' : '');
+      stEl.textContent = text;
+    }
+    $('#isgdOn').addEventListener('change', function () {
+      S.isgdOn = this.checked; err = ''; save(); renderList(); kick(300);
+      toast(this.checked ? 'Đã bật link rút gọn is.gd.' : 'Đã tắt link rút gọn: khách nhận link dài.');
+    });
+    return { get: get, pending: pending, kick: kick, on: on };
   })();
 
   /* ---------- Bắt đầu ---------- */
@@ -987,4 +1088,5 @@
   renderList();
   SYNC.start();
   SHORT.load();
+  ISGD.kick();
 })();
