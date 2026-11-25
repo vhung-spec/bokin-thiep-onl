@@ -197,6 +197,17 @@ Hiện thiệp chạy ở `https://vhung-spec.github.io/bokin-thiep-onl/` (chưa
 - Sửa `og:url` / `og:image` trong `index.html` và `xanh-pastel/index.html` sang tên miền để Zalo/Facebook hiện ảnh xem trước. Link mời ở trang tạo link tự đổi theo tên miền khi mở trang đó qua tên miền.
 - Trang gốc `index.html` chỉ chuyển thẳng vào `xanh-pastel/` và mang sẵn ảnh xem trước; mẫu đỏ rượu cũ ở `mau-do-ruou.html`.
 
+## Video slide ảnh cưới
+
+`tools/video-slide/` tự dựng **video trình chiếu ảnh cưới** cùng tông xanh xô thơm & vàng của thiệp: mở đầu bằng tấm thiệp khung hoa, ảnh lia/zoom chậm hoặc đặt như ảnh in trên nền giấy, kết bằng *Thank you!*, có nhạc nền. Chép ảnh vào `tools/video-slide/anh/`, sửa `tools/video-slide/cau-hinh.mjs`, rồi chạy:
+
+```bash
+node tools/video-slide/lam-video.mjs              # → tools/video-slide/ra/video-cuoi.mp4 (Full HD)
+node tools/video-slide/lam-video.mjs --khung 9:16 # bản dọc cho điện thoại
+```
+
+Xem `tools/video-slide/README.md` để biết cách cài đặt và các tuỳ chọn.
+
 ## Cấu trúc thư mục
 
 ```
@@ -208,6 +219,7 @@ js/lunar.js                đổi ngày dương sang âm lịch
 js/art.js                  hình vẽ SVG: hoa rum, phong bì, dấu sáp, chữ lồng
 js/main.js                 mở phong bì, lịch, đếm ngược, form, sổ lưu bút, QR
 google-apps-script/Code.gs lưu xác nhận, lời chúc, lượt thả tim vào Google Sheets (dùng chung)
+tools/video-slide/         dựng video slide ảnh cưới (ảnh trong anh/, sửa cau-hinh.mjs)
 tools/hoa-tiet/            code tách ảnh bìa (dấu sáp, nền, trang trong, giấy kem) và vẽ hoạ tiết vàng của mẫu xanh pastel
 assets/anh/                ảnh mẫu của mẫu đỏ rượu
 assets/og-image.jpg        ảnh xem trước khi chia sẻ link
