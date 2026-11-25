@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Dựng video theo kịch bản</title>
+<link rel="stylesheet" href="font/font.css">
+<style>
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  #stage { position: absolute; left: 0; top: 0; overflow: hidden; background: #000; transform-origin: 0 0; }
+  .shot { position: absolute; inset: 0; overflow: hidden; }
+  .box { position: absolute; overflow: hidden; }
+  .box img { position: absolute; left: 0; top: 0; max-width: none; }
+  .paper { position: absolute; inset: 0; background-size: cover; }
+  .sage { position: absolute; background: #A7A680 url(../../xanh-pastel/assets/giay-xo-tham.webp) 0 0 / 1080px 1920px;
+    box-shadow: 3px 0 12px rgba(40, 50, 30, .2), 1px 0 0 rgba(40, 50, 30, .18); }
+  .deco { position: absolute; transform-origin: 50% 50%; }
+  .txt { position: absolute; white-space: pre; color: #2D3826; line-height: 1.25; }
+  .f-script { font-family: 'Ephesis', cursive; font-weight: 400; }
+  .f-serif { font-family: 'Lora', serif; font-weight: 400; }
+  .f-serif-italic { font-family: 'Lora', serif; font-style: italic; font-weight: 400; }
+  .f-ui { font-family: 'Be Vietnam Pro', sans-serif; font-weight: 500; }
+  #black { position: absolute; inset: 0; background: #000; opacity: 0; z-index: 9999; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="kich-ban.js"></script>
+</body>
+</html>

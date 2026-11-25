@@ -38,6 +38,28 @@ Thêm `--anh <thư mục>`, `--ra <file.mp4>` hoặc `--cau-hinh <file.mjs>` đ�
 
 Mỗi phút video mất khoảng **2–3 phút** để dựng. Thư mục `ra/` không đưa lên GitHub vì file video nặng.
 
+## Dựng theo kịch bản (video "Qua những ô cửa")
+
+Ngoài kiểu tự chia cảnh ở trên, có thể viết hẳn **kịch bản từng cảnh** trong `kich-ban/*.mjs`: giờ cắt theo phách nhạc, ảnh nào, khung, điểm căn, chuyển động, chữ. Bản hiện có là `kich-ban/qua-nhung-o-cua.mjs`:
+
+- Nhạc "Lễ Đường" đo được 68 BPM. Phách thứ n rơi vào giây `T(n) = 0,815 + n × 60/68`, mọi điểm cắt đặt đúng phách. Nhạc nền vào ở 0:31,7, chỗ lấy hơi ở 1:14,4, điệp khúc cuối mở ở 2:30,8.
+- Ảnh dọc cao bằng khung, hai bên là màu phẳng lấy từ mép ảnh. Ảnh studio thì lấy màu phông theo từng độ cao để nối liền. Không xoay nghiêng, không bóng đổ, gần như toàn bộ là cắt thẳng.
+- Có các cú cắt khớp vị trí: dùng `focus` (điểm trong ảnh) và `to` (vị trí trên khung), ví dụ mắt cô dâu ở cùng một chỗ qua ba ảnh cầu thang.
+- Màu chỉnh theo từng bộ ảnh trong `chinh_mau.py`:
+  - A (studio): ấm nhẹ.
+  - B (phố cổ): bớt hồng rực, hạ vùng nắng.
+  - C (toà nhà cổ): bớt ố vàng ở váy và hoa, giữ màu gỗ.
+  - D (Hạ Long): bớt xanh lục và lam.
+  - Cả phim: bóng tối hơi ấm.
+
+```bash
+node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh>                  # bản chiếu tiệc 16:9 → ra/qua-nhung-o-cua-16x9.mp4
+node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh> --khung 9:16     # bản dọc → ra/qua-nhung-o-cua-9x16.mp4
+node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh> --xem 80.5,150.9 # chụp khung hình để kiểm tra
+```
+
+Ảnh đã chỉnh màu được lưu đệm trong `ra/.anh-da-chinh/`, chỉ làm lại khi ảnh gốc hoặc `chinh_mau.py` thay đổi. Nếu font chưa tải đủ, lệnh sẽ dừng chứ không xuất video sai chữ.
+
 ## Cài đặt (khi chạy trên máy riêng)
 
 - Node 18 trở lên, **ffmpeg**, **python3** kèm Pillow (`pip install pillow`; ảnh iPhone `.heic` cần thêm `pip install pillow-heif`).
@@ -51,6 +73,8 @@ Mỗi phút video mất khoảng **2–3 phút** để dựng. Thư mục `ra/` 
 | `lam-video.mjs` | chia cảnh, tính thời lượng theo nhạc, dựng từng khung hình bằng Chromium rồi ghép thành MP4 bằng ffmpeg |
 | `mau.html`, `mau.js` | mẫu video: bố cục và chuyển động của từng loại cảnh (mọi chuyển động tính theo thời gian `t`, nên dựng lại ra đúng từng khung hình) |
 | `chuan_bi_anh.py` | xoay ảnh theo EXIF, thu nhỏ, xếp thứ tự |
+| `kich-ban/*.mjs`, `dung-kich-ban.mjs`, `kich-ban.html`, `kich-ban.js` | dựng theo kịch bản viết sẵn (giờ cắt, ảnh, khung, chữ từng cảnh) |
+| `chinh_mau.py` | chỉnh màu theo bộ ảnh, màu nền phẳng từ mép ảnh, vẽ giấy ngà |
 | `font/` | font của thiệp (Ephesis, Lora, Playfair Display, Be Vietnam Pro — giấy phép SIL OFL), tải sẵn để dựng không cần mạng |
 
 Nền giấy, khung thiệp, dấu sáp, cành lá vàng lấy từ `xanh-pastel/assets/`. Đổi các ảnh đó là video đổi theo.
