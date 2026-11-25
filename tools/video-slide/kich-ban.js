@@ -414,6 +414,16 @@
       if (next && t >= next.at && next.in && next.in.type !== 'black') vis *= 1 - sine(prog(t, next.at, next.in.d));
       dust = Math.max(dust, (s.dust || 0) * vis);
     }
+    if (!leak) {
+      // vệt sáng ấm trôi chậm trong cảnh (ví dụ trên thiệp tên) khi không có chuyển cảnh
+      for (const s of live) {
+        if (!s.glow) continue;
+        const g = s.glow;
+        const q = sine(prog(t - s.at, 0, s.showUntil - s.at));
+        const fadeIn = sine(prog(t - s.at, 0, 1.5));
+        leak = { x: lerp(g.from[0], g.to[0], q) * S.W, y: lerp(g.from[1], g.to[1], q) * S.H, r: (g.r ?? 0.7) * S.W, a: (g.a ?? 0.35) * fadeIn };
+      }
+    }
     if (leak && leak.a > 0.002) {
       S.leak.style.opacity = 1;
       S.leak.style.background = `radial-gradient(circle ${px(leak.r)} at ${px(leak.x)} ${px(leak.y)}, rgba(255, 236, 205, ${leak.a.toFixed(3)}) 0%, rgba(255, 196, 130, ${(leak.a * 0.55).toFixed(3)}) 35%, rgba(255, 170, 100, 0) 100%)`;

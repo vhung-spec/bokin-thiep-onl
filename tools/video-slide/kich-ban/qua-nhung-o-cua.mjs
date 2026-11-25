@@ -36,17 +36,19 @@ export default function kichBan() {
   const shots = [];
   const at = (t, s) => shots.push({ at: t, ...s });
 
-  // 0:00 · Mở đầu: hiện từ tối vào vòm kính toàn màn hình, máy lia chậm từ đèn chùm xuống hai người, bụi sáng lơ lửng
+  // 0:00 · Mở đầu: hiện từ tối thẳng vào cận cảnh hai người khiêu vũ trong vùng nắng trước cửa kính,
+  //        máy từ từ lùi ra và ngước lên để lộ cả vòm kính, đèn chùm; bụi sáng lơ lửng
   at(0, {
-    in: tr('black', 1.4),
+    in: tr('black', 1.8),
     dust: 0.9,
-    layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.2], tilt: { from: 0.17, to: 0.8, ease: 'inout', until: 10.2 } })],
+    layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.86], tilt: { from: 0.86, to: 0.58, ease: 'inout' }, zoom: { from: 1.28, to: 1, ease: 'inout' } })],
   });
 
   // 0:09,4 · Tiến vào ô cửa sáng sau lưng hai người → loá sáng → thiệp tên trên giấy ngà
   at(9.4, {
-    in: tr('bloom', 1.4, [0.45, 0.32]),
+    in: tr('bloom', 1.4, [0.45, 0.62]),
     dust: 0.8,
+    glow: { from: [0.95, 0.15], to: [0.6, 0.35], r: 0.75, a: 0.32 },
     layers: [
       { kind: 'paper' },
       { kind: 'sage', box: [0, 0, 0.12, 1], enter: { at: 1.0, d: 1.2, from: 'left', dist: 230 } },
@@ -59,14 +61,19 @@ export default function kichBan() {
     ],
   });
 
-  // 0:16,2 · A · Studio — ô cửa vòm mở ra từ tấm thiệp (chương 1)
-  at(16.18, { in: tr('arch', 1.5, [0.5, 0.56]), layers: [P('IMG_2006', { feather: 0.06, focus: [0.45, 0.3], zoom: PUSH })] });
-  at(T(24), { in: tr('dissolve', 1.0), bg: 'paper', layers: strip([['IMG_2007', [0.5, 0.5]], ['IMG_2008', [0.5, 0.4]], ['L1007339', [0.52, 0.3]]], [0, 1.76, 3.53]) });
+  // 0:16,2 · A · Studio — ô cửa vòm mở ra từ tấm thiệp: bốn khoảnh khắc studio lấp kín khung, vào cách nhau 2 phách
+  at(16.18, {
+    in: tr('arch', 1.5, [0.5, 0.56]),
+    bg: '#ECEBE6',
+    layers: strip([['IMG_2006', [0.45, 0.35]], ['IMG_2007', [0.5, 0.5]], ['IMG_2008', [0.5, 0.4]], ['L1007339', [0.52, 0.3]]], [0.5, 0.5 + B4 / 2, 0.5 + B4, 0.5 + 1.5 * B4]),
+  });
+  // → cận mặt má kề má toàn màn hình (phóng nhẹ xuyên cảnh)
+  at(T(28), { in: tr('zoom', 1.0), layers: [P('L1007339', { fit: 'cover', focus: [0.5, 0.12], zoom: PUSH })] });
 
   // 0:31,7 · B · Hà Nội — ô cửa mở đúng lúc nhạc nền vào; lia từ biển "Hiệu thuốc Hoà Hưng" xuống hai người
   at(T(35), {
     in: tr('arch', 1.5, [0.5, 0.5]),
-    layers: [P('NAM08332', { fit: 'cover', focus: [0.5, 0.2], tilt: { from: 0.12, to: 0.6, ease: 'inout' } })],
+    layers: [P('NAM08332', { fit: 'cover', focus: [0.5, 0.2], tilt: { from: 0.12, to: 0.55, ease: 'inout' } })],
     texts: [{ text: 'Một ngày ở Hà Nội', font: 'serif-italic', size: 56, x: 0.175, y: 0.5, color: '#F6F0E4', shadow: true, appear: 1.4, fade: 1.2, rise: 10, out: 5.2 }],
   });
   // sân đình đầy nắng, khung vào hai người
@@ -75,15 +82,15 @@ export default function kichBan() {
   const half = (1 - GUT) / 2;
   at(T(51), {
     in: tr('wipe', 1.1),
-    bg: 'paper',
+    bg: WARM_DARK,
     layers: [
-      P('NAM08137', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3], slide: { at: B4, d: 1.5, from: (1 - half) / 2 } }),
-      P('NAM08138', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.5, 0.3], enter: { at: B4 + 0.3, d: 1.5, from: 'right', dist: 160 } }),
+      P('NAM08137', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3], slide: { at: B4 / 2, d: 1.5, from: (1 - half) / 2 } }),
+      P('NAM08138', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.5, 0.3], enter: { at: B4 / 2 + 0.3, d: 1.5, from: 'right', dist: 160 } }),
     ],
   });
   at(T(67), {
-    in: tr('wipe', 1.1),
-    bg: 'paper',
+    in: tr('leak', 1.3),
+    bg: WARM_DARK,
     layers: strip([['NAM07765', [0.55, 0.5]], ['NAM07834', [0.46, 0.3]], ['NAM08260', [0.5, 0.4]]], [0, B4 / 2, B4]),
   });
 
