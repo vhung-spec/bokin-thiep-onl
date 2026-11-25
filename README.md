@@ -156,7 +156,7 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 | Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
 
 - Giữ nguyên dấu `"…"` và dấu phẩy. Nếu lỡ sửa sai định dạng, trang báo lỗi và tạm hiện bản người xem đã mở lần trước — mở trang ngay sau khi sửa để kiểm tra.
-- **Địa chỉ nhà gái đón dâu sáng 29/11 chưa xác nhận** — đừng dùng địa chỉ nhà văn hoá Ngọc Trục (nơi tiệc 28/11) nếu không đúng.
+- Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
 - Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.
 
 ### Link ngắn có tên khách (Facebook, Zalo hiện “Thân gửi …”)
