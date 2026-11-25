@@ -73,14 +73,15 @@
   function renderEvent(ev) {
     var t = timeLabel(ev);
     var dd = resolvePlace(ev.diaDiem);
-    var html = '<li class="ev' + (ev.xeChay ? ' xe' : '') + '" id="ev-' + esc(ev.id || '') + '">';
-
-    html += '<div class="time-row"><p class="time' + (t.rel ? ' rel' : '') + '">' + esc(t.text) + '</p>';
-    if (ev.xeChay) html += '<span class="tag car">Giờ xe chạy</span>';
-    if (str(ev.batDau) && str(ev.khiNao)) html += '<span class="tag wait">' + esc(ev.khiNao) + '</span>';
-    html += '</div>';
+    var hasTime = !!(str(ev.batDau) || str(ev.nhanGio));
+    var timeTxt = hasTime ? t.text : (str(ev.gioNgan) || t.text);
+    var html = '<li class="row' + (ev.xeChay ? ' xe' : '') + '"><details class="ev" id="ev-' + esc(ev.id || '') + '">' +
+      '<summary><span class="r-time' + (hasTime ? '' : ' rel') + '">' + esc(timeTxt) + '</span>' +
+      '<span class="r-what">' + esc(str(ev.tomTat) || str(ev.viec)) +
+      (ev.xeChay ? '<span class="tag car">Giờ xe chạy</span>' : '') + '</span>' +
+      '<span class="chev" aria-hidden="true"></span></summary><div class="r-body">';
     html += '<h3>' + esc(ev.viec) + '</h3>';
-    if (!str(ev.batDau) && !str(ev.nhanGio)) html += '<p class="time-note">Giờ cụ thể: chờ gia đình cập nhật.</p>';
+    if (!hasTime) html += '<p class="time-note">' + esc(str(ev.khiNao) ? str(ev.khiNao) + '. ' : '') + 'Giờ cụ thể: chờ gia đình cập nhật.</p>';
     if (str(ev.ghiChuGio)) html += '<p class="time-note">' + esc(ev.ghiChuGio) + '</p>';
 
     html += '<div class="meta">';
@@ -123,9 +124,9 @@
     if (steps.length) more += '<p><b>Thứ tự nghi thức:</b></p><ol>' + steps.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ol>';
     var extra = (ev.chiTiet || []).map(str).filter(Boolean);
     if (extra.length) more += '<ul>' + extra.map(function (s) { return '<li>' + esc(s) + '</li>'; }).join('') + '</ul>';
-    if (more) html += '<details class="more"><summary>Xem chi tiết</summary><div class="more-body">' + more + '</div></details>';
+    if (more) html += '<div class="more-body">' + more + '</div>';
 
-    return html + '</li>';
+    return html + '</div></details></li>';
   }
 
   /* ---------- Lộ trình cho lái xe ---------- */
@@ -152,13 +153,29 @@
     return '<a class="btn gm-main' + (extra || '') + '" href="' + esc(appHref(url)) + '" target="_blank" rel="noopener">' + ICON.map +
       '<span>' + esc(str(l.nutGoogle) || 'Mở Google Maps') + '</span></a>';
   }
+  // Tiêu đề ô: "05:00 · Nhà trai → Nhà gái" — phần giờ in đậm, không xuống dòng
+  function tripTitle(t) {
+    var i = t.indexOf(' · ');
+    if (i < 0) return esc(t);
+    return '<span class="thead"><b class="tt">' + esc(t.slice(0, i)) + '</b> ·</span> <span class="tdir">' + esc(t.slice(i + 3)) + '</span>';
+  }
+  function tripCards(legs) {
+    var html = '';
+    legs.forEach(function (l) {
+      var to = PLACES[l.den] || {};
+      html += '<div class="trip" data-luot="' + esc(l.id) + '"><p class="trip-t">' + tripTitle(str(l.oTieuDe) || str(l.ten)) + '</p>' +
+        (LEG_URLS[l.id] ? mainButton(l) : '<p class="leg-note warn">Chưa đủ toạ độ để mở Google Maps.</p>') +
+        (str(to.ghiChuGhim) ? '<p class="pin-note">' + esc(to.ghiChuGhim) + '</p>' : '') + '</div>';
+    });
+    return html;
+  }
   // Trợ giúp khi bản đồ mở trong Zalo: chỉ hiện khi chạm
   function zaloHelp(legs, key) {
     var copies = legs.filter(function (l) { return LEG_URLS[l.id]; }).map(function (l) {
       return '<button class="btn ghost small" type="button" data-copy="' + esc(l.id) + '">Sao chép link Google Maps' +
         (legs.length > 1 ? ' · ' + esc(/ve$/.test(l.id) ? 'lượt về' : 'lượt đi') : '') + '</button>';
     }).join('');
-    return '<details class="zalo-help"><summary>Bản đồ vẫn mở trong Zalo?</summary><div class="zh-body">' +
+    return '<details class="zalo-help"><summary>Nếu bản đồ mở trong Zalo</summary><div class="zh-body">' +
       '<ol><li>Bấm <b>⋯</b> hoặc <b>⋮</b> ở góc trên Zalo, chọn mở bằng trình duyệt (<b>Safari</b> trên iPhone, <b>Chrome</b> trên Android).</li>' +
       '<li>Trong trình duyệt, bấm lại nút “… – Mở Google Maps”. Nếu máy hỏi, chọn mở bằng ứng dụng <b>Google Maps</b>.</li>' +
       '<li>Vẫn không được: bấm nút sao chép dưới đây, dán link vào Ghi chú hoặc tin nhắn Zalo gửi chính mình, rồi chạm vào link đó.</li></ol>' +
@@ -172,12 +189,10 @@
 
     (r.luot || []).forEach(function (l) {
       var from = PLACES[l.tu] || {}, to = PLACES[l.den] || {};
-      html += '<article class="leg" id="' + esc(l.id || '') + '"><h3>' + esc(l.ten) + '</h3>';
-      if (str(l.gio)) html += '<p class="leg-time">' + esc(l.gio) + '</p>';
-      // Nút Google Maps chính của lượt + trợ giúp Zalo
-      if (LEG_URLS[l.id]) html += '<div class="gm-box">' + mainButton(l) + zaloHelp([l], l.id) + '</div>';
-      else html += '<p class="leg-note warn">Thiếu toạ độ điểm đi, điểm đến hoặc điểm khoá nên chưa tạo được nút Google Maps.</p>';
-      // Bản đồ cung đường cố định (vẽ sẵn, không đổi theo tình trạng tắc đường)
+      html += '<details class="leg" id="' + esc(l.id || '') + '" data-luot="' + esc(l.id) + '"><summary>' +
+        '<span class="leg-s1">' + tripTitle(str(l.oTieuDe) || str(l.ten)) + '</span>' +
+        '<span class="leg-s2">' + esc(str(l.tomTatMoRong) || 'Bản đồ, chỉ đường, GPX') + '</span><span class="chev" aria-hidden="true"></span></summary><div class="leg-body">';
+      // Bản đồ cung đường cố định (vẽ khi mở mục, để Leaflet đo đúng kích thước)
       html += '<div class="map-wrap" data-luot="' + esc(l.id) + '"><div class="map" id="map-' + esc(l.id) + '" role="img" aria-label="Bản đồ cung đường ' + esc(l.ten) + '"></div>' +
         '<button class="map-close" type="button" hidden>Đóng bản đồ lớn ✕</button></div>' +
         '<p class="leg-note warn" id="pinwarn-' + esc(l.id) + '" hidden></p>' +
@@ -186,20 +201,20 @@
         '<p class="gps-msg" id="gps-' + esc(l.id) + '" role="status" aria-live="polite"></p>' +
         '<p class="gps-elev" id="elev-' + esc(l.id) + '" hidden>GPS có thể hiển thị gần tuyến dù xe đang ở đường dưới. Người ngồi cạnh kiểm tra biển chỉ dẫn và lối ra.</p>';
       // Điểm đi – qua – đến
-      html += '<ol class="stops">';
+      html += '<h4 class="steps-h">Các điểm đi qua</h4><ol class="stops">';
       html += '<li><span class="lbl">Đi từ</span>' + esc(str(from.ten) + (str(from.diaChi) ? ' — ' + str(from.diaChi) : '')) +
         (str(from.ghiChuGhim) ? '<span class="pin-note">' + esc(from.ghiChuGhim) + '</span>' : '') + '</li>';
       (l.quaDiem || []).forEach(function (v) { if (str(v && v.ten)) html += '<li class="via"><span class="lbl">Qua</span>' + esc(v.ten) + '</li>'; });
       html += '<li class="end"><span class="lbl">Đến</span>' + esc(str(to.ten) + (str(to.diaChi) ? ' — ' + str(to.diaChi) : '')) +
         (str(to.ghiChuGhim) ? '<span class="pin-note">' + esc(to.ghiChuGhim) + '</span>' : '') + '</li></ol>';
-      // Các nút giao quan trọng (bằng chữ)
+      // Chỉ đường từng bước
       var steps = (l.cacBuoc || []).map(str).filter(Boolean);
-      if (steps.length) html += '<h4 class="steps-h">Các chỗ rẽ quan trọng</h4><ol class="steps">' + steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
-      // GPX thu gọn
-      html += '<details class="gpx"><summary>Dành cho xe dẫn đoàn</summary><div class="gpx-body">' +
+      if (steps.length) html += '<h4 class="steps-h">Chỉ đường từng bước</h4><ol class="steps">' + steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
+      // GPX
+      html += '<h4 class="steps-h">Dành cho xe dẫn đoàn</h4><div class="gpx-body">' +
         '<p><a class="btn ghost small" href="' + esc(l.id) + '.gpx" download>Tải file GPX ' + esc(/ve$/.test(l.id) ? 'lượt về' : 'lượt đi') + '</a></p>' +
-        '<p class="leg-note">Đường vẽ cố định của lượt này, dùng cho ứng dụng dẫn đường theo file như OsmAnd (chọn “Theo dõi tuyến”, bật “Gắn vào đường”). Không đổi khi tắc đường.</p></div></details>';
-      html += '</article>';
+        '<p class="leg-note">Đường vẽ cố định của lượt này, dùng cho ứng dụng dẫn đường theo file như OsmAnd (chọn “Theo dõi tuyến”, bật “Gắn vào đường”).</p></div>';
+      html += '</div></details>';
     });
 
     // Liên hệ đoàn xe: trường nào trống thì ẩn
@@ -236,18 +251,44 @@
     js.onerror = function () { document.querySelectorAll('.map').forEach(function (m) { m.innerHTML = '<p class="map-err">Chưa tải được bản đồ (mạng yếu?). Vẫn đi theo các bước bên dưới.</p>'; }); };
     document.head.appendChild(js);
   }
+  function loadGeo() {
+    if (geo) return Promise.resolve(geo);
+    return fetch(GEO_URL + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (g) { geo = g; return g; });
+  }
+  // Sau khi vẽ trang: chỉ tải đường vẽ để kiểm tra ghim; bản đồ vẽ khi người xem mở từng lượt
   function setupMaps() {
-    var wraps = document.querySelectorAll('.map-wrap');
-    if (!wraps.length) return;
-    loadLeaflet(function () {
-      var got = geo ? Promise.resolve(geo) : fetch(GEO_URL + '?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.json(); });
-      got.then(function (g) {
-        geo = g;
-        wraps.forEach(function (w) { drawMap(w.getAttribute('data-luot')); });
-      }).catch(function () {
-        wraps.forEach(function (w) { w.querySelector('.map').innerHTML = '<p class="map-err">Chưa tải được đường kẻ lộ trình. Vẫn đi theo các bước bên dưới.</p>'; });
+    if (!document.querySelector('.map-wrap')) return;
+    loadGeo().then(function () {
+      LEGS.forEach(function (l) {
+        var line = lineOf(l.id);
+        if (line) pinCheck(l.id, line);
+      });
+    }).catch(function () { /* mở mục lượt sẽ báo lỗi */ });
+  }
+  function lineOf(id) {
+    var f = (geo && geo.features || []).filter(function (x) { return x.properties.luot === id && x.geometry.type === 'LineString' && x.properties.loai !== 'tren-cao'; })[0];
+    return f ? f.geometry.coordinates.map(function (c) { return [c[1], c[0]]; }) : null;
+  }
+  var mapWaits = {};
+  function ensureMap(id) {
+    if (maps[id]) {
+      // Đã vẽ: đo lại kích thước (mục vừa mở) rồi khung lại trọn tuyến
+      return new Promise(function (ok) {
+        requestAnimationFrame(function () { maps[id].map.invalidateSize(); if (!maps[id].follow) maps[id].map.fitBounds(maps[id].bounds, { padding: [16, 16] }); ok(maps[id]); });
+      });
+    }
+    if (mapWaits[id]) return mapWaits[id];
+    mapWaits[id] = new Promise(function (ok, fail) {
+      loadLeaflet(function () {
+        loadGeo().then(function () {
+          requestAnimationFrame(function () { drawMap(id); delete mapWaits[id]; maps[id] ? ok(maps[id]) : fail(); });
+        }).catch(function () {
+          var el = $('map-' + id); if (el) el.innerHTML = '<p class="map-err">Chưa tải được đường kẻ lộ trình. Vẫn đi theo các bước bên dưới.</p>';
+          delete mapWaits[id]; fail();
+        });
       });
     });
+    return mapWaits[id];
   }
   function drawMap(id) {
     var el = $('map-' + id);
@@ -262,7 +303,7 @@
     });
     if (!line) return;
     var latlngs = line.geometry.coordinates.map(function (c) { return [c[1], c[0]]; });
-    var map = L.map(el, { dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, tap: false, zoomControl: false, attributionControl: true });
+    var map = L.map(el, { zoomSnap: 0.25, zoomDelta: 0.5, dragging: false, touchZoom: false, scrollWheelZoom: false, doubleClickZoom: false, boxZoom: false, keyboard: false, tap: false, zoomControl: false, attributionControl: true });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map);
     L.polyline(latlngs, { color: '#FFFFFF', weight: 9, opacity: .9 }).addTo(map);
     L.polyline(latlngs, { color: '#203E4B', weight: 5, opacity: 1 }).addTo(map);
@@ -275,7 +316,8 @@
     var bounds = L.latLngBounds(latlngs);
     map.fitBounds(bounds, { padding: [16, 16] });
     maps[id] = { map: map, line: latlngs, elev: elev, bounds: bounds, me: null, acc: null };
-    pinCheck(id, latlngs);
+    // Kiểm tra lại sau khi khung đã ổn định (phông chữ, thanh cuộn): vẫn thấy trọn tuyến
+    setTimeout(function () { map.invalidateSize(); map.fitBounds(bounds, { padding: [16, 16] }); }, 250);
     // chú thích điểm mốc ngay dưới bản đồ (đọc được không cần chạm)
     var legend = document.createElement('ol'); legend.className = 'marks';
     legend.innerHTML = pts.map(function (f) { return '<li><b>' + f.properties.stt + '</b> ' + esc(f.properties.ten) + '</li>'; }).join('');
@@ -302,7 +344,8 @@
     }
   }
   function setFull(id, on) {
-    var m = maps[id]; if (!m) return;
+    var m = maps[id];
+    if (!m) { if (on) ensureMap(id).then(function () { setFull(id, true); }, function () {}); return; }
     var wrap = $('map-' + id).parentNode;
     wrap.classList.toggle('full', on);
     document.body.classList.toggle('map-open', on);
@@ -325,8 +368,9 @@
     return { m: best * R, at: at };
   }
   function startGps(id) {
+    if (!maps[id]) { ensureMap(id).then(function () { startGps(id); }, function () {}); return; }
     var m = maps[id], msg = $('gps-' + id);
-    if (!m) return;
+    m.follow = true;
     if (!navigator.geolocation) { msg.textContent = 'Điện thoại không cho lấy vị trí.'; return; }
     msg.className = 'gps-msg'; msg.textContent = 'Đang tìm vị trí… (cho phép trình duyệt dùng vị trí nếu được hỏi)';
     if (watchId !== null) navigator.geolocation.clearWatch(watchId);
@@ -373,35 +417,42 @@
     $('dayNote').hidden = !str(data.ghiChuNgay);
 
     var html = note ? '<p class="alert">' + esc(note) + '</p>' : '';
+    html += '<section class="sched" aria-labelledby="sched-h"><h2 id="sched-h">Lịch cả buổi sáng</h2>' +
+      '<p class="sched-hint">Chạm vào từng dòng để xem địa điểm, người tham gia và việc cần chuẩn bị.</p><ol class="rows">';
     (data.chang || []).forEach(function (st, i) {
-      html += '<section class="stage" aria-labelledby="st-' + i + '"><h2 id="st-' + i + '"><span class="k">Chặng ' + (i + 1) + '</span>' + esc(st.ten) + '</h2><ol class="tl">';
-      (st.suKien || []).forEach(function (ev) {
-        html += renderEvent(ev);
-      });
-      html += '</ol></section>';
+      html += '<li class="stage-lbl"><span>Chặng ' + (i + 1) + '</span> ' + esc(st.ten) + '</li>';
+      (st.suKien || []).forEach(function (ev) { html += renderEvent(ev); });
     });
+    html += '</ol></section>';
     html += renderRoute(data.loTrinh);
     $('main').innerHTML = html;
     maps = {};
     setupMaps();
     $('routeLink').hidden = !(data.loTrinh && (data.loTrinh.luot || []).length);
-    // Đầu trang: hai nút Google Maps chính (giờ xuất phát nằm trong nhãn nút)
-    var top = LEGS.map(function (l) { return mainButton(l, ' top-btn'); }).join('');
-    $('quick').innerHTML = top ? top + zaloHelp(LEGS.filter(function (l) { return LEG_URLS[l.id]; }), 'top') : '';
+    // Đầu trang: hai ô đi / về, mỗi ô một nút Google Maps
+    var top = tripCards(LEGS);
+    $('quick').innerHTML = top ? top +
+      '<p class="gm-remind">Google Maps có thể tự đổi đường khi tắc. Đối chiếu với bản đồ tuyến của đoàn ở mục từng lượt bên dưới và đi theo xe dẫn đoàn.</p>' +
+      zaloHelp(LEGS.filter(function (l) { return LEG_URLS[l.id]; }), 'top') : '';
     $('quick').hidden = !top;
     document.title = (str(data.tieuDe) || 'Lịch trình ngày đón dâu') + ' · ' + (str(data.doiTen) || '');
 
-    // Mở thẳng tới một mốc khi link có #ev-…
-    if (location.hash) { var el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }
+    // Mở thẳng tới một mốc / một lượt khi link có #ev-… hoặc #lo-trinh-…
+    if (location.hash) { var el = document.getElementById(location.hash.slice(1)); if (el) { openTarget(el); el.scrollIntoView(); } }
   }
 
-  /* Chạm ô nhắc giờ: cuộn tới mốc và nháy viền */
+  /* Mở mục (mốc lịch / lượt xe) nếu đang đóng */
+  function openTarget(el) {
+    if (el && el.tagName === 'DETAILS' && !el.open) el.open = true;
+  }
+  /* Chạm nút "Lộ trình xe" trong lịch: mở lượt tương ứng và cuộn tới */
   function jump(e) {
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     var el = $(a.getAttribute('data-target'));
     if (!el) return;
     e.preventDefault();
+    openTarget(el);
     el.scrollIntoView({ block: 'start' });
     el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
     if (history.replaceState) history.replaceState(null, '', '#' + el.id);
@@ -415,6 +466,11 @@
     var box = b.closest('.zh-body'), msg = box && box.querySelector('.share-msg');
     if (url && msg) copy(url, msg, 'Đã sao chép link Google Maps. Dán vào Ghi chú hoặc tin nhắn rồi chạm vào link.');
   }
+  // Mở một lượt: vẽ bản đồ lúc này (khung đã hiện) để thấy trọn tuyến
+  $('main').addEventListener('toggle', function (e) {
+    var d = e.target;
+    if (d.classList && d.classList.contains('leg') && d.open) ensureMap(d.getAttribute('data-luot')).catch(function () {});
+  }, true);
   $('main').addEventListener('click', function (e) {
     jump(e);
     copyClick(e);

@@ -157,7 +157,9 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 
 **Lộ trình xe cho lái xe** — cung đường cố định, hai lượt cùng một hành lang: Phố Văn → Quốc lộ 5 (Mỹ Hào, Như Quỳnh, Gia Lâm) → cầu Thanh Trì → Vành đai 3 trên cao → lối Nguyễn Trãi/Nguyễn Xiển → Nguyễn Trãi – Trần Phú → Quang Trung → Chu Văn An – Vạn Phúc → Đại Mỗ → Ngọc Trục. Tránh CT04, Tố Hữu, không xuống Vành đai 3 sớm. Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
 
-- **Hai nút Google Maps** ở đầu trang và trong từng lượt: “05:00 · Đi nhà gái – Mở Google Maps”, “08:30–08:45 · Về nhà trai – Mở Google Maps”. Mỗi nút: điểm đi/đến cố định, `travelmode=driving`, `dir_action=navigate`, 6 điểm khoá đúng thứ tự. Android mở thẳng ứng dụng Google Maps (dự phòng: đúng link HTTPS); iPhone dùng link HTTPS. Dưới nút có “Bản đồ vẫn mở trong Zalo?” với hướng dẫn và nút sao chép link.
+- **Đầu trang: hai ô xếp dọc** “05:00 · Nhà trai → Nhà gái” (nút *Mở Google Maps đi nhà gái*) và “08:30–08:45 · Nhà gái → Nhà trai” (nút *Mở Google Maps về nhà trai*, kèm ghi chú ghim Phố Văn). Mỗi nút: điểm đi/đến cố định, `travelmode=driving`, `dir_action=navigate`, 6 điểm khoá đúng thứ tự. Android mở thẳng ứng dụng Google Maps (dự phòng: đúng link HTTPS); iPhone dùng link HTTPS. Mục gập “Nếu bản đồ mở trong Zalo” có hướng dẫn và nút sao chép link. Chữ trên ô và nút: `loTrinh.luot[].oTieuDe`, `nutGoogle`.
+- **Lịch cả buổi sáng**: mỗi mốc một dòng (giờ + `tomTat`), chạm mới mở địa điểm, người tham gia, việc cần chuẩn bị. Mốc chưa có giờ hiện chữ `gioNgan` (“Sau đó”).
+- **Từng lượt** là một mục gập riêng: bản đồ cố định, các điểm đi qua, chỉ đường từng bước, GPX. Bản đồ chỉ vẽ khi mở mục (đúng kích thước, thấy trọn tuyến).
 - **Bản đồ cố định + GPX** (`lo-trinh-co-dinh.geojson`, `lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) vẽ sẵn, không tính lại khi khách mở trang. Nút *Vị trí của tôi* báo “Vị trí đang gần tuyến của đoàn” hoặc “Cách tuyến vẽ khoảng X m”; gần Vành đai 3 có nhắc GPS dễ lẫn đường trên cao/dưới thấp.
 
 | Muốn sửa | Ở đâu (tệp `lich-trinh/lich-trinh.json`) |

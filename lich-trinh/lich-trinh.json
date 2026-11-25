@@ -6,7 +6,8 @@
     "nhanGio: chữ hiện thay cho giờ; để trống \"\" thì tự hiện theo batDau–ketThuc. Chưa có giờ thì ghi khiNao (ví dụ \"Sau khi đoàn về\").",
     "diaDiem.daXacNhan: đổi thành true khi địa chỉ và link bản đồ đã chắc chắn đúng — lúc đó mới hiện nút Chỉ đường.",
     "dauMoi.soDienThoai: điền số đầy đủ (ví dụ \"0912 345 678\") thì hiện nút Gọi đầu mối.",
-    "Thứ tự các mốc trên trang là thứ tự trong tệp này. Ngày “Cập nhật lần cuối” tự lấy từ lần sửa tệp gần nhất."
+    "Thứ tự các mốc trên trang là thứ tự trong tệp này. Ngày “Cập nhật lần cuối” tự lấy từ lần sửa tệp gần nhất.",
+    "tomTat: dòng ngắn hiện trên lịch (giờ + việc chính); chạm vào dòng mới mở địa điểm, người tham gia, việc cần chuẩn bị. gioNgan: chữ ở cột giờ khi chưa có giờ cụ thể (ví dụ \"Sau đó\")."
   ],
   "tieuDe": "Lịch trình ngày đón dâu",
   "doiTen": "Văn Hùng & Tuyết Anh",
@@ -28,7 +29,7 @@
       "ten": "Nhà trai, Hải Phòng",
       "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
       "toaDo": "20.9577131,106.2765173",
-      "ghiChuGhim": "Ghim khu Phố Văn. Gia đình sẽ cập nhật điểm lên xe chính xác.",
+      "ghiChuGhim": "Ghim khu Phố Văn, chưa phải cổng nhà. Gia đình sẽ cập nhật điểm lên xe chính xác.",
       "daXacNhan": true
     },
     "nhaGai": {
@@ -69,7 +70,8 @@
         "gio": "Xe chạy 05:00",
         "tu": "nhaTrai",
         "den": "nhaGai",
-        "nutGoogle": "05:00 · Đi nhà gái – Mở Google Maps",
+        "oTieuDe": "05:00 · Nhà trai → Nhà gái",
+        "nutGoogle": "Mở Google Maps đi nhà gái",
         "quaDiem": [
           {
             "ten": "Quốc lộ 5, đoạn Mỹ Hào",
@@ -104,7 +106,8 @@
           "Đi Vành đai 3 trên cao khoảng 10,5 km (Pháp Vân – Linh Đàm – Nguyễn Xiển), xuống ở lối xuống Nguyễn Trãi.",
           "Đi Nguyễn Xiển khoảng 300 m, rẽ trái vào Nguyễn Trãi, đi thẳng sang Trần Phú (khoảng 2,5 km, không rẽ vào Tố Hữu).",
           "Hết Trần Phú sang Quang Trung một đoạn ngắn, rẽ phải vào Chu Văn An, đi thẳng Vạn Phúc – Đại Mỗ (qua ngã tư Tố Hữu), rẽ phải vào Phố Ngọc Trục, tới STEN."
-        ]
+        ],
+        "tomTatMoRong": "Bản đồ, điểm đi qua, chỉ đường từng bước, GPX"
       },
       {
         "id": "lo-trinh-ve",
@@ -112,7 +115,8 @@
         "gio": "Xe chạy 08:30–08:45",
         "tu": "nhaGai",
         "den": "nhaTrai",
-        "nutGoogle": "08:30–08:45 · Về nhà trai – Mở Google Maps",
+        "oTieuDe": "08:30–08:45 · Nhà gái → Nhà trai",
+        "nutGoogle": "Mở Google Maps về nhà trai",
         "quaDiem": [
           {
             "ten": "Trần Phú, đoạn Mộ Lao",
@@ -145,7 +149,8 @@
           "Tới ngã tư Nguyễn Trãi – Khuất Duy Tiến, rẽ phải vào Nguyễn Xiển rồi theo lối lên Vành đai 3 trên cao, hướng Pháp Vân – cầu Thanh Trì.",
           "Đi Vành đai 3 trên cao khoảng 10,5 km, qua cầu Thanh Trì, đi tiếp khoảng 5,6 km tới nút giao Quốc lộ 5, vào QL5 hướng Hải Phòng.",
           "Đi thẳng Quốc lộ 5 khoảng 35 km qua Như Quỳnh, Mỹ Hào, Lai Cách; rẽ trái rời QL5 về Phố Văn (khoảng 3 km)."
-        ]
+        ],
+        "tomTatMoRong": "Bản đồ, điểm đi qua, chỉ đường từng bước, GPX"
       }
     ]
   },
@@ -160,6 +165,7 @@
           "nhanGio": "",
           "khiNao": "",
           "viec": "Bắt đầu trang điểm",
+          "tomTat": "Cô dâu bắt đầu trang điểm",
           "xeChay": false,
           "diaDiem": {
             "ref": "nhaTrai"
@@ -184,6 +190,7 @@
           "nhanGio": "",
           "khiNao": "",
           "viec": "Đoàn nhà trai xuất phát đi đón dâu",
+          "tomTat": "Xe rời nhà trai đi đón dâu",
           "nhacNhanh": "Rời nhà trai",
           "loTrinh": "lo-trinh-di",
           "xeChay": true,
@@ -218,6 +225,7 @@
           "nhanGio": "",
           "khiNao": "",
           "viec": "Đoàn đến nhà gái",
+          "tomTat": "Dự kiến tới nhà gái",
           "xeChay": false,
           "diaDiem": {
             "ref": "nhaGai"
@@ -243,6 +251,7 @@
           "nhanGio": "",
           "khiNao": "",
           "viec": "Đoàn rời nhà gái, đưa dâu về Hải Phòng",
+          "tomTat": "Rời nhà gái, đưa dâu về Hải Phòng",
           "nhacNhanh": "Rời nhà gái",
           "loTrinh": "lo-trinh-ve",
           "xeChay": true,
@@ -276,6 +285,7 @@
           "nhanGio": "",
           "khiNao": "",
           "viec": "Đoàn về đến nhà trai",
+          "tomTat": "Dự kiến về đến nhà trai",
           "xeChay": false,
           "diaDiem": {
             "ref": "nhaTrai"
@@ -301,6 +311,8 @@
           "nhanGio": "",
           "khiNao": "Sau khi đoàn về",
           "viec": "Tiến hành nghi lễ tại nhà trai",
+          "tomTat": "Nghi lễ tại nhà trai",
+          "gioNgan": "Sau đó",
           "xeChay": false,
           "diaDiem": {
             "ref": "nhaTrai"
@@ -322,6 +334,8 @@
           "nhanGio": "",
           "khiNao": "Sau nghi lễ",
           "viec": "Khai tiệc",
+          "tomTat": "Khai tiệc",
+          "gioNgan": "Sau đó",
           "xeChay": false,
           "diaDiem": {
             "ten": "",

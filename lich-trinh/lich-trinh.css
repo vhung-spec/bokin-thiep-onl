@@ -41,25 +41,32 @@ main { max-width: 560px; margin: 0 auto; background: var(--flat); border-top: 1.
 .loading { padding: 28px 4px; text-align: center; color: var(--ink-2); }
 .alert { margin: 12px 0 4px; padding: 10px 12px; border-radius: 12px; background: #FBF1DF; color: var(--warn); font-size: 15.5px; border: 1px solid #E8D2A8; }
 
-.stage { padding-top: 14px; }
-.stage + .stage { border-top: 1px dashed var(--mist); margin-top: 6px; }
-.stage h2 { display: flex; align-items: baseline; gap: 8px; font: 600 20px/1.3 var(--serif); margin: 0 0 8px; }
-.stage h2 .k { font: 600 13px/1 var(--ui); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
-
-/* Dòng thời gian: đường kẻ dọc xanh sương + chấm tròn */
-.tl { position: relative; padding-left: 26px; }
-.tl::before { content: ''; position: absolute; left: 7px; top: 14px; bottom: 14px; width: 2px; background: var(--mist); border-radius: 2px; }
-.ev { position: relative; padding: 10px 0 16px; scroll-margin-top: 12px; }
-.ev + .ev { border-top: 1px solid rgba(169, 190, 199, .45); }
-.ev::before {
-  content: ''; position: absolute; left: -24px; top: 21px; width: 12px; height: 12px; border-radius: 50%;
-  background: var(--flat); border: 2.5px solid var(--mist);
+/* ---------- Lịch cả buổi sáng: mỗi mốc một dòng, chạm mới mở chi tiết ---------- */
+.sched { padding-top: 12px; }
+.sched h2 { font: 600 22px/1.3 var(--serif); }
+.sched-hint { margin-top: 2px; font-size: 15px; color: var(--ink-2); }
+.rows { margin-top: 8px; }
+.stage-lbl { margin: 12px 0 4px; font: 600 14px/1.35 var(--ui); color: var(--ink-2); }
+.stage-lbl span { text-transform: uppercase; letter-spacing: .06em; font-size: 12.5px; margin-right: 4px; }
+.row + .row { border-top: 1px solid rgba(169, 190, 199, .55); }
+.row.xe { background: var(--mist-l); border-radius: 12px; border-top: 0; }
+.row.xe + .row { border-top: 0; }
+.ev { scroll-margin-top: 12px; }
+.ev > summary {
+  display: grid; grid-template-columns: auto 1fr 22px; align-items: center; gap: 4px 12px;
+  min-height: 56px; padding: 10px 8px; cursor: pointer; list-style: none;
 }
-.ev.xe::before { background: var(--ink); border-color: var(--ink); }
-.ev.xe { background: var(--mist-l); border-radius: 14px; padding: 10px 12px 14px; margin: 4px 0 6px -6px; border-top: 0; }
-.ev.xe::before { left: -18px; }
-.ev.xe + .ev { border-top: 0; }
-.ev:target, .ev.flash { animation: flash 1.6s ease-out; }
+.ev > summary::-webkit-details-marker { display: none; }
+.r-time { font: 700 21px/1.2 var(--ui); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.01em; min-width: 4.1em; }
+.r-time.rel { font-size: 17px; font-weight: 700; color: var(--ink-2); }
+.r-what { font: 600 18px/1.35 var(--ui); text-wrap: pretty; }
+.r-what .tag { display: table; margin-top: 4px; }
+.chev { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; }
+.chev::before { content: ''; width: 8px; height: 8px; border-right: 2.5px solid var(--ink); border-bottom: 2.5px solid var(--ink); transform: rotate(45deg) translate(-2px, -2px); transition: transform .2s; }
+details[open] > summary .chev::before { transform: rotate(-135deg) translate(-2px, -2px); }
+.r-body { padding: 0 8px 14px; }
+.row.xe .r-body .prep { background: rgba(255, 255, 255, .6); border-left-color: var(--ink); }
+.ev.flash { animation: flash 1.6s ease-out; }
 @keyframes flash { 0% { box-shadow: 0 0 0 4px rgba(32, 62, 75, .35); } 100% { box-shadow: 0 0 0 4px rgba(32, 62, 75, 0); } }
 
 .time-row { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; }
@@ -68,7 +75,7 @@ main { max-width: 560px; margin: 0 auto; background: var(--flat); border-top: 1.
 .tag { display: inline-block; padding: 3px 9px; border-radius: 999px; font: 700 13px/1.3 var(--ui); letter-spacing: .02em; white-space: nowrap; }
 .tag.car { background: var(--ink); color: #fff; }
 .tag.wait { background: #F3EBDA; color: var(--warn); }
-.ev h3 { font: 600 21px/1.3 var(--ui); margin-top: 3px; text-wrap: pretty; }
+.ev h3 { font: 600 19px/1.35 var(--ui); margin-top: 0; text-wrap: pretty; }
 .time-note { margin-top: 4px; font-weight: 600; font-size: 16.5px; line-height: 1.45; }
 
 .meta { margin-top: 8px; display: grid; gap: 6px; }
@@ -201,3 +208,27 @@ details.gpx summary::after { content: ' ▾'; font-size: 13px; }
 .small-t { font-size: 14.5px; }
 
 .quick .zalo-help { text-align: center; }
+
+/* ---------- Hai ô đi / về ở đầu trang ---------- */
+.trip { padding: 12px 12px 12px; border: 1.5px solid var(--mist); border-radius: 16px; background: var(--flat); text-align: left; }
+.trip-t { font: 600 18.5px/1.35 var(--ui); margin-bottom: 8px; }
+.trip-t .tt { font-weight: 700; font-size: 22px; font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.01em; }
+.trip-t .tdir { white-space: nowrap; }
+.trip .pin-note { margin-top: 8px; padding-left: 0; }
+.gm-remind { margin-top: 2px; font-size: 14.5px; line-height: 1.45; color: var(--ink-2); text-align: center; text-wrap: balance; }
+
+/* ---------- Mỗi lượt xe: mục mở rộng riêng ---------- */
+details.leg { margin-top: 12px; padding: 0; border: 1.5px solid var(--mist); border-radius: 14px; scroll-margin-top: 10px; background: var(--flat); }
+details.leg > summary { display: grid; grid-template-columns: 1fr 22px; align-items: center; gap: 2px 10px; padding: 12px; min-height: 60px; cursor: pointer; list-style: none; }
+details.leg > summary::-webkit-details-marker { display: none; }
+.leg-s1 { font: 600 18.5px/1.35 var(--ui); grid-column: 1; }
+.leg-s1 .tt { font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.leg-s1 .tdir { white-space: nowrap; }
+.leg-s2 { grid-column: 1; font-size: 15px; color: var(--ink-2); }
+details.leg > summary .chev { grid-column: 2; grid-row: 1 / span 2; }
+.leg-body { padding: 0 12px 14px; }
+.leg-body .map-wrap { margin-top: 0; }
+
+.thead { white-space: nowrap; }
+.trip .btn.gm-main { font-size: 16.5px; padding: 10px 12px; gap: 8px; }
+.leg-body .map { height: 300px; }
