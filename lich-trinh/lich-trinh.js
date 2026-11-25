@@ -219,7 +219,7 @@
 
     // Liên hệ đoàn xe: trường nào trống thì ẩn
     var c = r.lienHeDoanXe || {}, box = '', acts = '';
-    if (str(c.nguoiPhuTrach)) box += '<p><b>Người phụ trách điện thoại:</b> ' + esc(c.nguoiPhuTrach) + (str(c.vaiTro) ? ' <span class="muted">(' + esc(c.vaiTro) + ')</span>' : '') + '</p>';
+    if (str(c.nguoiPhuTrach) && !telHref(c.soDienThoai)) box += '<p><b>Người phụ trách điện thoại:</b> ' + esc(c.nguoiPhuTrach) + (str(c.vaiTro) ? ' <span class="muted">(' + esc(c.vaiTro) + ')</span>' : '') + '</p>';
     if (str(c.bienSoXeDanDoan)) box += '<p><b>Biển số xe dẫn đoàn:</b> <span class="num">' + esc(c.bienSoXeDanDoan) + '</span></p>';
     if (str(c.diemHenKhiTachDoan)) box += '<p><b>Điểm hẹn khi tách đoàn:</b> ' + esc(c.diemHenKhiTachDoan) + '</p>';
     var tel = telHref(c.soDienThoai);
@@ -227,8 +227,7 @@
     if (/^https:\/\/zalo\.me\//i.test(str(c.nhomZalo))) acts += '<a class="btn ghost" href="' + esc(c.nhomZalo) + '" target="_blank" rel="noopener">' + ICON.zalo + 'Vào nhóm Zalo đoàn xe</a>';
     if (acts) box += '<div class="acts">' + acts + '</div>';
     if (!box) box = '<p class="muted">Gia đình đang cập nhật.</p>';
-    html += '<div class="convoy" id="lien-he"><h3>Liên hệ đoàn xe</h3>' + box +
-      '<p class="muted small-t">Ưu tiên gọi người ngồi cạnh tài xế.</p></div>';
+    html += '<div class="convoy" id="lien-he"><h3>Liên hệ đoàn xe</h3>' + box + '</div>';
 
     var rules = (r.quyTac || []).map(str).filter(Boolean);
     if (rules.length) html += '<div class="convoy"><h3>Đi theo đoàn</h3><ul class="rules">' + rules.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
