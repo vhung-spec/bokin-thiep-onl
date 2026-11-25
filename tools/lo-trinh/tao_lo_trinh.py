@@ -9,7 +9,7 @@ Ghi ra:
 
 Tuyến tính bằng OSRM (dữ liệu OpenStreetMap) với các điểm bắt buộc đi qua và hướng đi
 tại mỗi điểm (để không bị bắt sang làn ngược chiều, gây quay đầu). Sau khi chạy, script
-in ra tên các đoạn đường để kiểm tra: phải là Quốc lộ 5 → cầu Thanh Trì → Vành đai 3 trên cao.
+in ra tên các đoạn đường để kiểm tra: phải là Quốc lộ 5 → cầu Thanh Trì → Vành đai 3 trên cao → Nguyễn Trãi – Trần Phú – Vạn Phúc (không đi Tố Hữu).
 """
 import json, os, sys, urllib.request
 from datetime import datetime, timezone
@@ -26,9 +26,15 @@ LUOT = {
     'lo-trinh-di': [NHA_TRAI,
                     (20.9323078, 106.0617733, 280, 60),  # QL5 đoạn Mỹ Hào (Nguyễn Văn Linh), hướng Hà Nội
                     (20.9860400, 105.9786744, 315, 60),  # QL5 qua Như Quỳnh
+                    (20.98327, 105.79151, 235, 50),      # Trần Phú (đầu Nguyễn Trãi), hướng Hà Đông
+                    (20.97809, 105.78498, 235, 50),      # Trần Phú đoạn Mộ Lao
+                    (20.97886, 105.77322, 340, 60),      # Vạn Phúc, đi thẳng về Đại Mỗ (không đi Tố Hữu)
                     NHA_GAI],
     'lo-trinh-ve': [NHA_GAI,
-                    (20.9920240, 105.7852400, 55, 45),   # Tố Hữu, hướng Khuất Duy Tiến (đi ngược lượt đi)
+                    (20.97886, 105.77322, 180, 60),      # Vạn Phúc, đi thẳng qua ngã tư Tố Hữu ra Trần Phú
+                    (20.97809, 105.78498, 55, 50),       # Trần Phú đoạn Mộ Lao
+                    (20.98327, 105.79151, 55, 50),       # Trần Phú → Nguyễn Trãi
+                    (20.97157, 105.82196, 120, 60),      # Vành đai 3 trên cao đoạn Linh Đàm
                     (20.9860400, 105.9786744, 135, 60),  # QL5 qua Như Quỳnh, hướng Hải Phòng
                     (20.9323078, 106.0617733, 100, 60),  # QL5 đoạn Mỹ Hào
                     NHA_TRAI],
@@ -41,14 +47,14 @@ MOC = {
         ('road:Quốc lộ 5', 'Vào Quốc lộ 5', 'Rẽ phải vào QL5, đi hướng Hà Nội'),
         ('road:Cầu vượt Quốc lộ 5', 'Lên cầu vượt QL5', 'Đi làn phải, lên cầu vượt hướng cầu Thanh Trì'),
         ('point:20.99456,105.90257', 'Cầu Thanh Trì', 'Qua cầu, đi thẳng lên Vành đai 3 trên cao'),
-        ('road:Lối xuống Nguyễn Trãi', 'Lối xuống Nguyễn Trãi', 'Xuống đường trên cao, đi thẳng Khuất Duy Tiến'),
-        ('road:Phố Tố Hữu', 'Rẽ trái vào Tố Hữu', 'Đi Tố Hữu khoảng 3,4 km'),
+        ('road:Lối xuống Nguyễn Trãi', 'Lối xuống Nguyễn Trãi', 'Xuống đường trên cao, rẽ trái vào Nguyễn Trãi, đi thẳng Trần Phú'),
+        ('road:Phố Chu Văn An', 'Rẽ phải vào Chu Văn An', 'Đi thẳng Vạn Phúc – Đại Mỗ (qua ngã tư Tố Hữu)'),
         ('end', 'Nhà gái — STEN', 'Đến nơi'),
     ],
     'lo-trinh-ve': [
         ('start', 'Nhà gái — STEN', 'Xuất phát'),
-        ('road:Phố Tố Hữu', 'Rẽ trái vào Tố Hữu', 'Đi Tố Hữu về Khuất Duy Tiến'),
-        ('onramp', 'Lên Vành đai 3 trên cao', 'Theo lối lên CT.37, hướng Pháp Vân – cầu Thanh Trì'),
+        ('road:Đường Trần Phú', 'Vào Trần Phú', 'Đi thẳng Vạn Phúc qua ngã tư Tố Hữu, ra Trần Phú – Nguyễn Trãi'),
+        ('onramp', 'Lên Vành đai 3 trên cao', 'Ở ngã tư Nguyễn Trãi – Khuất Duy Tiến, theo lối lên CT.37'),
         ('point:20.99456,105.90257', 'Cầu Thanh Trì', 'Qua cầu, đi tiếp tới nút giao QL5'),
         ('road:Đường Nguyễn Đức Thuận', 'Vào Quốc lộ 5', 'Đi QL5 hướng Hải Phòng'),
         ('road_last:Quốc lộ 5', 'Rời Quốc lộ 5', 'Rẽ trái vào đường về Phố Văn'),
