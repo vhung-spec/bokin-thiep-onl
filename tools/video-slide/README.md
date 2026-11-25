@@ -38,6 +38,15 @@ Thêm `--anh <thư mục>`, `--ra <file.mp4>` hoặc `--cau-hinh <file.mjs>` đ�
 
 Mỗi phút video mất khoảng **2–3 phút** để dựng. Thư mục `ra/` không đưa lên GitHub vì file video nặng.
 
+## Hai bản video đã chốt của Văn Hùng & Tuyết Anh
+
+Ảnh cưới không có trong repo. Chép ảnh vào `tools/video-slide/anh/` (hoặc dùng `--anh <thư mục>`), rồi chạy lệnh tương ứng để dựng lại đúng bản đó:
+
+| Bản | Kiểu | Lệnh dựng lại | File ra |
+|---|---|---|---|
+| **Bản đầu tiên** | 56 ảnh in viền giấy trên nền giấy xô thơm, ghép đôi theo bối cảnh, chữ viết tay | `node tools/video-slide/lam-video.mjs --cau-hinh tools/video-slide/cau-hinh-ban-dau-tien.mjs` | `ra/Van_Hung_Tuyet_Anh_Ban_Dau_Tien_16x9.mp4` |
+| **Qua những ô cửa** | 34 ảnh, dải ảnh, lia và zoom, chuyển cảnh ô cửa vòm, vệt sáng, cắt theo phách nhạc | `node tools/video-slide/dung-kich-ban.mjs` | `ra/Van_Hung_Tuyet_Anh_Le_Cuoi_16x9.mp4` |
+
 ## Dựng theo kịch bản (video "Qua những ô cửa")
 
 Ngoài kiểu tự chia cảnh ở trên, có thể viết hẳn **kịch bản từng cảnh** trong `kich-ban/*.mjs`: giờ cắt theo phách nhạc, ảnh nào, khung, điểm căn, chuyển động, chữ. Bản hiện có là `kich-ban/qua-nhung-o-cua.mjs`, video chiếu tiệc 16:9:
