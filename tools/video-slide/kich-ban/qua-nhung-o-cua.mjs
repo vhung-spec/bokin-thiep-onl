@@ -20,7 +20,7 @@ const WARM_DARK = '#1A1611';
 const SET = (f) =>
   /^(IMG_200[678]|L1007339)/.test(f) ? 'A' : /^NAM0(7|8[0-3])/.test(f) ? 'B' : /^NAM/.test(f) ? 'C' : 'D';
 const P = (img, o = {}) => ({ img: `${img}.jpg`, set: SET(img), ...o });
-const PUSH = [1, 1.035];
+const PUSH = [1, 1.07]; // tiến gần ~7% suốt cảnh
 const tr = (type, d, at) => ({ type, d, ...(at ? { at } : {}) });
 
 // Dải nhiều ảnh dọc lấp kín khung, khe 10 px; từng ảnh vào lần lượt theo phách
@@ -28,7 +28,7 @@ const GUT = 10 / 1920;
 function strip(items, times, from = 'up') {
   const n = items.length;
   const w = (1 - GUT * (n - 1)) / n;
-  return items.map(([img, focus], i) => P(img, { box: [i * (w + GUT), 0, w, 1], fit: 'cover', focus, enter: { at: times[i] ?? 0, d: 1.1, from } }));
+  return items.map(([img, focus], i) => P(img, { box: [i * (w + GUT), 0, w, 1], fit: 'cover', focus, zoom: [1, 1.06], enter: { at: times[i] ?? 0, d: 1.1, from } }));
 }
 const B4 = T(4) - T(0); // 4 phách ≈ 3,53 giây
 
@@ -41,7 +41,7 @@ export default function kichBan() {
   at(0, {
     in: tr('black', 1.8),
     dust: 0.9,
-    layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.86], tilt: { from: 0.86, to: 0.58, ease: 'inout' }, zoom: { from: 1.28, to: 1, ease: 'inout' } })],
+    layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.86], tilt: { from: 0.88, to: 0.5, ease: 'inout' }, zoom: { from: 1.3, to: 1, ease: 'inout' } })],
   });
 
   // 0:09,4 · Tiến vào ô cửa sáng sau lưng hai người → loá sáng → thiệp tên trên giấy ngà
@@ -73,7 +73,7 @@ export default function kichBan() {
   // 0:31,7 · B · Hà Nội — ô cửa mở đúng lúc nhạc nền vào; lia từ biển "Hiệu thuốc Hoà Hưng" xuống hai người
   at(T(35), {
     in: tr('arch', 1.5, [0.5, 0.5]),
-    layers: [P('NAM08332', { fit: 'cover', focus: [0.5, 0.2], tilt: { from: 0.12, to: 0.55, ease: 'inout' } })],
+    layers: [P('NAM08332', { fit: 'cover', focus: [0.5, 0.2], tilt: { from: 0.12, to: 0.64, ease: 'inout' } })],
     texts: [{ text: 'Một ngày ở Hà Nội', font: 'serif-italic', size: 56, x: 0.175, y: 0.5, color: '#F6F0E4', shadow: true, appear: 1.4, fade: 1.2, rise: 10, out: 5.2 }],
   });
   // sân đình đầy nắng, khung vào hai người
@@ -84,8 +84,8 @@ export default function kichBan() {
     in: tr('wipe', 1.1),
     bg: WARM_DARK,
     layers: [
-      P('NAM08137', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3], slide: { at: B4 / 2, d: 1.5, from: (1 - half) / 2 } }),
-      P('NAM08138', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.5, 0.3], enter: { at: B4 / 2 + 0.3, d: 1.5, from: 'right', dist: 160 } }),
+      P('NAM08137', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3], zoom: [1, 1.06], slide: { at: B4 / 2, d: 1.5, from: (1 - half) / 2 } }),
+      P('NAM08138', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.5, 0.3], zoom: [1, 1.06], enter: { at: B4 / 2 + 0.3, d: 1.5, from: 'right', dist: 160 } }),
     ],
   });
   at(T(67), {
@@ -102,28 +102,28 @@ export default function kichBan() {
 
   // 1:30,8 · C · Ra vùng sáng: nắm tay ngược sáng → vòm kính lần hai, lia ngược từ hai người lên vòm
   at(T(102), { in: tr('leak', 1.3), layers: [P('NAM09416', { fit: 'cover', focus: [0.45, 0.45], zoom: PUSH })] });
-  at(T(108), { in: tr('dissolve', 1.3), dust: 0.6, layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.5], tilt: { from: 0.8, to: 0.22, ease: 'inout' } })] });
+  at(T(108), { in: tr('dissolve', 1.3), dust: 0.6, layers: [P('NAM09385', { fit: 'cover', focus: [0.45, 0.5], tilt: { from: 0.86, to: 0.14, ease: 'inout' } })] });
 
   // 1:48,5 · C · Đoạn lắng: hai chân dung nhìn về nhau (cô dâu trượt vào sau 4 phách) → mặt đối mặt bên cửa kính
   at(T(122), {
     in: tr('dissolve', 1.3),
     bg: WARM_DARK,
     layers: [
-      P('NAM00116', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3] }),
-      P('NAM00160', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.4, 0.3], enter: { at: B4, d: 1.3, from: 'right', dist: 90 } }),
+      P('NAM00116', { box: [0, 0, half, 1], fit: 'cover', focus: [0.48, 0.3], zoom: [1, 1.06] }),
+      P('NAM00160', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.4, 0.3], zoom: [1, 1.06], enter: { at: B4, d: 1.3, from: 'right', dist: 90 } }),
     ],
   });
   at(T(134), { in: tr('wipe', 1.2), layers: [P('NAM09644', { fit: 'cover', focus: [0.5, 0.3], zoom: PUSH })] });
 
   // 2:06,1 · C · Nhạc dồn lên: điệu nhảy (phóng nhẹ xuyên cảnh) → bế xoay, voan bay
   at(T(142), { in: tr('zoom', 0.9), layers: [P('NAM09621', { fit: 'cover', focus: [0.55, 0.38], zoom: PUSH })] });
-  at(T(150), { in: tr('dissolve', 0.8), layers: [P('NAM09729', { fit: 'cover', focus: [0.55, 0.42] })] }); // cắt ngang: bế xoay, voan bay
+  at(T(150), { in: tr('dissolve', 0.8), layers: [P('NAM09729', { fit: 'cover', focus: [0.55, 0.42], zoom: PUSH })] }); // cắt ngang: bế xoay, voan bay
 
   // 2:16,7 · C → D · Từ tấm voan trong nhà sang tấm voan trên vách đá Hạ Long, nối bằng vệt sáng
   at(T(154), { in: tr('leak', 1.1), layers: [P('L1007649', { fit: 'cover', focus: [0.62, 0.55], zoom: PUSH })] });
 
   // 2:23,8 · D · Khe đá như khung cửa tự nhiên — lia xuống hai người đứng trong khe
-  at(T(162), { in: tr('dissolve', 1.0), layers: [P('L1007701', { fit: 'cover', focus: [0.62, 0.5], tilt: { from: 0.33, to: 0.69, ease: 'inout', until: T(170) - T(162) } })] });
+  at(T(162), { in: tr('dissolve', 1.0), layers: [P('L1007701', { fit: 'cover', focus: [0.62, 0.5], tilt: { from: 0.26, to: 0.72, ease: 'inout' } })] });
 
   // 2:30,8 · D · Điệp khúc cuối: ô cửa mở từ khe đá ra toàn vịnh, giữ ~10,6 giây, tiến rất chậm về phía hai người
   at(T(170), { in: tr('arch', 1.6, [0.58, 0.48]), layers: [P('IMG_2047', { fit: 'cover', focus: [0.57, 0.33], to: [0.57, 0.42], zoom: PUSH })] });
@@ -134,12 +134,12 @@ export default function kichBan() {
     in: tr('wipe', 1.1),
     bg: '#151A14',
     layers: [
-      P('L1007506', { box: [0, 0, half, 1], fit: 'cover', focus: [0.5, 0.42] }),
-      P('L1007501', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.45, 0.36], enter: { at: 1.0, d: 1.4, from: 'right', dist: 110 } }),
+      P('L1007506', { box: [0, 0, half, 1], fit: 'cover', focus: [0.5, 0.42], zoom: [1, 1.06] }),
+      P('L1007501', { box: [1 - half, 0, half, 1], fit: 'cover', focus: [0.45, 0.36], zoom: [1, 1.06], enter: { at: 1.0, d: 1.4, from: 'right', dist: 110 } }),
     ],
   });
   at(T(202), { in: tr('dissolve', 1.3), layers: [P('IMG_1998', { fit: 'cover', focus: [0.3, 0.6], zoom: PUSH })] });
-  at(T(206), { in: tr('dissolve', 1.3), layers: [P('IMG_2050', { fit: 'cover', focus: [0.62, 0.55], to: [0.634, 0.55], scale: 1.03, pan: { dx: 0.02 } })] });
+  at(T(206), { in: tr('dissolve', 1.3), layers: [P('IMG_2050', { fit: 'cover', focus: [0.62, 0.55], to: [0.658, 0.55], scale: 1.07, pan: { dx: 0.05 } })] });
 
   // 3:09,6 · Hồi tưởng: bốn khoảnh khắc A → B → C → D xếp thành dải, mỗi ảnh vào sau 2 phách
   at(T(214), {
@@ -150,7 +150,7 @@ export default function kichBan() {
   });
 
   // 3:23,8 · D · Trao nhẫn toàn màn hình, tiến chậm rồi dừng êm
-  at(T(230), { in: tr('wipe', 1.3), layers: [P('L1007796', { fit: 'cover', focus: [0.5, 0.41], zoom: { from: 1, to: 1.04, until: 8, ease: 'out' } })] });
+  at(T(230), { in: tr('wipe', 1.3), layers: [P('L1007796', { fit: 'cover', focus: [0.5, 0.41], zoom: { from: 1, to: 1.08, until: 8, ease: 'out' } })] });
 
   // 3:34,4 · Lời cảm ơn trên giấy ngà, bụi sáng, dấu sáp đóng xuống; giữ đến hết nhạc
   at(T(242), {
