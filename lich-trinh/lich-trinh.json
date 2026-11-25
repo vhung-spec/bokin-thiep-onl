@@ -23,11 +23,14 @@
     "_huongDan": [
       "GHIM: chỉ sửa ở đây. Lịch (diaDiem có \"ref\"), điểm đầu lượt đi (nhaTrai) và điểm cuối lượt về (tiecNhaTrai) đều lấy toạ độ từ mục này.",
       "toaDo viết \"vĩ độ,kinh độ\" (lấy trong Google Maps: nhấn giữ đúng chỗ → chép số hiện ra).",
-      "SAU KHI ĐỔI toaDo: người quản trị chạy lại  python3 tools/lo-trinh/tao_lo_trinh.py  để vẽ lại đường cố định và 2 file GPX, rồi xem đoạn nối từ ghim ra Quốc lộ 5 trên bản đồ. Khi chưa chạy lại, trang tự hiện lời nhắc dưới bản đồ."
+      "SAU KHI ĐỔI toaDo: người quản trị chạy lại  python3 tools/lo-trinh/tao_lo_trinh.py  để vẽ lại đường cố định và 2 file GPX, rồi xem đoạn nối từ ghim ra Quốc lộ 5 trên bản đồ. Khi chưa chạy lại, trang tự hiện lời nhắc dưới bản đồ.",
+      "goiNgan, viTriNgan: tên ngắn dùng trên hai thẻ đầu trang, ví dụ \"Rời nhà trai · Phố Văn, Hải Phòng\", \"Dự kiến 07:00 đến nhà gái\"."
     ],
     "nhaTrai": {
       "ten": "Nhà trai, Hải Phòng",
       "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
+      "goiNgan": "nhà trai",
+      "viTriNgan": "Phố Văn, Hải Phòng",
       "toaDo": "20.9577131,106.2765173",
       "ghiChuGhim": "Ghim khu Phố Văn, chưa phải cổng nhà.",
       "daXacNhan": true
@@ -35,6 +38,8 @@
     "nhaGai": {
       "ten": "Nhà gái, Hà Nội",
       "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội",
+      "goiNgan": "nhà gái",
+      "viTriNgan": "STEN, Hà Nội",
       "toaDo": "20.9882994,105.7731068",
       "ghiChuGhim": "",
       "daXacNhan": true
@@ -42,6 +47,8 @@
     "tiecNhaTrai": {
       "ten": "Tổ hợp Thể thao Vũ Tuấn Mobile",
       "diaChi": "Lôi Xá, Tuệ Tĩnh, Hải Phòng",
+      "goiNgan": "Tổ hợp Vũ Tuấn",
+      "viTriNgan": "Lôi Xá, Hải Phòng",
       "toaDo": "20.9581597,106.2743602",
       "ghiChuGhim": "",
       "daXacNhan": true
@@ -52,7 +59,8 @@
       "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ và 2 file GPX lấy từ lo-trinh-co-dinh.geojson, lo-trinh-di.gpx, lo-trinh-ve.gpx (tạo bằng tools/lo-trinh/tao_lo_trinh.py, KHÔNG tính lại khi khách mở trang).",
       "Mỗi lượt MỘT nút Google Maps: điểm đi (tu) và điểm đến (den) lấy từ diaDiemChung, travelmode=driving, dir_action=navigate, qua đúng thứ tự 6 điểm khoá trong quaDiem (toạ độ nằm trên đường kẻ, đúng chiều xe chạy).",
       "Đã thử trên Google Maps bản máy tính ngày 25/11/2026: lượt đi 66,9 km, lượt về 66,1 km, đúng các chỗ rẽ ở Gia Lâm, Vành đai 3 trên cao, lối Nguyễn Trãi/Nguyễn Xiển, Chu Văn An – Vạn Phúc. Chỉ thêm hoặc dời điểm khoá khi đã biết điện thoại dẫn sai ở nhánh nào.",
-      "lienHeDoanXe: điền đủ số điện thoại thì hiện nút Gọi; dán link nhóm Zalo (https://zalo.me/g/…) thì hiện nút vào nhóm. Ô nào để trống thì trang ẩn đi."
+      "lienHeDoanXe: điền đủ số điện thoại thì hiện nút Gọi; dán link nhóm Zalo (https://zalo.me/g/…) thì hiện nút vào nhóm. Ô nào để trống thì trang ẩn đi.",
+      "Hai thẻ đầu trang: nhãn chiều (nhanChieu), giờ lấy từ mốc suKienDi, dòng \"Rời …\" lấy từ ghim tu, dòng \"Dự kiến … \" lấy giờ mốc suKienDen và tên ghim den theo mẫu dongDen. Sửa giờ trong lịch là thẻ tự đổi theo."
     ],
     "gioiThieu": "Hai lượt đi cùng một đường: QL5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc. Không đi Tố Hữu, không đi cao tốc CT04.",
     "lienHeDoanXe": {
@@ -71,7 +79,11 @@
         "gio": "Xe chạy 05:00",
         "tu": "nhaTrai",
         "den": "nhaGai",
-        "oTieuDe": "05:00 · Nhà trai → Nhà gái",
+        "chieu": "di",
+        "nhanChieu": "Đi đón dâu",
+        "suKienDi": "roi-nha-trai",
+        "suKienDen": "den-nha-gai",
+        "dongDen": "Dự kiến {gio} đến {noi}",
         "nutGoogle": "Mở Google Maps đi nhà gái",
         "quaDiem": [
           {
@@ -115,7 +127,11 @@
         "gio": "Xe chạy 08:30–08:45",
         "tu": "nhaGai",
         "den": "tiecNhaTrai",
-        "oTieuDe": "08:30–08:45 · Nhà gái → Tổ hợp Vũ Tuấn",
+        "chieu": "ve",
+        "nhanChieu": "Đưa dâu về",
+        "suKienDi": "roi-nha-gai",
+        "suKienDen": "ve-nha-trai",
+        "dongDen": "Dự kiến {gio} về đến {noi}",
         "nutGoogle": "Mở Google Maps về Vũ Tuấn",
         "quaDiem": [
           {
@@ -276,7 +292,7 @@
       ]
     },
     {
-      "ten": "Về nhà trai, Hải Phòng",
+      "ten": "Về Tổ hợp Vũ Tuấn, Hải Phòng",
       "suKien": [
         {
           "id": "ve-nha-trai",
@@ -312,7 +328,7 @@
           "khiNao": "Sau khi đoàn về",
           "viec": "Tiến hành nghi lễ tại Tổ hợp Vũ Tuấn",
           "tomTat": "Nghi lễ tại Tổ hợp Vũ Tuấn",
-          "gioNgan": "Sau đó",
+          "gioNgan": "Sau khi đoàn về",
           "xeChay": false,
           "diaDiem": {
             "ref": "tiecNhaTrai"
@@ -335,7 +351,7 @@
           "khiNao": "Sau nghi lễ",
           "viec": "Khai tiệc",
           "tomTat": "Khai tiệc",
-          "gioNgan": "Sau đó",
+          "gioNgan": "Sau nghi lễ",
           "xeChay": false,
           "diaDiem": {
             "ref": "tiecNhaTrai"
