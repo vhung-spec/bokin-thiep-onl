@@ -40,11 +40,13 @@ Mỗi phút video mất khoảng **2–3 phút** để dựng. Thư mục `ra/` 
 
 ## Dựng theo kịch bản (video "Qua những ô cửa")
 
-Ngoài kiểu tự chia cảnh ở trên, có thể viết hẳn **kịch bản từng cảnh** trong `kich-ban/*.mjs`: giờ cắt theo phách nhạc, ảnh nào, khung, điểm căn, chuyển động, chữ. Bản hiện có là `kich-ban/qua-nhung-o-cua.mjs`:
+Ngoài kiểu tự chia cảnh ở trên, có thể viết hẳn **kịch bản từng cảnh** trong `kich-ban/*.mjs`: giờ cắt theo phách nhạc, ảnh nào, khung, điểm căn, chuyển động, chữ. Bản hiện có là `kich-ban/qua-nhung-o-cua.mjs`, video chiếu tiệc 16:9:
 
 - Nhạc "Lễ Đường" đo được 68 BPM. Phách thứ n rơi vào giây `T(n) = 0,815 + n × 60/68`, mọi điểm cắt đặt đúng phách. Nhạc nền vào ở 0:31,7, chỗ lấy hơi ở 1:14,4, điệp khúc cuối mở ở 2:30,8.
 - Ảnh dọc cao bằng khung, hai bên là màu phẳng lấy từ mép ảnh. Ảnh studio thì lấy màu phông theo từng độ cao để nối liền. Không xoay nghiêng, không bóng đổ, gần như toàn bộ là cắt thẳng.
 - Có các cú cắt khớp vị trí: dùng `focus` (điểm trong ảnh) và `to` (vị trí trên khung), ví dụ mắt cô dâu ở cùng một chỗ qua ba ảnh cầu thang.
+- Mỗi ảnh chỉ một chuyển động (tiến tối đa 103%), chạy đều suốt thời gian ảnh còn trên màn hình, kể cả lúc hoà sang ảnh sau. Zoom làm bằng `transform` trên ảnh có kích thước cố định, nên chạy mượt dưới mức 1 px, không giật từng nấc.
+- `--kiem-tra` in điểm nhìn trước và sau từng điểm chuyển, kèm khoảng lệch (px), để căn ảnh sau cho mắt khách có chỗ bám.
 - Màu chỉnh theo từng bộ ảnh trong `chinh_mau.py`:
   - A (studio): ấm nhẹ.
   - B (phố cổ): bớt hồng rực, hạ vùng nắng.
@@ -53,8 +55,8 @@ Ngoài kiểu tự chia cảnh ở trên, có thể viết hẳn **kịch bản 
   - Cả phim: bóng tối hơi ấm.
 
 ```bash
-node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh>                  # bản chiếu tiệc 16:9 → ra/qua-nhung-o-cua-16x9.mp4
-node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh> --khung 9:16     # bản dọc → ra/qua-nhung-o-cua-9x16.mp4
+node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh>                  # bản chiếu tiệc → ra/Van_Hung_Tuyet_Anh_Le_Cuoi_16x9.mp4
+node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh> --kiem-tra       # in điểm nhìn trước/sau mỗi điểm chuyển
 node tools/video-slide/dung-kich-ban.mjs --anh <thư mục ảnh> --xem 80.5,150.9 # chụp khung hình để kiểm tra
 ```
 

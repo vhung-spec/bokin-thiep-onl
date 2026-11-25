@@ -39,7 +39,7 @@ export default function kichBan() {
 
   // 0:08,8 · Tên hai người trên giấy ngà (hoà mềm từ vòm kính, đoạn dạo đầu còn lắng)
   at(8.8, {
-    in: fade(0.7),
+    in: fade(1.0),
     layers: [{ kind: 'paper' }, { kind: 'sage', box: [0, 0, 0.12, 1] }],
     texts: [
       { text: 'Văn Hùng & Tuyết Anh', font: 'script', size: 108, x: 0.222, y: 0.45, align: 'left', appear: 0.9 },
@@ -53,12 +53,12 @@ export default function kichBan() {
   at(T(24), { layers: [P('IMG_2007', { ...studio, focus: [0.5, 0.45] })] });
   at(T(30), { layers: [P('L1007339', { ...studio, focus: [0.52, 0.22], zoom: PUSH })] });
 
-  // 0:31,7 · B · Một ngày ở Hà Nội — vào đúng lúc nhạc nền vào
+  // 0:31,7 · B · Một ngày ở Hà Nội — vào đúng lúc nhạc nền vào, mở bằng sân đình đầy nắng → hiệu thuốc Hoà Hưng
   at(T(35), {
-    layers: [P('NAM08332', { focus: [0.43, 0.38], to: [0.434, 0.38] })],
-    texts: [{ text: 'Một ngày ở Hà Nội', font: 'serif-italic', size: 46, x: 0.82, y: 0.5, color: 'auto', appear: 0.5 }],
+    layers: [P('NAM07943', { focus: [0.5, 0.44], to: [0.42, 0.44], zoom: PUSH })],
+    texts: [{ text: 'Một ngày ở Hà Nội', font: 'serif-italic', size: 46, x: 0.8, y: 0.5, color: 'auto', appear: 0.5 }],
   });
-  at(T(43), { layers: [P('NAM07943', { focus: [0.5, 0.44], to: [0.46, 0.44], zoom: PUSH })] });
+  at(T(43), { layers: [P('NAM08332', { focus: [0.43, 0.38], to: [0.47, 0.38] })] });
 
   // 0:45,8 · B · Chiếc ô giấy: cô dâu đứng nguyên chỗ, chú rể "bước vào" che ô cho cô
   at(T(51), { layers: [P('NAM08137', { focus: [0.48, 0.24] })] });
@@ -79,8 +79,8 @@ export default function kichBan() {
   at(T(98), { layers: [stair('NAM08892', [0.39, 0.45])] });
 
   // 1:30,8 · C · Ra vùng sáng: nắm tay ngược sáng (hoà mềm từ cầu thang tối) → vòm kính lần hai, tĩnh và rộng nhất
-  at(T(102), { in: fade(0.5), layers: [P('NAM09416', { fit: 'cover', focus: [0.45, 0.45], zoom: PUSH })] });
-  at(T(108), { in: fade(0.6), layers: [P('NAM09385')] });
+  at(T(102), { in: fade(0.7), layers: [P('NAM09416', { fit: 'cover', focus: [0.45, 0.45], zoom: PUSH })] });
+  at(T(108), { in: fade(0.7), layers: [P('NAM09385', { focus: [0.42, 0.88] })] });
 
   // 1:48,5 · C · Đoạn lắng: hai chân dung nhìn về nhau (chú rể trước, cô dâu hiện dần sau 4 phách)
   const half = 0.5 - 4 / 1920;
@@ -97,10 +97,10 @@ export default function kichBan() {
 
   // 2:06,1 · C · Nhạc dồn lên: điệu nhảy → bế xoay, voan bay
   at(T(142), { layers: [P('NAM09621', { focus: [0.55, 0.3], zoom: PUSH })] });
-  at(T(150), { layers: [P('NAM09729', { fill: '#3B3126', focus: [0.55, 0.35] })] });
+  at(T(150), { layers: [P('NAM09729', { focus: [0.55, 0.35], fill: '#7A6A58' })] }); // nền ấm trung tính: nối độ sáng từ điệu nhảy sang Hạ Long
 
-  // 2:16,7 · C → D · Nối bằng tấm voan: gương mặt cô dâu đặt đúng chỗ, hai khối voan sáng cùng phía, hoà 0,3 giây
-  at(T(154), { in: fade(0.3), layers: [P('L1007649', { focus: [0.62, 0.45], to: [0.519, 0.35], lock: 'y' })] });
+  // 2:16,7 · C → D · Nối bằng tấm voan: gương mặt cô dâu đặt đúng chỗ, hai khối voan sáng cùng phía, hoà 0,4 giây
+  at(T(154), { in: fade(0.4), layers: [P('L1007649', { focus: [0.62, 0.45], to: [0.519, 0.35], lock: 'y', fill: '#3A4034' })] });
 
   // 2:23,8 · D · Khe đá như một khung cửa tự nhiên — đứng yên đến hết câu
   at(T(162), { layers: [P('L1007701', { focus: [0.64, 0.56] })] });
@@ -108,18 +108,18 @@ export default function kichBan() {
   // 2:30,8 · D · Điệp khúc cuối mở thẳng ra toàn vịnh, giữ 12 phách (~10,6 giây), tiến rất chậm về phía hai người
   at(T(170), { layers: [P('IMG_2047', { fit: 'cover', focus: [0.57, 0.33], to: [0.57, 0.42], zoom: PUSH })] });
 
-  // 2:41,4 · D · Đi giữa gió: bãi cát (lia theo bước chân) → trên đỉnh núi, hai người ở giữa khung → nâng voan
-  at(T(182), { layers: [P('IMG_2050', { fit: 'cover', focus: [0.6, 0.55], scale: 1.03, pan: { dx: 0.02 } })] });
-  at(T(190), { layers: [P('IMG_2001', { fit: 'cover', focus: [0.52, 0.48] })] });
-  at(T(194), { layers: [P('L1007506', { focus: [0.47, 0.38] })] });
+  // 2:41,4 · D · Góc rộng thấy biển quanh hai người → nâng voan → dưới tấm voan → nụ hôn bên vịnh
+  at(T(182), { layers: [P('IMG_2001', { fit: 'cover', focus: [0.52, 0.48] })] });
+  at(T(190), { layers: [P('L1007506', { focus: [0.47, 0.38] })] });
+  at(T(194), { layers: [P('L1007501', { focus: [0.45, 0.3], zoom: PUSH })] });
+  at(T(202), { in: fade(0.6), layers: [P('IMG_1998', { fit: 'cover', focus: [0.3, 0.6] })] });
 
-  // 2:55,5 · D · Dưới tấm voan → hoà mềm sang nụ hôn bên vịnh (góc rộng thấy biển quanh hai người)
-  at(T(198), { layers: [P('L1007501', { focus: [0.45, 0.3], zoom: PUSH })] });
-  at(T(206), { in: fade(0.6), layers: [P('IMG_1998', { fit: 'cover', focus: [0.3, 0.6] })] });
+  // 3:02,6 · D · Đi giữa gió trên bãi cát (hoà mềm, lia theo bước chân) — cảnh sáng dẫn vào hồi tưởng
+  at(T(206), { in: fade(0.7), layers: [P('IMG_2050', { fit: 'cover', focus: [0.62, 0.55], to: [0.634, 0.55], scale: 1.03, pan: { dx: 0.02 } })] });
 
-  // 3:09,6 · Hồi tưởng A → B → C → D: gương mặt cô dâu giữ cùng một chỗ, 4 phách mỗi ảnh
+  // 3:09,6 · Hồi tưởng (hoà mềm vào chương) A → B → C → D: gương mặt cô dâu giữ cùng một chỗ, 4 phách mỗi ảnh
   const flash = (img, face, o = {}) => P(img, { focus: face, to: [0.45, face[1]], ...o });
-  at(T(214), { layers: [flash('IMG_2008', [0.47, 0.32], { to: [0.45, 0.33], scale: 1.45, lock: 'y' })] });
+  at(T(214), { in: fade(0.6), layers: [flash('IMG_2008', [0.47, 0.32], { to: [0.45, 0.33], scale: 1.45, lock: 'y' })] });
   at(T(218), { layers: [flash('NAM07870', [0.63, 0.25])] });
   at(T(222), { layers: [flash('NAM09196', [0.55, 0.33])] });
   at(T(226), { layers: [flash('IMG_2046', [0.57, 0.42])] });
@@ -129,7 +129,7 @@ export default function kichBan() {
 
   // 3:34,4 · Lời cảm ơn trên giấy ngà, dấu sáp đồng nhỏ, nhánh lá vàng in chìm ở góc; giữ đến hết nhạc
   at(T(242), {
-    in: fade(0.6),
+    in: fade(0.7),
     layers: [
       { kind: 'paper' },
       { kind: 'deco', src: 'canh-la-vang.webp', box: [0.83, 0.62, 0.21], rotate: -28, opacity: 0.28, blend: 'multiply' },

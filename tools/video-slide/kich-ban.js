@@ -97,7 +97,13 @@
       if (L.appearFade) d.style.opacity = sine(prog(l, a, L.appearFade));
       const g = photoGeom(L, l);
       L.seen = [g.fx, g.fy];
-      Object.assign(i.style, { width: px(g.w), height: px(g.h), transform: `translate(${px(g.x)}, ${px(g.y)})` });
+      // Kích thước ảnh cố định từ khung đầu (số nguyên px); zoom/lia bằng transform để chạy mượt dưới mức 1 px,
+      // không bị trình duyệt làm tròn kích thước từng nấc gây giật nhẹ.
+      if (!L.base) {
+        L.base = [Math.round(g.w), Math.round(g.h)];
+        Object.assign(i.style, { width: `${L.base[0]}px`, height: `${L.base[1]}px`, transformOrigin: '0 0', willChange: 'transform' });
+      }
+      i.style.transform = `translate(${g.x.toFixed(3)}px, ${g.y.toFixed(3)}px) scale(${(g.w / L.base[0]).toFixed(6)}, ${(g.h / L.base[1]).toFixed(6)})`;
     };
   }
 
@@ -132,7 +138,12 @@
     const d = el('div', `txt f-${T.font || 'serif'}`, parent);
     d.textContent = T.text;
     const fill = shot.layers.find((L) => L.img)?.fillColor;
-    const color = T.color === 'auto' ? (fill && lum(fill) < 0.5 ? '#EFE8DA' : S.ink) : T.color || S.ink;
+    // 'auto': chọn màu ngà hoặc màu rêu, màu nào tương phản với nền mạnh hơn (đọc rõ khi nhìn xa)
+    const contrast = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    const IVORY = '#F3EDE1';
+    const color = T.color === 'auto' && fill
+      ? (contrast(lum(IVORY), lum(fill)) > contrast(lum(S.ink), lum(fill)) ? IVORY : S.ink)
+      : T.color && T.color !== 'auto' ? T.color : S.ink;
     Object.assign(d.style, {
       fontSize: px(T.size),
       color,

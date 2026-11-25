@@ -71,12 +71,16 @@ def fill_color(im, studio):
     if studio:
         c = edge.mean(axis=0)
     else:
-        # lấy nhóm điểm có độ sáng từ 15% đến 45% ở mép ảnh: ra màu nền trầm, đúng tông ảnh, không bị vệt sáng cửa kính kéo lệch
-        lum_e = edge @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
-        lo, hi = np.percentile(lum_e, [15, 45])
-        c = edge[(lum_e >= lo) & (lum_e <= hi)].mean(axis=0)
+        # nửa màu mép ảnh, nửa tông giữa của cả ảnh (bỏ vùng quá tối/quá sáng): ra màu nền trung tính, đúng tông,
+        # không tối hơn ảnh quá nhiều để độ sáng giữa các cảnh không nhảy gắt
+        Y = np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+        def band(px, lo, hi):
+            l = px @ Y
+            a, b = np.percentile(l, [lo, hi])
+            return px[(l >= a) & (l <= b)].mean(axis=0)
+        c = 0.5 * band(edge, 30, 70) + 0.5 * band(a.reshape(-1, 3), 30, 70)
         l = c.mean()
-        c = (l + (c - l) * 0.9) * 0.92
+        c = (l + (c - l) * 0.9) * 0.88
     return '#%02x%02x%02x' % tuple(int(v) for v in np.clip(c, 0, 255))
 
 
