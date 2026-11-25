@@ -18,12 +18,11 @@
 
   "loTrinh": {
     "_huongDan": [
-      "LỘ TRÌNH CHO LÁI XE: nút “Mở trên Google Maps” dẫn đường từ vị trí hiện tại của điện thoại, đi qua lần lượt các điểm trong quaDiem rồi tới diemDen.",
-      "quaDiem là các điểm bắt buộc đi qua để Google Maps chọn đúng Quốc lộ 5 và Vành đai 3 (tối đa 3 điểm). Muốn đổi đường thì sửa các điểm này.",
-      "diemDen để trống \"\" thì nút bản đồ của lượt đó tạm ẩn (đang chờ địa chỉ nhà trai).",
+      "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ lấy từ tệp lo-trinh-co-dinh.geojson (tạo bằng tools/lo-trinh/tao_lo_trinh.py) — muốn đổi cung đường thì sửa và chạy lại script đó.",
+      "Nút Google Maps: dẫn đường từ vị trí hiện tại, bắt buộc đi qua các điểm trong quaDiem (toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy; tối đa 3 điểm) rồi tới toaDoDen.",
       "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
     ],
-    "gioiThieu": "Cả đoàn đi Quốc lộ 5 và Vành đai 3 trên cao. Nếu Google Maps gợi ý đường khác (ví dụ cao tốc Hà Nội – Hải Phòng), vẫn đi theo lộ trình của đoàn.",
+    "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Tố Hữu. Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
     "xeDanDoan": { "taiXe": "", "bienSo": "", "soDienThoai": "" },
     "nhomZalo": "",
     "danhSachXe": [],
@@ -31,39 +30,52 @@
     "quyTac": [
       "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
       "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
-      "Lạc đoàn: không quay đầu đi tìm. Bấm “Mở trên Google Maps” của lượt đang đi rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
+      "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
     ],
     "luot": [
       {
         "id": "lo-trinh-di",
         "ten": "Lượt đi: Nhà trai → Nhà gái",
         "gio": "Xe chạy 05:00",
-        "diemDi": "Điểm tập trung bên nhà trai, Hải Phòng",
+        "diemDi": "Nhà trai — Phố Văn, Tuệ Tĩnh, Hải Phòng",
         "diemDen": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ, Hà Nội",
+        "toaDoDen": "20.9882994,105.7731068",
         "tenDiemDen": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
-        "quaDiem": ["Quốc lộ 5, Như Quỳnh, Hưng Yên", "Cầu Thanh Trì, Hà Nội"],
+        "quaDiem": [
+          { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93231,106.06177" },
+          { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98604,105.97867" },
+          { "ten": "Cầu Thanh Trì", "toaDo": "20.99338,105.90140" }
+        ],
         "cacBuoc": [
-          "Từ điểm tập trung ra Quốc lộ 5, đi hướng Hà Nội.",
-          "Đi Quốc lộ 5 qua Như Quỳnh về Long Biên, tới nút giao Vành đai 3 thì rẽ theo biển chỉ dẫn hướng cầu Thanh Trì – Pháp Vân.",
-          "Qua cầu Thanh Trì, lên Vành đai 3 trên cao, đi hướng Linh Đàm – Nguyễn Xiển – Khuất Duy Tiến (hướng Mai Dịch).",
-          "Xuống đường trên cao theo biển chỉ dẫn để vào Đại lộ Thăng Long, đi hướng Hòa Lạc.",
-          "Rời Đại lộ Thăng Long về phía Đại Mỗ, vào P. Ngọc Trục — Trung tâm ngoại ngữ STEN."
+          "Từ Phố Văn đi xuống Quốc lộ 5 (khoảng 3 km), rẽ phải vào QL5, đi hướng Hà Nội.",
+          "Đi thẳng Quốc lộ 5 khoảng 35 km: qua Mỹ Hào (đoạn tên Nguyễn Văn Linh), Như Quỳnh, vào Gia Lâm (đoạn Nguyễn Bình, Nguyễn Đức Thuận).",
+          "Tới nút giao Quốc lộ 5 – Vành đai 3: đi làn phải, lên cầu vượt hướng cầu Thanh Trì.",
+          "Đi thẳng khoảng 5,7 km, qua cầu Thanh Trì rồi lên Vành đai 3 trên cao.",
+          "Đi Vành đai 3 trên cao khoảng 10,5 km (Pháp Vân – Linh Đàm – Nguyễn Xiển), xuống ở lối xuống Nguyễn Trãi.",
+          "Đi thẳng Khuất Duy Tiến khoảng 1 km, rẽ trái vào Tố Hữu, đi khoảng 3,4 km.",
+          "Rẽ phải vào Vạn Phúc – Đại Mỗ, rẽ phải vào Phố Ngọc Trục, tới Trung tâm ngoại ngữ STEN."
         ]
       },
       {
         "id": "lo-trinh-ve",
         "ten": "Lượt về: Nhà gái → Nhà trai",
         "gio": "Xe chạy 08:30–08:45",
-        "diemDi": "Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ, Hà Nội",
+        "diemDi": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
         "diemDen": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
+        "toaDoDen": "20.9577131,106.2765173",
         "tenDiemDen": "Nhà trai — Phố Văn, Tuệ Tĩnh, Hải Phòng",
         "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
-        "quaDiem": ["Cầu Thanh Trì, Hà Nội", "Quốc lộ 5, Như Quỳnh, Hưng Yên"],
+        "quaDiem": [
+          { "ten": "Tố Hữu", "toaDo": "20.99191,105.78532" },
+          { "ten": "Cầu Thanh Trì", "toaDo": "20.99328,105.90153" },
+          { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98598,105.97860" }
+        ],
         "cacBuoc": [
-          "Từ Ngọc Trục ra Đại lộ Thăng Long, đi hướng trung tâm Hà Nội.",
-          "Lên Vành đai 3 trên cao, đi hướng Pháp Vân – cầu Thanh Trì.",
-          "Qua cầu Thanh Trì, theo Vành đai 3 tới nút giao Quốc lộ 5 thì rẽ đi hướng Hải Phòng.",
-          "Đi Quốc lộ 5 về Tuệ Tĩnh, vào Phố Văn — nhà trai."
+          "Từ STEN ra Phố Ngọc Trục, rẽ trái vào Đại Mỗ – Vạn Phúc, rẽ trái vào Tố Hữu (đi ngược đường lúc đến).",
+          "Đi Tố Hữu khoảng 3 km tới Khuất Duy Tiến, rẽ phải đi Khuất Duy Tiến – Nguyễn Xiển khoảng 1,3 km.",
+          "Theo lối lên Vành đai 3 trên cao, đi hướng Pháp Vân – cầu Thanh Trì khoảng 10,6 km.",
+          "Qua cầu Thanh Trì, đi tiếp khoảng 5,6 km tới nút giao Quốc lộ 5, vào QL5 hướng Hải Phòng.",
+          "Đi thẳng Quốc lộ 5 khoảng 35 km qua Như Quỳnh, Mỹ Hào; rẽ trái rời QL5 về Phố Văn (khoảng 3 km)."
         ]
       }
     ]

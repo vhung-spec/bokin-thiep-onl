@@ -155,12 +155,17 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 | Số xe, hướng dẫn tập trung… | `chiTiet`, ví dụ `["Xe 1: 15A-123.45 — anh Tuấn"]` (nằm trong *Xem chi tiết*) |
 | Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
 
-**Lộ trình xe cho lái xe** (mục `loTrinh` trong cùng tệp; link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`). Đi Quốc lộ 5 và Vành đai 3 trên cao. Nút *Mở trên Google Maps* dẫn đường từ vị trí hiện tại của điện thoại, bắt buộc đi qua các điểm trong `quaDiem` (đang là *Quốc lộ 5, Như Quỳnh* và *Cầu Thanh Trì*), rồi tới `diemDen`.
+**Lộ trình xe cho lái xe** — cung đường cố định, hai lượt đi về cùng một đường: Phố Văn → Quốc lộ 5 → cầu Thanh Trì → Vành đai 3 trên cao → Tố Hữu → Ngọc Trục (khoảng 66 km). Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
 
-| Muốn sửa | Trường trong `loTrinh` |
+- **Bản đồ cố định** trên trang vẽ sẵn đường kẻ và 7 điểm mốc mỗi lượt (`lich-trinh/lo-trinh-co-dinh.geojson`), không đổi khi tắc đường. Nút *Vị trí của tôi* hiện chấm vị trí và báo “đang đi đúng cung đường” hoặc “đang cách cung đường … m/km”. Nút *Phóng to bản đồ* mở bản đồ toàn màn hình.
+- **Google Maps** chỉ để dẫn đường phụ: buộc đi qua 3 điểm lấy đúng trên đường kẻ (`quaDiem`, `toaDoDen`), nhưng Google vẫn có thể đổi đường khi tắc — khi đó đi theo đường kẻ và xe dẫn đoàn.
+- **File GPX** (`lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.
+- **Đổi cung đường**: sửa điểm trong `tools/lo-trinh/tao_lo_trinh.py` rồi chạy `python3 tools/lo-trinh/tao_lo_trinh.py` (cần mạng; tuyến tính bằng OSRM / OpenStreetMap, script tự báo nếu có chỗ quay đầu). Nhớ sửa chữ các bước (`cacBuoc`) và `quaDiem` cho khớp.
+- Thư viện bản đồ Leaflet 1.9.4 để sẵn trong `lich-trinh/vendor/leaflet/` (không phụ thuộc CDN).
+
+| Muốn sửa | Trường trong `loTrinh` (tệp `lich-trinh.json`) |
 |---|---|
-| Địa chỉ nhà trai cho lượt về | `luot[1].diemDen` (đang là Phố Văn, Tuệ Tĩnh) — để trống thì nút bản đồ lượt về tạm ẩn |
-| Đổi đường đi | `quaDiem` (tối đa 3 điểm) và các bước chữ `cacBuoc` |
+| Các bước chỉ đường bằng chữ | `cacBuoc` |
 | Xe dẫn đoàn | `xeDanDoan.taiXe`, `bienSo`, `soDienThoai` → hiện nút *Gọi xe dẫn đoàn* |
 | Nhóm Zalo đoàn xe | `nhomZalo` (link `https://zalo.me/g/…`) |
 | Danh sách xe, điểm chờ nhau, quy tắc | `danhSachXe`, `diemChoNhau`, `quyTac` |
@@ -256,7 +261,8 @@ xanh-pastel/               mẫu xanh pastel
   thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
 m/                                trang nhỏ của link ngắn (trang tạo link tự ghi lên GitHub)
 nha-trai/index.html               cửa vào bản nhà trai (ảnh, lời xem trước 29.11)
-lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json
+lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json; lộ trình xe cố định lo-trinh-co-dinh.geojson
+tools/lo-trinh/tao_lo_trinh.py    tạo lại cung đường cố định + file GPX
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel
