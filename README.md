@@ -144,6 +144,44 @@ Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-vid
 
 Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
 
+### Lịch trình ngày đón dâu 29/11 (`lich-trinh/`)
+
+Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở nhà chuẩn bị tiệc** — không phải cho mọi khách mời, nên **không** đặt trên thiệp; nút *Xem lịch trình đón dâu · 29/11* nằm ở đầu trang tạo link.
+
+- Link gửi Zalo: **https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/** (mở thẳng lịch, không phong bì, không nhạc). Trên trang có nút *Chia sẻ lịch trình*.
+- Link giữ nguyên qua mọi lần sửa: ai mở lại tin nhắn cũ cũng thấy bản mới nhất. Dòng *Cập nhật lần cuối* tự lấy từ lần sửa tệp gần nhất.
+
+**Sửa lịch: chỉ sửa `lich-trinh/lich-trinh.json`** (trên điện thoại: mở tệp trên GitHub → bút chì ✏️ → sửa → *Commit changes*; khoảng 1–2 phút sau trang đổi). Các mốc xếp theo 3 chặng (`chang`), thứ tự trên trang là thứ tự trong tệp. Trong mỗi mốc:
+
+| Muốn sửa | Trường |
+|---|---|
+| Giờ | `batDau` (ví dụ `"11:15"`), `ketThuc` khi là một khoảng (`"08:45"`). Nghi lễ / khai tiệc đang để `""` → trang hiện *Sau khi đoàn về / Sau nghi lễ* và *Giờ cụ thể: chờ gia đình cập nhật*; điền `batDau` là tự hiện giờ |
+| Giờ có mặt (khác giờ xe chạy 05:00) | `gioCoMat`, ví dụ `"04:40"` |
+| Địa chỉ | `diaDiem.ten`, `diaDiem.diaChi`, `diaDiem.banDo` (link Google Maps) — nút **Chỉ đường** chỉ hiện khi đổi `diaDiem.daXacNhan` thành `true` |
+| Đầu mối | `dauMoi.ten`, `dauMoi.soDienThoai` (số đủ 10 chữ số) → hiện nút **Gọi …** |
+| Thứ tự nghi thức ở nhà gái | `nghiThuc` của mốc 07:00, ví dụ `["Thắp hương", "Trao lễ"]` (nằm trong *Xem chi tiết*) |
+| Số xe, hướng dẫn tập trung… | `chiTiet`, ví dụ `["Xe 1: 15A-123.45 — anh Tuấn"]` (nằm trong *Xem chi tiết*) |
+| Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
+
+**Lộ trình xe cho lái xe** — cung đường cố định, hai lượt cùng một hành lang: Phố Văn → Quốc lộ 5 (Mỹ Hào, Như Quỳnh, Gia Lâm) → cầu Thanh Trì → Vành đai 3 trên cao → lối Nguyễn Trãi/Nguyễn Xiển → Nguyễn Trãi – Trần Phú → Quang Trung → Chu Văn An – Vạn Phúc → Đại Mỗ → Ngọc Trục. Lượt về theo cùng hành lang, đi thẳng tới Tổ hợp Thể thao Vũ Tuấn Mobile. Tránh CT04, Tố Hữu, không xuống Vành đai 3 sớm. Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
+
+- **Đầu trang: hai ô xếp dọc** “05:00 · Nhà trai → Nhà gái” (nút *Mở Google Maps đi nhà gái*) và “08:30–08:45 · Nhà gái → Tổ hợp Vũ Tuấn” (nút *Mở Google Maps về Vũ Tuấn*; lượt về đi thẳng tới Tổ hợp Thể thao Vũ Tuấn Mobile, ghim `diaDiemChung.tiecNhaTrai`). Mỗi nút: điểm đi/đến cố định, `travelmode=driving`, `dir_action=navigate`, 6 điểm khoá đúng thứ tự. Android mở thẳng ứng dụng Google Maps (dự phòng: đúng link HTTPS); iPhone dùng link HTTPS. Mục gập “Nếu bản đồ mở trong Zalo” có hướng dẫn và nút sao chép link. Chữ trên ô và nút: `loTrinh.luot[].oTieuDe`, `nutGoogle`.
+- **Lịch cả buổi sáng**: mỗi mốc một dòng (giờ + `tomTat`), chạm mới mở địa điểm, người tham gia, việc cần chuẩn bị. Mốc chưa có giờ hiện chữ `gioNgan` (“Sau đó”).
+- **Từng lượt** là một mục gập riêng: bản đồ cố định, các điểm đi qua, chỉ đường từng bước, GPX. Bản đồ chỉ vẽ khi mở mục (đúng kích thước, thấy trọn tuyến).
+- **Bản đồ cố định + GPX** (`lo-trinh-co-dinh.geojson`, `lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) vẽ sẵn, không tính lại khi khách mở trang. Nút *Vị trí của tôi* báo “Vị trí đang gần tuyến của đoàn” hoặc “Cách tuyến vẽ khoảng X m”; gần Vành đai 3 có nhắc GPS dễ lẫn đường trên cao/dưới thấp.
+
+| Muốn sửa | Ở đâu (tệp `lich-trinh/lich-trinh.json`) |
+|---|---|
+| **Ghim nhà trai / nhà gái** (dùng chung cho lịch, điểm đầu lượt đi, điểm cuối lượt về) | `diaDiemChung.nhaTrai.toaDo`, `diaDiemChung.nhaGai.toaDo` — viết `"vĩ độ,kinh độ"`. Ghi chú ghim: `ghiChuGhim` (đang là “Ghim khu Phố Văn…”). **Sau khi đổi toạ độ**: chạy `python3 tools/lo-trinh/tao_lo_trinh.py` (vẽ lại đường + GPX), mở trang xem đoạn nối từ ghim ra QL5. Chưa chạy lại thì trang tự hiện lời nhắc dưới bản đồ. |
+| **Liên hệ đoàn xe** | `loTrinh.lienHeDoanXe`: `nguoiPhuTrach` (ưu tiên người ngồi cạnh tài xế), `vaiTro`, `soDienThoai`, `bienSoXeDanDoan`, `nhomZalo` (`https://zalo.me/g/…`), `diemHenKhiTachDoan`. Ô trống thì trang ẩn. |
+| Nhãn nút, 6 điểm khoá | `loTrinh.luot[].nutGoogle`, `loTrinh.luot[].quaDiem` — chỉ đổi khi đã biết điện thoại dẫn sai ở nhánh nào |
+| Các chỗ rẽ bằng chữ, quy tắc đi đoàn | `loTrinh.luot[].cacBuoc`, `loTrinh.quyTac` |
+| Đổi cung đường vẽ | điểm đi qua trong `tools/lo-trinh/tao_lo_trinh.py`, rồi chạy lại script |
+
+- Giữ nguyên dấu `"…"` và dấu phẩy. Nếu lỡ sửa sai định dạng, trang báo lỗi và tạm hiện bản người xem đã mở lần trước — mở trang ngay sau khi sửa để kiểm tra.
+- Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
+- Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.
+
 ### Link ngắn có tên khách (Facebook, Zalo hiện “Thân gửi …”)
 
 Facebook / Zalo chỉ đọc lời xem trước của đúng trang được gửi, nên link `?to=Tên` dài và không hiện tên khách. Bật **Dùng link ngắn** ở mục **3. Khách mời** của trang tạo link:
@@ -231,6 +269,8 @@ xanh-pastel/               mẫu xanh pastel
   thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
 m/                                trang nhỏ của link ngắn (trang tạo link tự ghi lên GitHub)
 nha-trai/index.html               cửa vào bản nhà trai (ảnh, lời xem trước 29.11)
+lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json; lộ trình xe cố định lo-trinh-co-dinh.geojson
+tools/lo-trinh/tao_lo_trinh.py    tạo lại cung đường cố định + file GPX
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel

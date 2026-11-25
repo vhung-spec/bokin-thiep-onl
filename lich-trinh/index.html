@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lịch trình ngày đón dâu · Văn Hùng &amp; Tuyết Anh</title>
+  <!-- Trang lịch trình đón dâu Chủ nhật 29/11/2026, dành cho gia đình, đội xe, người đi đón dâu.
+       NỘI DUNG LỊCH nằm trong lich-trinh.json (cùng thư mục) — sửa tệp đó, không cần sửa trang này.
+       Lời xem trước khi gửi qua Zalo / Messenger: các thẻ og: dưới đây. -->
+  <meta name="description" content="Lịch trình ngày đón dâu Văn Hùng & Tuyết Anh, Chủ nhật 29/11/2026: 05:00 xe nhà trai xuất phát, 08:30–08:45 rời nhà gái, 10:30 về Tổ hợp Thể thao Vũ Tuấn.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Lịch trình ngày đón dâu · Văn Hùng & Tuyết Anh">
+  <meta property="og:description" content="Chủ nhật 29/11/2026 · 05:00 xe nhà trai xuất phát · 08:30–08:45 rời nhà gái · 10:30 về Tổ hợp Thể thao Vũ Tuấn.">
+  <meta property="og:url" content="https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/">
+  <meta property="og:image" content="https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/og-lich-trinh.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="theme-color" content="#FAF7EF">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.2s-7.6-4.7-10.1-9.4C.3 8.4 2.1 4.4 5.9 3.9c2.2-.3 4.3.9 5.3 2.7 1-1.8 3.1-3 5.3-2.7 3.8.5 5.6 4.5 3.8 7.9C19.6 16.5 12 21.2 12 21.2z' fill='%23203E4B'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500;600&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="lich-trinh.css">
+</head>
+<body>
+  <header class="top">
+    <!-- Nhành ô liu nhỏ, gợi lại hoạ tiết trên phong bì -->
+    <svg class="olive" viewBox="0 0 120 34" aria-hidden="true">
+      <g fill="none" stroke="#203E4B" stroke-width="1.2" stroke-linecap="round">
+        <path d="M8 22 C34 15 72 14 112 20"/>
+      </g>
+      <g fill="#A9BEC7" stroke="#203E4B" stroke-width=".8" stroke-opacity=".55">
+        <path d="M22 19 c3-8 10-11 16-10 c-3 7-9 11-16 10z"/>
+        <path d="M30 18 c4 6 11 8 16 6 c-4-5-10-7-16-6z"/>
+        <path d="M48 16 c3-8 10-11 16-10 c-3 7-9 11-16 10z"/>
+        <path d="M56 16 c4 6 11 8 16 6 c-4-5-10-7-16-6z"/>
+        <path d="M74 16 c3-8 10-10 16-9 c-3 7-9 10-16 9z"/>
+        <path d="M82 17 c4 6 11 8 16 6 c-4-5-10-7-16-6z"/>
+        <path d="M99 19 c4-6 9-8 13-7 c-3 5-8 8-13 7z"/>
+      </g>
+      <g fill="#203E4B" fill-opacity=".75">
+        <ellipse cx="40" cy="22.5" rx="2.6" ry="3.4"/>
+        <ellipse cx="70" cy="21.5" rx="2.6" ry="3.4"/>
+      </g>
+    </svg>
+    <p class="couple" id="couple">Văn Hùng &amp; Tuyết Anh</p>
+    <h1 id="title">Lịch trình ngày đón dâu</h1>
+    <p class="date" id="date">Chủ nhật, 29/11/2026</p>
+    <p class="route" id="route" hidden>Nhà trai Hải Phòng → Nhà gái Hà Nội → Nhà trai Hải Phòng</p>
+
+    <!-- Hai ô xếp dọc: 05:00 Nhà trai → Nhà gái, 08:30–08:45 Nhà gái → Nhà trai, mỗi ô một nút Google Maps — tạo từ lich-trinh.json -->
+    <nav class="quick" id="quick" aria-label="Mở Google Maps cho hai lượt xe"></nav>
+
+    <p class="day-note" id="dayNote"></p>
+    <p class="top-links" id="routeLink" hidden><a href="#lo-trinh">Bản đồ tuyến của đoàn ↓</a><a href="#lien-he">Liên hệ đoàn xe ↓</a></p>
+  </header>
+
+  <main id="main" aria-live="polite">
+    <p class="loading" id="loading">Đang tải lịch trình…</p>
+  </main>
+
+  <footer class="foot">
+    <button class="share" type="button" id="share">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Chia sẻ lịch trình
+    </button>
+    <p class="share-msg" id="shareMsg" role="status" aria-live="polite"></p>
+    <p class="updated" id="updated" hidden></p>
+    <p class="link-note">Link giữ nguyên, mở lại là thấy bản mới nhất.</p>
+  </footer>
+
+  <noscript><p class="loading">Trình duyệt đang tắt JavaScript nên chưa hiện được lịch. Hãy mở link bằng Chrome hoặc Safari.</p></noscript>
+  <script src="lich-trinh.js"></script>
+</body>
+</html>
