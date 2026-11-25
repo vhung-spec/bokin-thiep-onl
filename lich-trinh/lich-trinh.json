@@ -310,15 +310,12 @@
           "ketThuc": "",
           "nhanGio": "",
           "khiNao": "Sau khi đoàn về",
-          "viec": "Tiến hành nghi lễ",
-          "tomTat": "Nghi lễ",
+          "viec": "Tiến hành nghi lễ tại Tổ hợp Vũ Tuấn",
+          "tomTat": "Nghi lễ tại Tổ hợp Vũ Tuấn",
           "gioNgan": "Sau đó",
           "xeChay": false,
           "diaDiem": {
-            "ten": "",
-            "diaChi": "",
-            "daXacNhan": false,
-            "khiTrong": "Địa điểm nghi lễ: chờ gia đình xác nhận"
+            "ref": "tiecNhaTrai"
           },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách nghi lễ mời cô dâu chú rể và đại diện hai gia đình vào vị trí.",
