@@ -19,7 +19,7 @@
   "loTrinh": {
     "_huongDan": [
       "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ lấy từ tệp lo-trinh-co-dinh.geojson (tạo bằng tools/lo-trinh/tao_lo_trinh.py) — muốn đổi cung đường thì sửa và chạy lại script đó.",
-      "Nút Google Maps: dẫn đường từ vị trí hiện tại, bắt buộc đi qua các điểm trong quaDiem (toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy; tối đa 3 điểm) rồi tới toaDoDen.",
+      "Nút Google Maps: dẫn đường từ vị trí hiện tại, bắt buộc đi qua các điểm trong quaDiem (toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy; tối đa 3 điểm) rồi tới toaDoDen. Đã thử trên Google Maps ngày 25/11/2026: lượt đi qua QL5 – cầu Thanh Trì – Vành đai 3 trên cao (66,7 km), lượt về qua Tố Hữu – Vành đai 3 trên cao – QL5 (65,9 km). Đổi điểm thì thử lại, vì điểm đặt gần đường trên cao có thể bị Google bắt xuống đường dưới thấp.",
       "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
     ],
     "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Tố Hữu. Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
@@ -30,6 +30,7 @@
     "quyTac": [
       "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
       "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
+      "Tuyến có trạm thu phí (Google Maps báo): kiểm tra thẻ thu phí không dừng (ETC) của xe còn tiền trước ngày đi.",
       "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
     ],
     "luot": [
@@ -43,7 +44,7 @@
         "tenDiemDen": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
         "quaDiem": [
           { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93231,106.06177" },
-          { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98604,105.97867" },
+          { "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)", "toaDo": "21.01742,105.94375" },
           { "ten": "Cầu Thanh Trì", "toaDo": "20.99338,105.90140" }
         ],
         "cacBuoc": [
@@ -67,7 +68,7 @@
         "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
         "quaDiem": [
           { "ten": "Tố Hữu", "toaDo": "20.99191,105.78532" },
-          { "ten": "Cầu Thanh Trì", "toaDo": "20.99328,105.90153" },
+          { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97157,105.82196" },
           { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98598,105.97860" }
         ],
         "cacBuoc": [
