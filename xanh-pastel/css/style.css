@@ -274,6 +274,7 @@ body.open .scroll-hint .icon { animation: nudge 2.2s ease-in-out 2s infinite; }
 .cal-grid .dow:first-child { border-radius: 999px 0 0 999px; }
 .cal-grid .dow:nth-child(7) { border-radius: 0 999px 999px 0; }
 .cal-grid .d { height: 42px; display: grid; place-items: center; font: 500 16px var(--ui); color: var(--ink); position: relative; }
+.cal-grid .d.also b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--gold-d); color: var(--gold-d); font-weight: 700; }
 .cal-grid .sun { color: var(--rose); }
 .cal-grid .wed b { position: relative; font: 700 16.5px var(--ui); color: #fff; margin-top: -2px; text-shadow: 0 1px 2px rgba(70, 45, 15, .45); }
 .cal-grid .wed-heart { position: absolute; left: 50%; top: 50%; width: 46px; height: 46px; margin: -23px 0 0 -23px; filter: drop-shadow(0 3px 6px rgba(85, 99, 63, .35)); }
@@ -314,6 +315,7 @@ section.vis .cal-grid .wed { animation-play-state: running; }
 .tl li.right .item { grid-column: 3; justify-content: flex-start; text-align: left; }
 .tl time { display: block; font: 500 32px/1.1 var(--title); font-variant-numeric: tabular-nums; }
 .tl .lbl { display: block; font: 500 15px/1.35 var(--ui); color: var(--ink-2); }
+.tl .tl-day { display: block; margin-bottom: 2px; font: 600 12.5px/1.2 var(--ui); letter-spacing: .03em; color: var(--gold-d); }
 .tl .tl-ico { width: 42px; height: auto; flex: none; }
 
 /* =========================================================

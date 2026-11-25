@@ -117,6 +117,14 @@ Dấu sáp và bìa được tách từ ảnh bìa bằng `tools/hoa-tiet/tach_b
 - Ở trang tạo link, khách ghi **Khách nhà trai** tự nhận link `…/nha-trai/?to=Tên&ben=trai`; lời nhắn dùng `{thoigian}` và `{diadiem}` nên tự ghi đúng giờ, nơi theo bên của khách.
 - Đổi ngày / địa điểm nhà trai: sửa `sides.trai` trong `config.js`, sửa lời xem trước trong `nha-trai/index.html` (và ảnh xem trước nếu đổi ngày).
 
+### Bản người nhà (nhà trai)
+
+- Mời người nhà ăn cỗ: **10:00 Thứ Bảy 28/11** (ăn cỗ bác rạp), **15:00 Thứ Bảy 28/11** (bữa cơm chiều), **10:30 Chủ Nhật 29/11** (cỗ cưới), cùng ở Tổ hợp Thể thao Vũ Tuấn Mobile.
+- Nằm ở `editions['nguoi-nha']` trong `xanh-pastel/js/config.js`: lấy bản nhà trai rồi đổi ngày giờ chính (bữa đầu tiên), lời mời và lịch trình (mỗi mốc có `date` thì thiệp ghi thứ, ngày và khoanh các ngày trên lịch tháng).
+- Link chung: `https://vhung-spec.github.io/bokin-thiep-onl/nguoi-nha/`. Ở trang tạo link chọn **Người nhà (nhà trai)** khi thêm khách: link `…/nguoi-nha/?to=Tên…`, lời nhắn kể đủ ba bữa.
+- Trên Google Sheet, cột **Bên** ghi “Người nhà trai”. Cần Code.gs mới (trang tạo link sẽ nhắc nếu Apps Script còn bản cũ).
+- Đổi giờ / món: sửa `editions['nguoi-nha']` trong `config.js` và lời xem trước trong `nguoi-nha/index.html`.
+
 ### Tạo link mời riêng cho từng khách (`xanh-pastel/tao-link.html`)
 
 Mở **https://vhung-spec.github.io/bokin-thiep-onl/xanh-pastel/tao-link.html** trên điện thoại hoặc máy tính. Link mời tạo ra lấy theo địa chỉ trang web đang mở (gắn tên miền riêng rồi thì mở trang này qua tên miền để link mời dùng tên miền):

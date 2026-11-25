@@ -191,14 +191,19 @@ function delSheet_() {
   sh.hideSheet();
   return sh;
 }
-function sideLabel_(s) { return s === 'trai' ? 'Nhà trai' : s === 'gai' ? 'Nhà gái' : ''; }
+function sideLabel_(s, ban) {
+  if (ban === 'nguoi-nha') return s === 'gai' ? 'Người nhà gái' : 'Người nhà trai';
+  return s === 'trai' ? 'Nhà trai' : s === 'gai' ? 'Nhà gái' : '';
+}
 function sideOf_(v) { v = String(v || '').toLowerCase(); return /trai/.test(v) ? 'trai' : /gái|gai/.test(v) ? 'gai' : ''; }
+// loại khách riêng (bản thiệp riêng): "Người nhà trai" → 'nguoi-nha'
+function banOf_(v) { return /người nhà|nguoi nha/i.test(String(v || '')) ? 'nguoi-nha' : ''; }
 function sentOf_(v) { return v === true || /^(có|co|x|✓|✔|1|yes|true|rồi|roi|đã gửi|da gui)$/i.test(String(v == null ? '' : v).trim()); }
-function guestKey_(name, side) { return String(name || '').replace(/\s+/g, ' ').trim().toLowerCase() + '|' + side; }
+function guestKey_(name, side, ban) { return String(name || '').replace(/\s+/g, ' ').trim().toLowerCase() + '|' + side + '|' + (ban || ''); }
 function newId_() { return 's' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 function guestList_(rows) {
   return rows.filter(function (r) { return String(r[0]).trim(); }).map(function (r) {
-    return { id: String(r[G_ID]), name: String(r[0]).trim(), side: sideOf_(r[1]), sent: sentOf_(r[2]), music: String(r[3] || '').trim(), link: String(r[4] || '') };
+    return { id: String(r[G_ID]), name: String(r[0]).trim(), side: sideOf_(r[1]), ban: banOf_(r[1]), sent: sentOf_(r[2]), music: String(r[3] || '').trim(), link: String(r[4] || '') };
   });
 }
 
@@ -250,7 +255,7 @@ function guests_(p) {
   var byId = {}, byKey = {};
   rows.forEach(function (r, i) {
     byId[String(r[G_ID])] = i;
-    var k = guestKey_(r[0], sideOf_(r[1]));
+    var k = guestKey_(r[0], sideOf_(r[1]), banOf_(r[1]));
     if (String(r[0]).trim() && !(k in byKey)) byKey[k] = i;
   });
   var add = [];
@@ -259,14 +264,15 @@ function guests_(p) {
     var id = String(g.id || '').slice(0, 40), name = String(g.name || '').replace(/\s+/g, ' ').trim().slice(0, 80);
     if (!id || !name || gone[id]) return;
     var side = g.side === 'trai' || g.side === 'gai' ? g.side : '';
-    var vals = [clean_(name, 80), sideLabel_(side), g.sent ? 'Có' : '', clean_(g.music || '', 300)];
+    var ban = g.ban === 'nguoi-nha' ? g.ban : '';
+    var vals = [clean_(name, 80), sideLabel_(side, ban), g.sent ? 'Có' : '', clean_(g.music || '', 300)];
     var i = byId[id];
     if (i !== undefined) {
       for (var j = 0; j < 4; j++) rows[i][j] = vals[j];
       sh.getRange(i + 2, 1, 1, 4).setValues([vals]);
       return;
     }
-    var k = guestKey_(name, side);
+    var k = guestKey_(name, side, ban);
     if (k in byKey) return;
     var row = vals.concat([clean_((d.links && d.links[id]) || '', 2000), now, id]);
     add.push(row);
@@ -294,7 +300,8 @@ function guests_(p) {
   try { settings = JSON.parse(props.getProperty('NHAC_CHUNG') || 'null'); } catch (e) { settings = null; }
 
   SpreadsheetApp.flush();
-  return json_({ ok: true, guests: guestList_(rows), settings: settings, sheet: ss_().getUrl() + '#gid=' + sh.getSheetId() });
+  // ver: phiên bản Code.gs (3 = có loại khách "Người nhà"); trang tạo link dựa vào đây để nhắc cập nhật
+  return json_({ ok: true, ver: 3, guests: guestList_(rows), settings: settings, sheet: ss_().getUrl() + '#gid=' + sh.getSheetId() });
 }
 
 // Danh sách phản hồi cho trang thong-ke.html (chỉ khi đúng mật khẩu MAT_KHAU)

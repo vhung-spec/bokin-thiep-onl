@@ -24,9 +24,29 @@
     return pad(+(dm[4] || 0)) + ':' + pad(+(dm[5] || 0)) + ', ' + weekday + ' ' + pad(+dm[3]) + '.' + pad(+dm[2]) + '.' + dm[1];
   }
   // giờ và nơi tổ chức theo bên của khách: nhà trai có bản riêng (config.js → sides.trai), còn lại dùng bản chính
-  function eventOf(side) {
-    var o = (W.sides || {})[side] || {}, v = o.venue || {};
-    return { when: whenOf(o.date || W.date), place: v.name || W.venue.name };
+  // các bản riêng cho nhóm khách (config.js → editions), vd. 'nguoi-nha'
+  var ED = W.editions || {}, EDK = Object.keys(ED);
+  function edOf(g) { return g && g.ban && ED[g.ban] ? ED[g.ban] : null; }
+  function edShort(e) { return String(e.label || 'Bản riêng').replace(/\s*\(.*\)\s*$/, ''); } // 'Người nhà (nhà trai)' → 'Người nhà'
+  // ô chọn nhóm khách: '' | 'trai' | 'gai' | 'trai:nguoi-nha'
+  function selVal(g) { return (g.side || '') + (g.ban ? ':' + g.ban : ''); }
+  function fromSel(v) { var p = String(v || '').split(':'); return { side: p[0] || '', ban: p[1] && ED[p[1]] ? p[1] : '' }; }
+  function dayLabel(date) {
+    var m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(date || '');
+    return m ? WD[new Date(Date.UTC(+m[1], m[2] - 1, +m[3])).getUTCDay()] + ' ' + pad(+m[3]) + '/' + pad(+m[2]) : '';
+  }
+  function lowerFirst(t) { t = String(t || ''); return t.charAt(0).toLowerCase() + t.slice(1); }
+  function eventOf(side, ban) {
+    var e = ban && ED[ban] ? ED[ban] : null;
+    if (e && !side) side = e.side || '';
+    var o = (W.sides || {})[side] || {}, v = o.venue || {}, ev = (e && e.venue) || {};
+    var dated = ((e && e.timeline && e.timeline.items) || []).filter(function (it) { return it.date; });
+    var when;
+    if (dated.length > 1) { // bản có nhiều bữa / nhiều ngày: kể đủ các mốc
+      var parts = dated.map(function (it) { return it.time + ' ' + dayLabel(it.date) + ' (' + lowerFirst(it.label) + ')'; });
+      when = parts.slice(0, -1).join(', ') + ' và ' + parts[parts.length - 1];
+    } else when = whenOf((e && e.date) || o.date || W.date);
+    return { when: when, place: ev.name || v.name || W.venue.name };
   }
   var when = whenOf(W.date);
   var HAS_TRAI = !!(W.sides && W.sides.trai);
@@ -99,10 +119,12 @@
   function effRaw() { return (S.music || '').trim() || W.music || ''; }
   function chosenMusic() { return musicSpec(effRaw(), S.start); }
   // khách nhà trai: link vào cửa nha-trai/ (ảnh và lời xem trước trên Zalo / Messenger ghi đúng ngày nhà trai)
-  function baseFor(side) {
-    var b = base();
-    if (side !== 'trai' || !HAS_TRAI) return b;
-    return new URL('nha-trai/', b.replace(/xanh-pastel\/(index\.html)?$/, '')).href;
+  // bản riêng (vd. người nhà) có cửa vào riêng cùng tên: …/nguoi-nha/
+  function baseFor(g) {
+    var b = base(), root = b.replace(/xanh-pastel\/(index\.html)?$/, '');
+    if (edOf(g)) return new URL(g.ban + '/', root).href;
+    if (g.side !== 'trai' || !HAS_TRAI) return b;
+    return new URL('nha-trai/', root).href;
   }
   // trang gốc của trang web (bỏ đoạn xanh-pastel/ nếu địa chỉ thiệp trỏ thẳng vào thiệp)
   function siteRoot() { return base().replace(/xanh-pastel\/(index\.html)?$/, ''); }
@@ -110,16 +132,17 @@
     var p = new URLSearchParams();
     p.set('to', g.name);
     if (g.side) p.set('ben', g.side);
+    if (edOf(g)) p.set('ban', g.ban);
     var sp = g.music ? N.parse(g.music) : chosenMusic();
     var m = sp ? N.toParam(sp) : '';
     if (m && m !== defaultMusic) p.set('nhac', m);
     return p.toString();
   }
-  function longLink(g) { return baseFor(g.side) + '?' + params(g); }
+  function longLink(g) { return baseFor(g) + '?' + params(g); }
   // link gửi khách: link ngắn …/m/ab12cd khi trang nhỏ của khách đã chạy (Facebook / Zalo hiện "Thân gửi <tên>"), không thì link dài
   function linkFor(g) { return (SHORT && SHORT.linkFor(g)) || longLink(g); }
   function message(g) {
-    var ev = eventOf(g.side);
+    var ev = eventOf(g.side, g.ban);
     return (S.tpl || DEFAULT_TPL).split('{ten}').join(g.name).split('{thoigian}').join(ev.when).split('{diadiem}').join(ev.place)
       .split('{link}').join(linkFor(g));
   }
@@ -349,12 +372,13 @@
 
   /* ---------- 3. Khách mời ---------- */
   var list = $('#guestList'), editing = null, openMore = null;
-  function addGuest(name, side) {
+  function addGuest(name, sel) {
     name = String(name || '').replace(/\s+/g, ' ').trim().slice(0, 80);
     if (!name) return false;
-    var dup = S.guests.some(function (g) { return g.name.toLowerCase() === name.toLowerCase() && (g.side || '') === (side || ''); });
+    var k = fromSel(sel);
+    var dup = S.guests.some(function (g) { return g.name.toLowerCase() === name.toLowerCase() && (g.side || '') === k.side && (g.ban || '') === k.ban; });
     if (dup) return false;
-    S.guests.unshift({ id: uid(), name: name, side: side || '', music: '', sent: false, p: ++S.rev });
+    S.guests.unshift({ id: uid(), name: name, side: k.side, ban: k.ban, music: '', sent: false, p: ++S.rev });
     return true;
   }
   $('#addForm').addEventListener('submit', function (e) {
@@ -383,6 +407,7 @@
       if (f === 'chua') return !g.sent;
       if (f === 'roi') return g.sent;
       if (f === 'trai' || f === 'gai') return g.side === f;
+      if (f.indexOf('ban:') === 0) return g.ban === f.slice(4);
       return true;
     });
     list.innerHTML = shown.map(function (g) {
@@ -391,7 +416,8 @@
         return '<li class="g" data-id="' + g.id + '"><div class="g-edit">' +
           '<input class="inp" data-f="name" maxlength="80" value="' + esc(g.name) + '" aria-label="Tên khách">' +
           '<div class="row"><select class="inp" data-f="side" aria-label="Khách của bên nào">' +
-          ['', 'trai', 'gai'].map(function (v) { return '<option value="' + v + '"' + (g.side === v ? ' selected' : '') + '>' + (v ? 'Khách ' + SIDE[v].toLowerCase() : 'Không ghi bên') + '</option>'; }).join('') +
+          [['', 'Không ghi bên'], ['trai', 'Khách nhà trai'], ['gai', 'Khách nhà gái']].concat(EDK.map(function (k) { return [(ED[k].side || '') + ':' + k, ED[k].label || k]; }))
+            .map(function (o) { return '<option value="' + esc(o[0]) + '"' + (selVal(g) === o[0] ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') +
           '</select></div>' +
           '<input class="inp" data-f="music" value="' + esc(g.music || '') + '" placeholder="Nhạc riêng cho khách này (để trống = nhạc chung)" aria-label="Nhạc riêng">' +
           '<div class="btns"><button class="btn" data-act="save">Lưu</button><button class="btn ghost" data-act="cancel">Huỷ</button></div>' +
@@ -399,7 +425,7 @@
       }
       return '<li class="g' + (g.sent ? ' sent' : '') + '" data-id="' + g.id + '">' +
         '<div class="g-top"><span class="g-name">' + esc(g.name) + '</span>' +
-        (g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
+        (edOf(g) ? '<span class="chip ' + g.side + '">' + esc(edShort(edOf(g))) + '</span>' : g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
         (g.music ? '<span class="chip music">Nhạc riêng</span>' : '') +
         (g.sent ? '<span class="chip done">Đã gửi</span>' : '') +
         (SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : '') + '</div>' +
@@ -423,11 +449,13 @@
     var sent = S.guests.filter(function (g) { return g.sent; }).length;
     var nt = S.guests.filter(function (g) { return g.side === 'trai'; }).length;
     var ng = S.guests.filter(function (g) { return g.side === 'gai'; }).length;
-    $('#stats').textContent = S.guests.length ? S.guests.length + ' khách · ' + sent + ' đã gửi · ' + nt + ' nhà trai · ' + ng + ' nhà gái' +
+    var nb = S.guests.filter(function (g) { return edOf(g); }).length;
+    $('#stats').textContent = S.guests.length ? S.guests.length + ' khách · ' + sent + ' đã gửi · ' + nt + ' nhà trai' + (nb ? ' (' + nb + ' người nhà)' : '') + ' · ' + ng + ' nhà gái' +
       (shown.length !== S.guests.length ? ' · đang hiện ' + shown.length : '') : '';
     if (editing) { var inp = $('.g-edit input', list); if (inp) inp.focus(); }
     $('#openCard').href = linkFor({ name: 'Khách quý', side: '' });
     if (HAS_TRAI) $('#openCardTrai').href = linkFor({ name: 'Khách quý', side: 'trai' });
+    EDK.forEach(function (k) { var a = $('#openCard-' + k); if (a) a.href = linkFor({ name: 'Khách quý', side: ED[k].side || '', ban: k }); });
   }
 
   // link ngắn của khách chưa chạy: hỏi có gửi luôn link dài không (Facebook sẽ không hiện tên)
@@ -471,7 +499,8 @@
       var mus = $('[data-f="music"]', li).value.trim();
       if (!name) { toast('Tên khách không được để trống.'); return; }
       if (mus && !N.parse(mus)) { toast('Link nhạc riêng chưa đúng.'); return; }
-      g.name = name; g.side = $('[data-f="side"]', li).value; g.music = mus; touch(g); SHORT.queue([g.id]);
+      var k = fromSel($('[data-f="side"]', li).value);
+      g.name = name; g.side = k.side; g.ban = k.ban; g.music = mus; touch(g); SHORT.queue([g.id]);
       editing = null; changed(); toast('Đã lưu.');
     } else if (act === 'delete') {
       if (!window.confirm('Xoá “' + g.name + '” khỏi danh sách?')) return;
@@ -489,7 +518,7 @@
   $('#exportCsv').addEventListener('click', function () {
     if (!S.guests.length) { toast('Danh sách đang trống.'); return; }
     var rows = [['STT', 'Tên khách', 'Bên', 'Đã gửi', 'Nhạc riêng', 'Link']].concat(S.guests.slice().reverse().map(function (g, i) {
-      return [i + 1, g.name, g.side ? SIDE[g.side] : '', g.sent ? 'Có' : '', g.music || '', linkFor(g)];
+      return [i + 1, g.name, edOf(g) ? edOf(g).label : g.side ? SIDE[g.side] : '', g.sent ? 'Có' : '', g.music || '', linkFor(g)];
     }));
     var csv = '﻿' + rows.map(function (r) { return r.map(csvCell).join(','); }).join('\r\n');
     var a = document.createElement('a');
@@ -527,6 +556,8 @@
       rows.reverse().forEach(function (r) {
         var sideTxt = iSide >= 0 ? (r[iSide] || '').toLowerCase() : '';
         var sd = /trai/.test(sideTxt) ? 'trai' : /gái|gai/.test(sideTxt) ? 'gai' : '';
+        var ek = EDK.filter(function (k) { return /người nhà|nguoi nha/.test(sideTxt) && /người nhà/i.test(ED[k].label || '') && (!sd || (ED[k].side || '') === sd); })[0];
+        if (ek) sd = (ED[ek].side || '') + ':' + ek;
         if (addGuest(r[iName], sd)) {
           added++;
           var g = S.guests[0];
@@ -587,9 +618,13 @@
         }, function (e) { clearTimeout(t); throw e; });
     }
     // Danh sách trên Google Sheet là bản chính; khách sửa trên máy này trong lúc đang lưu thì vẫn giữ bản của máy
-    function apply(list, sentP, sentDels) {
+    function apply(list, sentP, sentDels, hasBan) {
+      var mine = {};
+      S.guests.forEach(function (g) { mine[g.id] = g; });
       var out = list.map(function (x) {
-        return { id: String(x.id), name: String(x.name), side: x.side || '', music: x.music || '', sent: !!x.sent, sl: x.link || '' };
+        var id = String(x.id);
+        return { id: id, name: String(x.name), side: x.side || '', ban: hasBan ? (x.ban || '') : ((mine[id] && mine[id].ban) || ''),
+          music: x.music || '', sent: !!x.sent, sl: x.link || '' };
       }).reverse(); // mới thêm lên đầu
       var pos = {};
       out.forEach(function (g, i) { pos[g.id] = i; });
@@ -622,7 +657,7 @@
       if (first) S.guests.forEach(function (g) { if (!g.p) g.p = ++S.rev; }); // lần đầu: đưa cả danh sách trên máy lên
       var sentP = {}, up = [], links = {};
       S.guests.slice().reverse().forEach(function (g) { // cũ trước, mới sau: trang tính xếp theo thứ tự thêm
-        if (g.p) { sentP[g.id] = g.p; up.push({ id: g.id, name: g.name, side: g.side || '', sent: !!g.sent, music: g.music || '' }); }
+        if (g.p) { sentP[g.id] = g.p; up.push({ id: g.id, name: g.name, side: g.side || '', ban: g.ban || '', sent: !!g.sent, music: g.music || '' }); }
         var l = linkFor(g);
         if (l !== g.sl) links[g.id] = l;
       });
@@ -631,7 +666,7 @@
       if (setP) data.set = { music: S.music, start: S.start };
       status('', up.length || dels.length ? 'Đang lưu lên Google Sheet…' : 'Đang tải danh sách từ Google Sheet…');
       post({ type: 'guests', key: getKey(), data: JSON.stringify(data) }).then(function (j) {
-        apply(j.guests, sentP, dels);
+        apply(j.guests, sentP, dels, !!j.ver);
         applyMusic(j, setP);
         S.linked = true; retry = 0;
         save();
@@ -640,6 +675,11 @@
         $('#syncOld').hidden = true;
         var now = new Date();
         status('ok', '✓ Đã lưu trên Google Sheet lúc ' + pad(now.getHours()) + ':' + pad(now.getMinutes()) + ' · ' + S.guests.length + ' khách');
+        if (!j.ver && S.guests.some(function (g) { return edOf(g); })) { // Apps Script chưa biết loại "người nhà"
+          status('bad', 'Đã lưu ' + S.guests.length + ' khách, nhưng Apps Script đang chạy bản cũ nên loại “Người nhà” chỉ giữ trên máy này. Cập nhật theo 4 bước dưới đây:');
+          $('#syncOld').hidden = false;
+          prefetchGs();
+        }
         if (first) toast('Đã kết nối Google Sheet: ' + S.guests.length + ' khách.');
         SHORT.kick();
         // khách mới từ máy khác / gõ tay trên trang tính chưa có link mời: gửi link ở lượt sau (chỉ một lượt)
@@ -744,10 +784,12 @@
     }
     function attr(v) { return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function page(g) {
-      var ev = eventOf(g.side), root = siteRoot();
+      var ev = eventOf(g.side, g.ban), root = siteRoot(), e = edOf(g);
       var target = root + 'xanh-pastel/?' + params(g);
-      var img = root + 'xanh-pastel/assets/' + (g.side === 'trai' && HAS_TRAI ? 'og-image-nha-trai.jpg' : 'og-image.jpg');
-      var t = title(g), desc = couple + ' trân trọng kính mời bạn tới dự lễ thành hôn, ' + ev.when + ' tại ' + ev.place + '.';
+      var img = root + 'xanh-pastel/assets/' + (e && e.ogImage ? e.ogImage : g.side === 'trai' && HAS_TRAI ? 'og-image-nha-trai.jpg' : 'og-image.jpg');
+      var t = title(g), desc = e
+        ? couple + ' trân trọng kính mời bạn ' + ((e.invitation && e.invitation.line) || 'tới dự lễ thành hôn') + ': ' + ev.when + ' tại ' + ev.place + '.'
+        : couple + ' trân trọng kính mời bạn tới dự lễ thành hôn, ' + ev.when + ' tại ' + ev.place + '.';
       return '<!doctype html>\n<html lang="vi">\n<head>\n<meta charset="utf-8">\n' +
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n' +
         '<title>' + attr(t + ' · Thiệp cưới ' + couple) + '</title>\n' +
@@ -923,11 +965,21 @@
   })();
 
   /* ---------- Bắt đầu ---------- */
+  EDK.forEach(function (k) {
+    var e = ED[k], v = (e.side || '') + ':' + k;
+    ['#gSide', '#bulkSide'].forEach(function (id) { var o = document.createElement('option'); o.value = v; o.textContent = e.label || k; $(id).appendChild(o); });
+    var f = document.createElement('option'); f.value = 'ban:' + k; f.textContent = edShort(e); $('#filter').appendChild(f);
+    var a = document.createElement('a');
+    a.className = 'btn ghost'; a.id = 'openCard-' + k; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = 'Xem bản ' + lowerFirst(edShort(e));
+    ($('#openCardTrai') || $('#openCard')).insertAdjacentElement('afterend', a);
+  });
   if (HAS_TRAI) {
     var evT = eventOf('trai'), evG = eventOf('');
     $('#openCardTrai').hidden = false;
     $('#sideHint').innerHTML = '<b>Khách nhà trai</b> nhận bản nhà trai: ' + esc(evT.when) + ' tại ' + esc(evT.place) + '.<br>' +
-      '<b>Khách nhà gái</b> và khách không ghi bên: ' + esc(evG.when) + ' tại ' + esc(evG.place) + '.';
+      '<b>Khách nhà gái</b> và khách không ghi bên: ' + esc(evG.when) + ' tại ' + esc(evG.place) + '.' +
+      EDK.map(function (k) { var ev = eventOf('', k); return '<br><b>' + esc(ED[k].label || k) + '</b>: ' + esc(ev.when) + ' tại ' + esc(ev.place) + '.'; }).join('');
     $('#sideHint').hidden = false;
   }
   $('#couple').textContent = couple;

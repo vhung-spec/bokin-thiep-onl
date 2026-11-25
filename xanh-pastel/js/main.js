@@ -14,13 +14,18 @@
   // Bản theo bên: link có ?ben=trai lấy ngày giờ, địa điểm… trong config.js → sides.trai (mục không ghi thì giữ bản chính)
   var qs = new URLSearchParams(location.search);
   var side = { trai: 'trai', gai: 'gai' }[(qs.get('ben') || '').toLowerCase()] || ''; // khách của nhà trai / nhà gái
-  (function merge(a, b) {
+  // bản riêng cho một nhóm khách (vd. ?ban=nguoi-nha): lấy bản của bên đó rồi đổi thêm các mục trong config.js → editions
+  var ED = (W.editions || {})[(qs.get('ban') || '').toLowerCase()] || null;
+  if (ED && ED.side && !side) side = ED.side;
+  function merge(a, b) {
     Object.keys(b || {}).forEach(function (k) {
       var v = b[k];
       if (v && typeof v === 'object' && !Array.isArray(v) && a[k] && typeof a[k] === 'object') merge(a[k], v);
       else a[k] = v;
     });
-  })(W, (W.sides || {})[side]);
+  }
+  merge(W, (W.sides || {})[side]);
+  if (ED) merge(W, ED);
 
   // Ngày giờ cưới theo giờ Việt Nam, tách thành từng phần để không phụ thuộc múi giờ của máy khách
   var dm = /^(\d{4})-(\d{1,2})-(\d{1,2})(?:[T ](\d{1,2}):(\d{2}))?/.exec(String(W.date || ''));
@@ -243,11 +248,17 @@
     var first = dow(D.y, D.m, 1), off = sun ? first : (first + 6) % 7;
     var days = new Date(Date.UTC(D.y, D.m, 0)).getUTCDate();
     for (var i = 0; i < off; i++) html += '<span></span>';
+    var also = {}; // các ngày khác có trong lịch trình (bản có nhiều ngày, vd. bản người nhà)
+    (W.timeline.items || []).forEach(function (it) {
+      var m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(it.date || '');
+      if (m && +m[1] === D.y && +m[2] === D.m && +m[3] !== D.d) also[+m[3]] = true;
+    });
     for (var d = 1; d <= days; d++) {
       var isSun = dow(D.y, D.m, d) === 0;
       html += d === D.d
         ? '<span class="d wed" role="img" aria-label="Ngày ' + d + ', ngày cưới"><span class="wed-heart">' + A.heartSvg() + '</span><b aria-hidden="true">' + d + '</b></span>'
-        : '<span class="d' + (isSun ? ' sun' : '') + '">' + d + '</span>';
+        : also[d] ? '<span class="d also" role="img" aria-label="Ngày ' + d + ', có trong lịch trình"><b aria-hidden="true">' + d + '</b></span>'
+          : '<span class="d' + (isSun ? ' sun' : '') + '">' + d + '</span>';
     }
     $('#calGrid').innerHTML = html;
     $('#calNote').innerHTML = A.ringsIcon() + '<span><b>' + weekday + ', ' + pad(D.d) + '.' + pad(D.m) + '.' + D.y + ' · ' + hhmm +
@@ -259,7 +270,9 @@
   var tlItems = (W.timeline.items || []);
   if (!tlItems.length) $('#lich-trinh').hidden = true;
   $('#tlList').innerHTML = tlItems.map(function (it, i) {
-    var text = '<span class="tl-text"><time>' + esc(it.time) + '</time><span class="lbl">' + esc(it.label) + '</span></span>';
+    var dd = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(it.date || '');
+    var day = dd ? '<small class="tl-day">' + WD[dow(+dd[1], +dd[2], +dd[3])] + ' ' + pad(+dd[3]) + '/' + pad(+dd[2]) + '</small>' : '';
+    var text = '<span class="tl-text">' + day + '<time>' + esc(it.time) + '</time><span class="lbl">' + esc(it.label) + '</span></span>';
     var ico = A.tlIcon(it.icon);
     var left = i % 2 === 0;
     return '<li class="' + (left ? 'left' : 'right') + '"><span class="dot"></span><div class="item">' + (left ? ico + text : text + ico) + '</div></li>';

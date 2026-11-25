@@ -8,6 +8,7 @@
  *  • Thứ trong tuần và ngày âm lịch được tính tự động.
  *  • Mời riêng từng khách: thêm ?to=Tên vào link, ví dụ  .../xanh-pastel/?to=Anh%20Thắng
  *  • Bản nhà trai (giờ, địa điểm khác): mục sides.trai ở dưới, mở bằng link .../nha-trai/
+ *  • Bản người nhà (nhà trai): mục editions['nguoi-nha'] ở dưới, mở bằng link .../nguoi-nha/
  */
 window.WEDDING = {
   groom: { name: 'Văn Hùng' },
@@ -131,6 +132,25 @@ window.WEDDING = {
   thanks: {
     title: 'Thank you!',
     text: 'Cảm ơn bạn đã dành thời gian quý báu để chung vui cùng chúng mình. Sự hiện diện của bạn là món quà ý nghĩa nhất!',
+  },
+
+  // CÁC BẢN RIÊNG cho từng nhóm khách. Link có &ban=<tên bản> (trang tạo link tự gắn) lấy bản của bên (side)
+  // rồi đổi thêm các mục ghi trong bản. Lịch trình có date thì hiện thứ, ngày trên mỗi mốc và đánh dấu các ngày trên lịch tháng.
+  editions: {
+    'nguoi-nha': {
+      label: 'Người nhà (nhà trai)', // tên hiện ở trang tạo link
+      side: 'trai',                  // lấy địa điểm, ảnh xem trước… của bản nhà trai
+      date: '2026-11-28T10:00',      // bữa đầu tiên: ngày giờ lớn trên thiệp và đếm ngược theo giờ này
+      ogImage: 'og-image.jpg',       // ảnh xem trước Zalo / Facebook (ghi 28.11)
+      invitation: { line: 'tới ăn cỗ và chung vui cùng gia đình chúng tôi' },
+      timeline: {
+        items: [
+          { date: '2026-11-28', time: '10:00', label: 'Ăn cỗ bác rạp', icon: 'cheers' },
+          { date: '2026-11-28', time: '15:00', label: 'Bữa cơm chiều', icon: 'heart' },
+          { date: '2026-11-29', time: '10:30', label: 'Cỗ cưới', icon: 'rings' },
+        ],
+      },
+    },
   },
 
   // ĐỊA CHỈ THIỆP dùng trong link mời riêng (trang tao-link.html).
