@@ -106,6 +106,20 @@ def fill_gradient(im, stops=14):
     return res
 
 
+def blur_bg(im, w=1920, h=1080):
+    """Nền mờ lấy từ chính ảnh: phủ kín khung 16:9, nhoè rất mạnh, tối và trầm màu để ảnh chính nổi lên."""
+    r = max(w / im.width, h / im.height)
+    sm = im.resize((max(1, round(im.width * r / 20)), max(1, round(im.height * r / 20))), Image.BOX)
+    sm = sm.filter(ImageFilter.GaussianBlur(2.2))
+    cw, ch = round(w / 20), round(h / 20)
+    left, top = (sm.width - cw) // 2, (sm.height - ch) // 2
+    sm = sm.crop((left, top, left + cw, top + ch)).resize((w, h), Image.BICUBIC).filter(ImageFilter.GaussianBlur(8))
+    x = np.asarray(sm, dtype=np.float32) / 255
+    L = (x @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32))[..., None]
+    x = (L + (x - L) * 0.78) * 0.58
+    return Image.fromarray((np.clip(x, 0, 1) * 255 + 0.5).astype(np.uint8))
+
+
 def paper(w, h, seed=7):
     """Giấy ngà: nền ấm, loang rất nhẹ, hạt mịn và vài sợi giấy."""
     rng = np.random.default_rng(seed)
@@ -140,6 +154,10 @@ def main():
         out[it['name']] = {'w': im.width, 'h': im.height, 'fill': fill_color(im, it.get('set') == 'A')}
         if it.get('set') == 'A':
             out[it['name']]['fillGrad'] = fill_gradient(im)
+        if it.get('blur'):
+            stem = it['name'].rsplit('.', 1)[0]
+            blur_bg(im).save(it['out'].rsplit('/', 1)[0] + f'/{stem}__mo.jpg', quality=90)
+            out[it['name']]['blur'] = f'{stem}__mo.jpg'
     for p in job.get('papers', []):
         paper(p['w'], p['h']).save(p['out'], quality=92)
     print(json.dumps(out))

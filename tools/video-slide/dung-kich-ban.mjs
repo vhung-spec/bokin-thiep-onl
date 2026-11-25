@@ -51,15 +51,18 @@ const meta = fs.existsSync(metaFile) ? JSON.parse(fs.readFileSync(metaFile, 'utf
 const gradeStamp = fs.statSync(path.join(HERE, 'chinh_mau.py')).mtimeMs;
 const files = new Map(fs.readdirSync(photoDir).map((f) => [f.toLowerCase(), f]));
 const used = new Map();
-for (const s of KB.shots) for (const L of s.layers || []) if (L.img) used.set(L.img, L.set);
+const wantBlur = new Set();
+for (const s of KB.shots) for (const L of s.layers || []) if (L.img) { used.set(L.img, L.set); if (L.blurBg) wantBlur.add(L.img); }
 const jobs = [];
 for (const [name, set] of used) {
   const real = files.get(name.toLowerCase());
   if (!real) throw new Error(`Không thấy ảnh ${name} trong ${photoDir}`);
   const src = path.join(photoDir, real);
   const m = meta[name];
-  const fresh = m && m.set === set && m.stamp === gradeStamp && m.srcTime === fs.statSync(src).mtimeMs && fs.existsSync(path.join(cache, name));
-  if (!fresh) jobs.push({ name, src, out: path.join(cache, name), set });
+  const blur = wantBlur.has(name);
+  const fresh = m && m.set === set && m.stamp === gradeStamp && m.srcTime === fs.statSync(src).mtimeMs && fs.existsSync(path.join(cache, name))
+    && (!blur || (m.blur && fs.existsSync(path.join(cache, m.blur))));
+  if (!fresh) jobs.push({ name, src, out: path.join(cache, name), set, blur });
 }
 const paperFile = path.join(cache, `giay-nga-${W}x${H}.jpg`);
 const papers = fs.existsSync(paperFile) ? [] : [{ out: paperFile, w: W, h: H }];
