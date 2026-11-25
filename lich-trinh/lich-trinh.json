@@ -19,9 +19,9 @@
   "loTrinh": {
     "_huongDan": [
       "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ lấy từ tệp lo-trinh-co-dinh.geojson (tạo bằng tools/lo-trinh/tao_lo_trinh.py) — muốn đổi cung đường thì sửa và chạy lại script đó.",
-      "Google Maps: mỗi lượt chia thành các đoạn trong doanGoogle. Mỗi đoạn một nút dẫn đường từ vị trí hiện tại, bắt buộc qua đúng 3 điểm quaDiem (giới hạn của link Google Maps trên điện thoại) rồi tới den. Toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy.",
+      "Google Maps: mỗi lượt chia thành các đoạn trong doanGoogle. Mỗi đoạn một nút có điểm đi cố định (toaDoDi của lượt, hoặc den của đoạn trước) và dir_action=navigate: điện thoại ở gần điểm đi thì vào dẫn đường, ở nơi khác thì chỉ xem trước; bắt buộc qua đúng 3 điểm quaDiem (giới hạn của link Google Maps trên điện thoại) rồi tới den. Toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy.",
       "Nút Xem trước toàn tuyến: điểm đi cố định toaDoDi, qua tất cả các điểm — mở ở đâu cũng thấy đúng một tuyến, dùng để kiểm tra trước.",
-      "Đã thử trên Google Maps ngày 25/11/2026: lượt đi đoạn 1 41,4 km (QL5 tới Gia Lâm), đoạn 2 25,5 km (cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Chu Văn An – Ngọc Trục); lượt về đoạn 1 25,2 km (Vạn Phúc – Quang Trung – Nguyễn Trãi – Vành đai 3 trên cao – cầu Thanh Trì – QL5), đoạn 2 40,8 km (QL5 về Phố Văn). Đổi điểm thì thử lại: điểm gần đường trên cao có thể bị Google bắt xuống đường dưới thấp.",
+      "Đã thử trên Google Maps ngày 25/11/2026 (cả khi điện thoại đang ở Hải Dương): lượt đi đoạn 1 41,4 km (QL5 tới Gia Lâm), đoạn 2 25,5 km (cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Chu Văn An – Ngọc Trục); lượt về đoạn 1 25,4 km (Vạn Phúc – Quang Trung – Nguyễn Trãi – Vành đai 3 trên cao – cầu Thanh Trì – QL5), đoạn 2 40,8 km (QL5 về Phố Văn). Hai điểm Linh Đàm và Yên Sở giữ xe trên đường trên cao, không cho Google rẽ xuống Tam Trinh – Nguyễn Khoái. Đổi điểm thì thử lại.",
       "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
     ],
     "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc (không đi Tố Hữu). Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
@@ -60,7 +60,7 @@
             "batDau": "khi Google Maps báo đã đến Quốc lộ 5 ở Gia Lâm (sắp tới nút giao Vành đai 3)",
             "den": { "ten": "Nhà gái — STEN", "toaDo": "20.9882994,105.7731068" },
             "quaDiem": [
-              { "ten": "Cầu Thanh Trì", "toaDo": "20.99338,105.90140" },
+              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96994,105.87921" },
               { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97173,105.82201" },
               { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97809,105.78498" }
             ]
@@ -94,7 +94,7 @@
             "quaDiem": [
               { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97787,105.78517" },
               { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97157,105.82196" },
-              { "ten": "Cầu Thanh Trì", "toaDo": "20.99328,105.90153" }
+              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96985,105.87935" }
             ]
           },
           {

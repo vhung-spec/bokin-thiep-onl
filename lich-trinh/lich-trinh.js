@@ -123,11 +123,14 @@
     if (!str(l.diemDen)) return [];
     return [{ ten: '', batDau: '', den: { ten: str(l.tenDiemDen) || str(l.diemDen), toaDo: str(l.toaDoDen) || str(l.diemDen) }, qua: (l.quaDiem || []).map(viaPoint) }];
   }
-  function segHref(seg) {
+  function segHref(seg, origin) {
     var via = seg.qua.map(function (v) { return v.toaDo || v.ten; }).filter(Boolean).slice(0, 3);
-    // Không ghi điểm xuất phát: Google Maps dẫn đường từ vị trí hiện tại của điện thoại
-    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(seg.den.toaDo || seg.den.ten) +
-      (via.length ? '&waypoints=' + via.map(encodeURIComponent).join('%7C') : '');
+    // Điểm đi cố định + dir_action=navigate: điện thoại đang ở gần điểm đi thì Google vào chế độ dẫn đường;
+    // ở nơi khác (ví dụ mở thử ở nhà) thì chỉ xem trước — luôn là cùng một tuyến, không vẽ thêm đường từ chỗ mình đang đứng.
+    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving' +
+      (origin ? '&origin=' + encodeURIComponent(origin) : '') +
+      '&destination=' + encodeURIComponent(seg.den.toaDo || seg.den.ten) +
+      (via.length ? '&waypoints=' + via.map(encodeURIComponent).join('%7C') : '') + '&dir_action=navigate';
   }
   // Xem trước: điểm đi cố định + tất cả các điểm, mở ở đâu cũng ra đúng một tuyến
   function previewHref(l, segs) {
@@ -165,12 +168,12 @@
         html += '<div class="gmaps"><h4>' + ICON.map + 'Dẫn đường bằng Google Maps</h4>';
         segs.forEach(function (sg, i) {
           var label = segs.length > 1 ? (sg.ten || 'Đoạn ' + (i + 1)) : 'Bắt đầu dẫn đường';
-          html += '<div class="seg"><a class="btn' + (i ? ' ghost' : '') + '" href="' + esc(segHref(sg)) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' +
+          html += '<div class="seg"><a class="btn' + (i ? ' ghost' : '') + '" href="' + esc(segHref(sg, i ? segs[i - 1].den.toaDo : str(l.toaDoDi))) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' +
             (sg.batDau ? '<p class="seg-when">Bấm ' + esc(sg.batDau) + '.</p>' : '') + '</div>';
         });
         var pv = previewHref(l, segs);
         if (pv) html += '<p class="leg-note"><a href="' + esc(pv) + '" target="_blank" rel="noopener">Xem trước toàn tuyến trên Google Maps</a> — mở ở đâu cũng thấy đúng một tuyến; dùng để kiểm tra trước, không dùng để dẫn đường.</p>';
-        html += '<p class="leg-note">Nút dẫn đường lấy vị trí hiện tại của điện thoại làm điểm đi, nên chỉ bấm khi xe đã ở điểm xuất phát của đoạn đó. Nếu Google vẫn gợi ý đường khác khi tắc, đi theo đường kẻ trên bản đồ và xe dẫn đoàn.</p></div>';
+        html += '<p class="leg-note">Mỗi nút có điểm đi cố định: bấm khi xe đang ở điểm xuất phát của đoạn đó thì Google vào chế độ dẫn đường; mở thử ở nơi khác thì Google chỉ hiện xem trước, vẫn đúng tuyến của đoàn. Nếu Google chỉ hiện “Xem trước” khi đã ở đúng chỗ, đổi ô điểm đi thành “Vị trí của bạn”. Gặp tắc mà Google gợi ý đường khác thì đi theo đường kẻ trên bản đồ và xe dẫn đoàn.</p></div>';
       } else if (str(l.khiThieuDiemDen)) html += '<p class="leg-note warn">' + esc(l.khiThieuDiemDen) + '</p>';
       html += '<p class="leg-note"><a href="' + esc(l.id) + '.gpx" download>Tải file lộ trình (GPX)</a> cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.</p>';
       html += '</article>';
