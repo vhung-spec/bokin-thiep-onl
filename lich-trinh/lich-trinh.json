@@ -16,6 +16,59 @@
   "hanhTrinh": ["Nhà trai Hải Phòng", "Nhà gái Hà Nội", "Nhà trai Hải Phòng"],
   "ghiChuNgay": "Chỉ dành cho Chủ nhật 29/11 — không phải tiệc nhà gái Thứ Bảy 28/11.",
 
+  "loTrinh": {
+    "_huongDan": [
+      "LỘ TRÌNH CHO LÁI XE: nút “Mở trên Google Maps” dẫn đường từ vị trí hiện tại của điện thoại, đi qua lần lượt các điểm trong quaDiem rồi tới diemDen.",
+      "quaDiem là các điểm bắt buộc đi qua để Google Maps chọn đúng Quốc lộ 5 và Vành đai 3 (tối đa 3 điểm). Muốn đổi đường thì sửa các điểm này.",
+      "diemDen để trống \"\" thì nút bản đồ của lượt đó tạm ẩn (đang chờ địa chỉ nhà trai).",
+      "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
+    ],
+    "gioiThieu": "Cả đoàn đi Quốc lộ 5 và Vành đai 3 trên cao. Nếu Google Maps gợi ý đường khác (ví dụ cao tốc Hà Nội – Hải Phòng), vẫn đi theo lộ trình của đoàn.",
+    "xeDanDoan": { "taiXe": "", "bienSo": "", "soDienThoai": "" },
+    "nhomZalo": "",
+    "danhSachXe": [],
+    "diemChoNhau": [],
+    "quyTac": [
+      "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
+      "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
+      "Lạc đoàn: không quay đầu đi tìm. Bấm “Mở trên Google Maps” của lượt đang đi rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
+    ],
+    "luot": [
+      {
+        "id": "lo-trinh-di",
+        "ten": "Lượt đi: Nhà trai → Nhà gái",
+        "gio": "Xe chạy 05:00",
+        "diemDi": "Điểm tập trung bên nhà trai, Hải Phòng",
+        "diemDen": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ, Hà Nội",
+        "tenDiemDen": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
+        "quaDiem": ["Quốc lộ 5, Như Quỳnh, Hưng Yên", "Cầu Thanh Trì, Hà Nội"],
+        "cacBuoc": [
+          "Từ điểm tập trung ra Quốc lộ 5, đi hướng Hà Nội.",
+          "Đi Quốc lộ 5 qua Như Quỳnh về Long Biên, tới nút giao Vành đai 3 thì rẽ theo biển chỉ dẫn hướng cầu Thanh Trì – Pháp Vân.",
+          "Qua cầu Thanh Trì, lên Vành đai 3 trên cao, đi hướng Linh Đàm – Nguyễn Xiển – Khuất Duy Tiến (hướng Mai Dịch).",
+          "Xuống đường trên cao theo biển chỉ dẫn để vào Đại lộ Thăng Long, đi hướng Hòa Lạc.",
+          "Rời Đại lộ Thăng Long về phía Đại Mỗ, vào P. Ngọc Trục — Trung tâm ngoại ngữ STEN."
+        ]
+      },
+      {
+        "id": "lo-trinh-ve",
+        "ten": "Lượt về: Nhà gái → Nhà trai",
+        "gio": "Xe chạy 08:30–08:45",
+        "diemDi": "Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ, Hà Nội",
+        "diemDen": "",
+        "tenDiemDen": "Nhà trai, Hải Phòng",
+        "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
+        "quaDiem": ["Cầu Thanh Trì, Hà Nội", "Quốc lộ 5, Như Quỳnh, Hưng Yên"],
+        "cacBuoc": [
+          "Từ Ngọc Trục ra Đại lộ Thăng Long, đi hướng trung tâm Hà Nội.",
+          "Lên Vành đai 3 trên cao, đi hướng Pháp Vân – cầu Thanh Trì.",
+          "Qua cầu Thanh Trì, theo Vành đai 3 tới nút giao Quốc lộ 5 thì rẽ đi hướng Hải Phòng.",
+          "Đi Quốc lộ 5 về nhà trai, Hải Phòng."
+        ]
+      }
+    ]
+  },
+
   "chang": [
     {
       "ten": "Chuẩn bị và xuất phát",
@@ -44,6 +97,7 @@
           "khiNao": "",
           "viec": "Đoàn nhà trai xuất phát đi đón dâu",
           "nhacNhanh": "Rời nhà trai",
+          "loTrinh": "lo-trinh-di",
           "xeChay": true,
           "diaDiem": { "ten": "Điểm tập trung bên nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
           "nguoiCanXem": ["Người đi đón dâu", "Người phụ trách đoàn", "Tài xế"],
@@ -84,6 +138,7 @@
           "khiNao": "",
           "viec": "Đoàn rời nhà gái, đưa dâu về Hải Phòng",
           "nhacNhanh": "Rời nhà gái",
+          "loTrinh": "lo-trinh-ve",
           "xeChay": true,
           "diaDiem": { "ten": "Nhà gái, Hà Nội", "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội", "banDo": "https://maps.app.goo.gl/j3Yn2AFm8rcCG3zS8", "daXacNhan": true, "khiTrong": "" },
           "nguoiCanXem": ["Cô dâu chú rể", "Người đi đưa dâu", "Đoàn nhà trai", "Tài xế"],

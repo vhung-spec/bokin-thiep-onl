@@ -155,6 +155,16 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 | Số xe, hướng dẫn tập trung… | `chiTiet`, ví dụ `["Xe 1: 15A-123.45 — anh Tuấn"]` (nằm trong *Xem chi tiết*) |
 | Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
 
+**Lộ trình xe cho lái xe** (mục `loTrinh` trong cùng tệp; link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`). Đi Quốc lộ 5 và Vành đai 3 trên cao. Nút *Mở trên Google Maps* dẫn đường từ vị trí hiện tại của điện thoại, bắt buộc đi qua các điểm trong `quaDiem` (đang là *Quốc lộ 5, Như Quỳnh* và *Cầu Thanh Trì*), rồi tới `diemDen`.
+
+| Muốn sửa | Trường trong `loTrinh` |
+|---|---|
+| Địa chỉ nhà trai cho lượt về | `luot[1].diemDen` — để trống thì nút bản đồ lượt về tạm ẩn |
+| Đổi đường đi | `quaDiem` (tối đa 3 điểm) và các bước chữ `cacBuoc` |
+| Xe dẫn đoàn | `xeDanDoan.taiXe`, `bienSo`, `soDienThoai` → hiện nút *Gọi xe dẫn đoàn* |
+| Nhóm Zalo đoàn xe | `nhomZalo` (link `https://zalo.me/g/…`) |
+| Danh sách xe, điểm chờ nhau, quy tắc | `danhSachXe`, `diemChoNhau`, `quyTac` |
+
 - Giữ nguyên dấu `"…"` và dấu phẩy. Nếu lỡ sửa sai định dạng, trang báo lỗi và tạm hiện bản người xem đã mở lần trước — mở trang ngay sau khi sửa để kiểm tra.
 - Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
 - Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.

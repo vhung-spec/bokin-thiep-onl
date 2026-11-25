@@ -27,6 +27,8 @@
     people: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 20c.6-3.6 3-5.6 6-5.6s5.4 2 6 5.6M16 4.9a3.2 3.2 0 0 1 0 6.2M18 14.6c1.8.7 2.8 2.6 3.1 5.4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
     clock: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
     map: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l18-8-8 18-2-8-8-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
+    car: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 16V11.5L7 6.5h10l2 5V16M3.5 16h17M5 16v2.5M19 16v2.5M7.5 13.2h.01M16.5 13.2h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    zalo: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16v10H9l-5 4v-14z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
     phone: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 3.5h2.8l1.4 4-2 1.3a11 11 0 0 0 6.4 6.4l1.3-2 4 1.4v2.8a2 2 0 0 1-2.2 2C10 19 5 14 4.6 5.7a2 2 0 0 1 2-2.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>',
   };
 
@@ -93,6 +95,7 @@
     var dm = ev.dauMoi || {};
     var tel = telHref(dm.soDienThoai);
     if (tel) acts += '<a class="btn ghost" href="' + esc(tel) + '">' + ICON.phone + 'Gọi ' + esc(str(dm.ten) || 'đầu mối') + '</a>';
+    if (str(ev.loTrinh)) acts += '<a class="btn ghost" href="#' + esc(ev.loTrinh) + '" data-target="' + esc(ev.loTrinh) + '">' + ICON.car + 'Lộ trình xe</a>';
     if (acts) html += '<div class="acts">' + acts + '</div>';
 
     // Xem chi tiết: thông tin phụ (đầu mối, thứ tự nghi thức, số xe, hướng dẫn tập trung…)
@@ -107,6 +110,56 @@
     if (more) html += '<details class="more"><summary>Xem chi tiết</summary><div class="more-body">' + more + '</div></details>';
 
     return html + '</li>';
+  }
+
+  /* ---------- Lộ trình cho lái xe ---------- */
+  function routeHref(l) {
+    var dest = str(l.diemDen);
+    if (!dest) return '';
+    var via = (l.quaDiem || []).map(str).filter(Boolean).slice(0, 3);
+    // Không ghi điểm xuất phát: Google Maps dẫn đường từ vị trí hiện tại của điện thoại
+    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination=' + encodeURIComponent(dest) +
+      (via.length ? '&waypoints=' + via.map(encodeURIComponent).join('%7C') : '');
+  }
+  function renderRoute(r) {
+    if (!r || !(r.luot || []).length) return '';
+    var html = '<section class="route-sec" id="lo-trinh" aria-labelledby="lt-h"><h2 id="lt-h">' + ICON.car + 'Lộ trình xe</h2>';
+    if (str(r.gioiThieu)) html += '<p class="route-intro">' + esc(r.gioiThieu) + '</p>';
+
+    (r.luot || []).forEach(function (l) {
+      html += '<article class="leg" id="' + esc(l.id || '') + '"><h3>' + esc(l.ten) + '</h3>';
+      if (str(l.gio)) html += '<p class="leg-time">' + esc(l.gio) + '</p>';
+      var via = (l.quaDiem || []).map(str).filter(Boolean);
+      html += '<ol class="stops">';
+      html += '<li><span class="lbl">Đi từ</span>' + esc(str(l.diemDi) || 'Vị trí hiện tại') + '</li>';
+      via.forEach(function (v) { html += '<li class="via"><span class="lbl">Qua</span>' + esc(v) + '</li>'; });
+      html += '<li class="end"><span class="lbl">Đến</span>' + esc(str(l.tenDiemDen) || str(l.diemDen) || 'Chưa có địa chỉ') + '</li></ol>';
+      var steps = (l.cacBuoc || []).map(str).filter(Boolean);
+      if (steps.length) html += '<ol class="steps">' + steps.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>';
+      var href = routeHref(l);
+      if (href) html += '<div class="acts"><a class="btn" href="' + esc(href) + '" target="_blank" rel="noopener">' + ICON.map + 'Mở trên Google Maps</a></div>' +
+        '<p class="leg-note">Mở lúc đã ở điểm xuất phát: bản đồ dẫn đường từ vị trí của bạn, đi qua đúng các điểm trên.</p>';
+      else if (str(l.khiThieuDiemDen)) html += '<p class="leg-note warn">' + esc(l.khiThieuDiemDen) + '</p>';
+      html += '</article>';
+    });
+
+    // Đi theo đoàn
+    var lead = r.xeDanDoan || {}, box = '';
+    if (str(lead.taiXe) || str(lead.bienSo)) box += '<p><b>Xe dẫn đoàn:</b> ' + esc([str(lead.taiXe), str(lead.bienSo)].filter(Boolean).join(' · ')) + '</p>';
+    var cars = (r.danhSachXe || []).map(str).filter(Boolean);
+    if (cars.length) box += '<p><b>Các xe trong đoàn:</b></p><ul>' + cars.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+    var waits = (r.diemChoNhau || []).map(str).filter(Boolean);
+    if (waits.length) box += '<p><b>Điểm chờ nhau:</b></p><ul>' + waits.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+    var rules = (r.quyTac || []).map(str).filter(Boolean);
+    if (rules.length) box += '<ul class="rules">' + rules.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>';
+    var acts = '', tel = telHref(lead.soDienThoai);
+    if (tel) acts += '<a class="btn" href="' + esc(tel) + '">' + ICON.phone + 'Gọi xe dẫn đoàn</a>';
+    if (/^https:\/\/zalo\.me\//i.test(str(r.nhomZalo))) acts += '<a class="btn ghost" href="' + esc(r.nhomZalo) + '" target="_blank" rel="noopener">' + ICON.zalo + 'Nhóm Zalo đoàn xe</a>';
+    if (acts) box += '<div class="acts">' + acts + '</div>';
+    if (box) html += '<div class="convoy"><h3>Đi theo đoàn</h3>' + box + '</div>';
+
+    html += '<div class="acts center"><button class="btn ghost" type="button" data-share="#lo-trinh">Gửi lộ trình cho lái xe</button></div><p class="share-msg" id="routeMsg" role="status" aria-live="polite"></p>';
+    return html + '</section>';
   }
 
   function render(data, note) {
@@ -128,7 +181,9 @@
       });
       html += '</ol></section>';
     });
+    html += renderRoute(data.loTrinh);
     $('main').innerHTML = html;
+    $('routeLink').hidden = !(data.loTrinh && (data.loTrinh.luot || []).length);
     $('quick').innerHTML = quick;
     $('quick').hidden = !quick;
     document.title = (str(data.tieuDe) || 'Lịch trình ngày đón dâu') + ' · ' + (str(data.doiTen) || '');
@@ -138,7 +193,7 @@
   }
 
   /* Chạm ô nhắc giờ: cuộn tới mốc và nháy viền */
-  $('quick').addEventListener('click', function (e) {
+  function jump(e) {
     var a = e.target.closest('a[data-target]');
     if (!a) return;
     var el = $(a.getAttribute('data-target'));
@@ -147,6 +202,12 @@
     el.scrollIntoView({ block: 'start' });
     el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
     if (history.replaceState) history.replaceState(null, '', '#' + el.id);
+  }
+  $('quick').addEventListener('click', jump);
+  $('main').addEventListener('click', function (e) {
+    jump(e);
+    var b = e.target.closest('[data-share]');
+    if (b) shareUrl(pageUrl() + b.getAttribute('data-share'), 'Lộ trình xe đón dâu Văn Hùng & Tuyết Anh — Chủ nhật 29/11/2026', $('routeMsg') || $('shareMsg'));
   });
 
   /* ---------- Tải dữ liệu (luôn lấy bản mới nhất; mất mạng thì dùng bản đã lưu) ---------- */
@@ -206,10 +267,10 @@
   /* ---------- Chia sẻ ---------- */
   function pageUrl() { return location.origin + location.pathname; }
   $('share').addEventListener('click', function () {
-    var url = pageUrl();
-    var msg = $('shareMsg');
+    shareUrl(pageUrl(), 'Lịch trình ngày đón dâu Văn Hùng & Tuyết Anh — Chủ nhật 29/11/2026', $('shareMsg'));
+  });
+  function shareUrl(url, text, msg) {
     var title = document.title;
-    var text = 'Lịch trình ngày đón dâu Văn Hùng & Tuyết Anh — Chủ nhật 29/11/2026';
     if (navigator.share) {
       navigator.share({ title: title, text: text, url: url }).catch(function (e) {
         if (!e || e.name !== 'AbortError') copy(url, msg);
@@ -217,7 +278,7 @@
       return;
     }
     copy(url, msg);
-  });
+  }
   function copy(url, msg) {
     function fallback() {
       msg.innerHTML = 'Chạm giữ đường dẫn dưới đây để sao chép:<input class="copy-box" readonly value="' + esc(url) + '">';
