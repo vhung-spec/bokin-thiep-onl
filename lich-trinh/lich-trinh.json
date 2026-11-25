@@ -8,55 +8,92 @@
     "dauMoi.soDienThoai: điền số đầy đủ (ví dụ \"0912 345 678\") thì hiện nút Gọi đầu mối.",
     "Thứ tự các mốc trên trang là thứ tự trong tệp này. Ngày “Cập nhật lần cuối” tự lấy từ lần sửa tệp gần nhất."
   ],
-
   "tieuDe": "Lịch trình ngày đón dâu",
   "doiTen": "Văn Hùng & Tuyết Anh",
   "ngay": "2026-11-29",
   "ngayHienThi": "Chủ nhật, 29/11/2026",
-  "hanhTrinh": ["Nhà trai Hải Phòng", "Nhà gái Hà Nội", "Nhà trai Hải Phòng"],
+  "hanhTrinh": [
+    "Nhà trai Hải Phòng",
+    "Nhà gái Hà Nội",
+    "Nhà trai Hải Phòng"
+  ],
   "ghiChuNgay": "Chỉ dành cho Chủ nhật 29/11 — không phải tiệc nhà gái Thứ Bảy 28/11.",
-
+  "diaDiemChung": {
+    "_huongDan": [
+      "GHIM NHÀ TRAI / NHÀ GÁI: chỉ sửa ở đây. Các mốc trong lịch (diaDiem có \"ref\"), điểm đầu lượt đi và điểm cuối lượt về đều lấy toạ độ từ mục này.",
+      "toaDo viết \"vĩ độ,kinh độ\" (lấy trong Google Maps: nhấn giữ đúng chỗ → chép số hiện ra).",
+      "SAU KHI ĐỔI toaDo: người quản trị chạy lại  python3 tools/lo-trinh/tao_lo_trinh.py  để vẽ lại đường cố định và 2 file GPX, rồi xem đoạn nối từ ghim ra Quốc lộ 5 trên bản đồ. Khi chưa chạy lại, trang tự hiện lời nhắc dưới bản đồ."
+    ],
+    "nhaTrai": {
+      "ten": "Nhà trai, Hải Phòng",
+      "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
+      "toaDo": "20.9577131,106.2765173",
+      "ghiChuGhim": "Ghim khu Phố Văn. Gia đình sẽ cập nhật điểm lên xe chính xác.",
+      "daXacNhan": true
+    },
+    "nhaGai": {
+      "ten": "Nhà gái, Hà Nội",
+      "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội",
+      "toaDo": "20.9882994,105.7731068",
+      "ghiChuGhim": "",
+      "daXacNhan": true
+    }
+  },
   "loTrinh": {
     "_huongDan": [
-      "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ lấy từ tệp lo-trinh-co-dinh.geojson (tạo bằng tools/lo-trinh/tao_lo_trinh.py) — muốn đổi cung đường thì sửa và chạy lại script đó.",
-      "Google Maps: mỗi lượt một nút (doanGoogle chỉ có 1 đoạn), điểm đi cố định toaDoDi, qua đúng thứ tự các điểm trong quaDiem (tối đa 9 điểm — ứng dụng Google Maps nhận đủ; trình duyệt điện thoại chỉ nhận 3 nên nút mở thẳng ứng dụng trên Android). Điện thoại ở gần điểm đi thì vào dẫn đường, ở nơi khác thì chỉ xem trước. Toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy.",
-      "Đã thử trên Google Maps ngày 25/11/2026 (cả khi điện thoại đang ở Hải Dương): lượt đi 66,9 km (QL5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Chu Văn An – Ngọc Trục); lượt về 66,1 km (Vạn Phúc – Quang Trung – Nguyễn Trãi – Vành đai 3 trên cao – cầu Thanh Trì – QL5 – Phố Văn). Hai điểm Linh Đàm và Yên Sở giữ xe trên đường trên cao. Đổi điểm thì thử lại.",
-      "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
+      "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ và 2 file GPX lấy từ lo-trinh-co-dinh.geojson, lo-trinh-di.gpx, lo-trinh-ve.gpx (tạo bằng tools/lo-trinh/tao_lo_trinh.py, KHÔNG tính lại khi khách mở trang).",
+      "Mỗi lượt MỘT nút Google Maps: điểm đi (tu) và điểm đến (den) lấy từ diaDiemChung, travelmode=driving, dir_action=navigate, qua đúng thứ tự 6 điểm khoá trong quaDiem (toạ độ nằm trên đường kẻ, đúng chiều xe chạy).",
+      "Đã thử trên Google Maps bản máy tính ngày 25/11/2026: lượt đi 66,9 km, lượt về 66,1 km, đúng các chỗ rẽ ở Gia Lâm, Vành đai 3 trên cao, lối Nguyễn Trãi/Nguyễn Xiển, Chu Văn An – Vạn Phúc. Chỉ thêm hoặc dời điểm khoá khi đã biết điện thoại dẫn sai ở nhánh nào.",
+      "lienHeDoanXe: điền đủ số điện thoại thì hiện nút Gọi; dán link nhóm Zalo (https://zalo.me/g/…) thì hiện nút vào nhóm. Ô nào để trống thì trang ẩn đi."
     ],
     "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc (không đi Tố Hữu). Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
-    "xeDanDoan": { "taiXe": "", "bienSo": "", "soDienThoai": "" },
-    "nhomZalo": "",
-    "danhSachXe": [],
-    "diemChoNhau": [],
+    "lienHeDoanXe": {
+      "nguoiPhuTrach": "",
+      "vaiTro": "",
+      "soDienThoai": "",
+      "bienSoXeDanDoan": "",
+      "nhomZalo": "",
+      "diemHenKhiTachDoan": ""
+    },
     "quyTac": [
       "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
       "Người ngồi cạnh tài xế bấm các nút trên điện thoại (mở dẫn đường); tài xế không thao tác điện thoại khi xe đang chạy.",
       "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
       "Tuyến có trạm thu phí (Google Maps báo): kiểm tra thẻ thu phí không dừng (ETC) của xe còn tiền trước ngày đi.",
-      "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
+      "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi người phụ trách trong mục Liên hệ đoàn xe để hẹn chỗ chờ."
     ],
     "luot": [
       {
         "id": "lo-trinh-di",
         "ten": "Lượt đi: Nhà trai → Nhà gái",
         "gio": "Xe chạy 05:00",
-        "diemDi": "Nhà trai — Phố Văn, Tuệ Tĩnh, Hải Phòng",
-        "diemDen": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ, Hà Nội",
-        "toaDoDi": "20.9577131,106.2765173",
-        "tenDiemDen": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
-        "doanGoogle": [
+        "tu": "nhaTrai",
+        "den": "nhaGai",
+        "nutGoogle": "05:00 · Đi nhà gái – Mở Google Maps",
+        "quaDiem": [
           {
-            "ten": "Nhà trai → Nhà gái",
-            "batDau": "khi xe đang ở nhà trai (Phố Văn)",
-            "den": { "ten": "Nhà gái — STEN", "toaDo": "20.9882994,105.7731068" },
-            "quaDiem": [
-              { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93231,106.06177" },
-              { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98604,105.97867" },
-              { "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)", "toaDo": "21.01742,105.94375" },
-              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96994,105.87921" },
-              { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97173,105.82201" },
-              { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97809,105.78498" }
-            ]
+            "ten": "Quốc lộ 5, đoạn Mỹ Hào",
+            "toaDo": "20.93231,106.06177"
+          },
+          {
+            "ten": "Quốc lộ 5, qua Như Quỳnh",
+            "toaDo": "20.98604,105.97867"
+          },
+          {
+            "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)",
+            "toaDo": "21.01742,105.94375"
+          },
+          {
+            "ten": "Vành đai 3 trên cao, đoạn Yên Sở",
+            "toaDo": "20.96994,105.87921"
+          },
+          {
+            "ten": "Vành đai 3 trên cao, đoạn Linh Đàm",
+            "toaDo": "20.97173,105.82201"
+          },
+          {
+            "ten": "Trần Phú, đoạn Mộ Lao",
+            "toaDo": "20.97809,105.78498"
           }
         ],
         "cacBuoc": [
@@ -73,24 +110,33 @@
         "id": "lo-trinh-ve",
         "ten": "Lượt về: Nhà gái → Nhà trai",
         "gio": "Xe chạy 08:30–08:45",
-        "diemDi": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
-        "diemDen": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
-        "toaDoDi": "20.9882994,105.7731068",
-        "tenDiemDen": "Nhà trai — Phố Văn, Tuệ Tĩnh, Hải Phòng",
-        "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
-        "doanGoogle": [
+        "tu": "nhaGai",
+        "den": "nhaTrai",
+        "nutGoogle": "08:30–08:45 · Về nhà trai – Mở Google Maps",
+        "quaDiem": [
           {
-            "ten": "Nhà gái → Nhà trai",
-            "batDau": "khi xe đang ở nhà gái (STEN)",
-            "den": { "ten": "Nhà trai — Phố Văn", "toaDo": "20.9577131,106.2765173" },
-            "quaDiem": [
-              { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97787,105.78517" },
-              { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97157,105.82196" },
-              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96985,105.87935" },
-              { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98598,105.97860" },
-              { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93219,106.06173" },
-              { "ten": "Quốc lộ 5, đoạn Lai Cách", "toaDo": "20.93461,106.24634" }
-            ]
+            "ten": "Trần Phú, đoạn Mộ Lao",
+            "toaDo": "20.97787,105.78517"
+          },
+          {
+            "ten": "Vành đai 3 trên cao, đoạn Linh Đàm",
+            "toaDo": "20.97157,105.82196"
+          },
+          {
+            "ten": "Vành đai 3 trên cao, đoạn Yên Sở",
+            "toaDo": "20.96985,105.87935"
+          },
+          {
+            "ten": "Quốc lộ 5, qua Như Quỳnh",
+            "toaDo": "20.98598,105.97860"
+          },
+          {
+            "ten": "Quốc lộ 5, đoạn Mỹ Hào",
+            "toaDo": "20.93219,106.06173"
+          },
+          {
+            "ten": "Quốc lộ 5, đoạn Lai Cách",
+            "toaDo": "20.93461,106.24634"
           }
         ],
         "cacBuoc": [
@@ -103,7 +149,6 @@
       }
     ]
   },
-
   "chang": [
     {
       "ten": "Chuẩn bị và xuất phát",
@@ -116,12 +161,20 @@
           "khiNao": "",
           "viec": "Bắt đầu trang điểm",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
-          "nguoiCanXem": ["Cô dâu", "Thợ trang điểm"],
+          "diaDiem": {
+            "ref": "nhaTrai"
+          },
+          "nguoiCanXem": [
+            "Cô dâu",
+            "Thợ trang điểm"
+          ],
           "canChuanBi": "Để sẵn váy cưới, phụ kiện tóc, trang sức và giày tại phòng trang điểm.",
           "ghiChuGio": "",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         },
         {
@@ -134,13 +187,23 @@
           "nhacNhanh": "Rời nhà trai",
           "loTrinh": "lo-trinh-di",
           "xeChay": true,
-          "diaDiem": { "ten": "Điểm tập trung bên nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
-          "nguoiCanXem": ["Người đi đón dâu", "Người phụ trách đoàn", "Tài xế"],
+          "diaDiem": {
+            "ref": "nhaTrai",
+            "ten": "Nhà trai — điểm lên xe, Phố Văn"
+          },
+          "nguoiCanXem": [
+            "Người đi đón dâu",
+            "Người phụ trách đoàn",
+            "Tài xế"
+          ],
           "canChuanBi": "Có mặt và lên đúng xe trước 05:00. Người phụ trách kiểm tra đủ người và đồ cần mang trước khi đoàn đi.",
           "ghiChuGio": "05:00 là giờ xe chạy, không phải giờ tập trung.",
           "gioCoMat": "",
           "gioCoMatKhiTrong": "Giờ có mặt: gia đình sẽ báo sau",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         }
       ]
@@ -156,12 +219,20 @@
           "khiNao": "",
           "viec": "Đoàn đến nhà gái",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà gái, Hà Nội", "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội", "banDo": "https://maps.app.goo.gl/j3Yn2AFm8rcCG3zS8", "daXacNhan": true, "khiTrong": "" },
-          "nguoiCanXem": ["Đoàn đón dâu", "Người đón tiếp bên nhà gái"],
+          "diaDiem": {
+            "ref": "nhaGai"
+          },
+          "nguoiCanXem": [
+            "Đoàn đón dâu",
+            "Người đón tiếp bên nhà gái"
+          ],
           "canChuanBi": "Nhà gái sẵn sàng đón đoàn. Khi tới nơi, người phụ trách đoàn liên hệ đầu mối nhà gái.",
           "ghiChuGio": "Từ lúc đoàn đến cho tới khi đoàn rời đi là thời gian ở nhà gái.",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "nghiThuc": [],
           "chiTiet": []
         },
@@ -175,12 +246,22 @@
           "nhacNhanh": "Rời nhà gái",
           "loTrinh": "lo-trinh-ve",
           "xeChay": true,
-          "diaDiem": { "ten": "Nhà gái, Hà Nội", "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội", "banDo": "https://maps.app.goo.gl/j3Yn2AFm8rcCG3zS8", "daXacNhan": true, "khiTrong": "" },
-          "nguoiCanXem": ["Cô dâu chú rể", "Người đi đưa dâu", "Đoàn nhà trai", "Tài xế"],
+          "diaDiem": {
+            "ref": "nhaGai"
+          },
+          "nguoiCanXem": [
+            "Cô dâu chú rể",
+            "Người đi đưa dâu",
+            "Đoàn nhà trai",
+            "Tài xế"
+          ],
           "canChuanBi": "Trước 08:30, kiểm tra đồ cá nhân của cô dâu, tập trung mọi người và xác nhận xe về.",
           "ghiChuGio": "08:30–08:45 là khoảng giờ dự kiến xe xuất phát, không phải thời gian đi đường.",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         }
       ]
@@ -196,12 +277,21 @@
           "khiNao": "",
           "viec": "Đoàn về đến nhà trai",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
-          "nguoiCanXem": ["Đoàn đưa dâu", "Người đón tiếp bên nhà trai", "Người phụ trách nghi lễ"],
+          "diaDiem": {
+            "ref": "nhaTrai"
+          },
+          "nguoiCanXem": [
+            "Đoàn đưa dâu",
+            "Người đón tiếp bên nhà trai",
+            "Người phụ trách nghi lễ"
+          ],
           "canChuanBi": "Đầu mối nhà trai sẵn sàng đón đoàn và hướng dẫn hai bên gia đình vào vị trí.",
           "ghiChuGio": "10:30 là giờ đoàn về đến nơi, chưa phải giờ khai tiệc.",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         },
         {
@@ -212,12 +302,17 @@
           "khiNao": "Sau khi đoàn về",
           "viec": "Tiến hành nghi lễ tại nhà trai",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
+          "diaDiem": {
+            "ref": "nhaTrai"
+          },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách nghi lễ mời cô dâu chú rể và đại diện hai gia đình vào vị trí.",
           "ghiChuGio": "",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         },
         {
@@ -228,12 +323,21 @@
           "khiNao": "Sau nghi lễ",
           "viec": "Khai tiệc",
           "xeChay": false,
-          "diaDiem": { "ten": "", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "diaDiem": {
+            "ten": "",
+            "diaChi": "",
+            "banDo": "",
+            "daXacNhan": false,
+            "khiTrong": ""
+          },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách tiệc nhận tín hiệu từ gia đình rồi mời khách vào bàn.",
           "ghiChuGio": "",
           "gioCoMat": "",
-          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "dauMoi": {
+            "ten": "",
+            "soDienThoai": ""
+          },
           "chiTiet": []
         }
       ]

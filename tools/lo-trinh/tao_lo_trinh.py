@@ -17,9 +17,15 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, 'lich-trinh')
 
-# Toạ độ ghim Google Maps chủ thiệp gửi (vĩ độ, kinh độ)
-NHA_TRAI = (20.9577131, 106.2765173)   # Phố Văn, Tuệ Tĩnh, Hải Phòng
-NHA_GAI = (20.9882994, 105.7731068)    # Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ
+# Toạ độ ghim nhà trai / nhà gái: đọc từ lich-trinh/lich-trinh.json → diaDiemChung (chỉ sửa ghim ở đó)
+def _ghim(key):
+    with open(os.path.join(OUT, 'lich-trinh.json'), encoding='utf-8') as f:
+        la, lo = json.load(f)['diaDiemChung'][key]['toaDo'].split(',')
+    return (float(la), float(lo))
+
+
+NHA_TRAI = _ghim('nhaTrai')   # Phố Văn, Tuệ Tĩnh, Hải Phòng (đang là ghim khu, chờ điểm lên xe chính xác)
+NHA_GAI = _ghim('nhaGai')     # Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ
 
 # Điểm bắt buộc đi qua: (vĩ độ, kinh độ, hướng đi độ, sai số độ)
 LUOT = {
@@ -112,9 +118,22 @@ def build(key, route):
             print(f'  {s["distance"]/1000:5.1f} km  {n}')
         prev = n
     feat = {'type': 'Feature', 'geometry': {'type': 'LineString', 'coordinates': line},
-            'properties': {'luot': key, 'km': round(route['distance'] / 1000, 1),
+            'properties': {'luot': key, 'loai': 'tuyen', 'km': round(route['distance'] / 1000, 1),
                            'phut': round(route['duration'] / 60)}}
-    return feat, marks, line
+    # Đoạn Vành đai 3 trên cao (kể cả lối lên / xuống): trang dùng để nhắc GPS có thể lẫn với đường dưới thấp
+    elev = []
+    for s in steps:
+        name, ref = s.get('name') or '', s.get('ref') or ''
+        if ('Vành đai 3' in name or 'CT.37' in ref or name.startswith('Lối xuống')
+                or s['maneuver']['type'] in ('on ramp', 'off ramp') and 'CT.37' in (s.get('destinations') or '') + ref):
+            g = [[r5(x), r5(y)] for x, y in s['geometry']['coordinates']]
+            if len(g) > 1:
+                elev.append(g)
+    tren_cao = {'type': 'Feature', 'geometry': {'type': 'MultiLineString', 'coordinates': elev},
+                'properties': {'luot': key, 'loai': 'tren-cao'}}
+    for m in marks:
+        m['properties']['loai'] = 'moc'
+    return feat, marks, line, tren_cao
 
 
 def gpx(key, title, line, marks):
@@ -133,8 +152,8 @@ def main():
     titles = {'lo-trinh-di': 'Lượt đi: Nhà trai → Nhà gái (QL5 · Vành đai 3 trên cao)',
               'lo-trinh-ve': 'Lượt về: Nhà gái → Nhà trai (Vành đai 3 trên cao · QL5)'}
     for key, pts in LUOT.items():
-        feat, marks, line = build(key, osrm(pts))
-        feats += [feat] + marks
+        feat, marks, line, tren_cao = build(key, osrm(pts))
+        feats += [feat, tren_cao] + marks
         with open(os.path.join(OUT, key.replace('lo-trinh-', 'lo-trinh-') + '.gpx'), 'w', encoding='utf-8') as f:
             f.write(gpx(key, titles[key], line, marks))
     data = {'type': 'FeatureCollection',
@@ -144,6 +163,7 @@ def main():
     with open(os.path.join(OUT, 'lo-trinh-co-dinh.geojson'), 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, separators=(',', ':'))
     print('\nĐã ghi lich-trinh/lo-trinh-co-dinh.geojson, lo-trinh-di.gpx, lo-trinh-ve.gpx')
+    print('Nhắc: mở trang lich-trinh/, xem đoạn nối từ ghim nhà trai ra Quốc lộ 5 trên cả hai bản đồ trước khi gửi cho đoàn xe.')
 
 
 if __name__ == '__main__':

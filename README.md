@@ -155,20 +155,18 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 | Số xe, hướng dẫn tập trung… | `chiTiet`, ví dụ `["Xe 1: 15A-123.45 — anh Tuấn"]` (nằm trong *Xem chi tiết*) |
 | Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
 
-**Lộ trình xe cho lái xe** — cung đường cố định, hai lượt đi về cùng một đường: Phố Văn → Quốc lộ 5 → cầu Thanh Trì → Vành đai 3 trên cao → Nguyễn Trãi – Trần Phú → Chu Văn An – Vạn Phúc → Ngọc Trục, không đi Tố Hữu (khoảng 66–67 km). Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
+**Lộ trình xe cho lái xe** — cung đường cố định, hai lượt cùng một hành lang: Phố Văn → Quốc lộ 5 (Mỹ Hào, Như Quỳnh, Gia Lâm) → cầu Thanh Trì → Vành đai 3 trên cao → lối Nguyễn Trãi/Nguyễn Xiển → Nguyễn Trãi – Trần Phú → Quang Trung → Chu Văn An – Vạn Phúc → Đại Mỗ → Ngọc Trục. Tránh CT04, Tố Hữu, không xuống Vành đai 3 sớm. Link gửi riêng lái xe: `.../lich-trinh/#lo-trinh`.
 
-- **Bản đồ cố định** trên trang vẽ sẵn đường kẻ và 7 điểm mốc mỗi lượt (`lich-trinh/lo-trinh-co-dinh.geojson`), không đổi khi tắc đường. Nút *Vị trí của tôi* hiện chấm vị trí và báo “đang đi đúng cung đường” hoặc “đang cách cung đường … m/km”. Nút *Phóng to bản đồ* mở bản đồ toàn màn hình.
-- **Google Maps**: mỗi lượt **một nút** (`doanGoogle` 1 đoạn), điểm đi cố định (`toaDoDi`) và 6 điểm khoá (`quaDiem`, tối đa 9) lấy trên đường kẻ, đúng chiều xe chạy: QL5 (Mỹ Hào, Như Quỳnh, Gia Lâm), Vành đai 3 trên cao (Yên Sở, Linh Đàm), Trần Phú. Đứng ở điểm xuất phát thì Google vào dẫn đường; mở ở nơi khác chỉ xem trước, vẫn đúng tuyến. Phải mở bằng **ứng dụng** Google Maps (trình duyệt điện thoại chỉ nhận 3 điểm khoá); trên Android nút tự mở ứng dụng.
-- **File GPX** (`lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.
-- **Đổi cung đường**: sửa điểm trong `tools/lo-trinh/tao_lo_trinh.py` rồi chạy `python3 tools/lo-trinh/tao_lo_trinh.py` (cần mạng; tuyến tính bằng OSRM / OpenStreetMap, script tự báo nếu có chỗ quay đầu). Nhớ sửa chữ các bước (`cacBuoc`) và `quaDiem` cho khớp.
-- Thư viện bản đồ Leaflet 1.9.4 để sẵn trong `lich-trinh/vendor/leaflet/` (không phụ thuộc CDN).
+- **Hai nút Google Maps** ở đầu trang và trong từng lượt: “05:00 · Đi nhà gái – Mở Google Maps”, “08:30–08:45 · Về nhà trai – Mở Google Maps”. Mỗi nút: điểm đi/đến cố định, `travelmode=driving`, `dir_action=navigate`, 6 điểm khoá đúng thứ tự. Android mở thẳng ứng dụng Google Maps (dự phòng: đúng link HTTPS); iPhone dùng link HTTPS. Dưới nút có “Bản đồ vẫn mở trong Zalo?” với hướng dẫn và nút sao chép link.
+- **Bản đồ cố định + GPX** (`lo-trinh-co-dinh.geojson`, `lo-trinh-di.gpx`, `lo-trinh-ve.gpx`) vẽ sẵn, không tính lại khi khách mở trang. Nút *Vị trí của tôi* báo “Vị trí đang gần tuyến của đoàn” hoặc “Cách tuyến vẽ khoảng X m”; gần Vành đai 3 có nhắc GPS dễ lẫn đường trên cao/dưới thấp.
 
-| Muốn sửa | Trường trong `loTrinh` (tệp `lich-trinh.json`) |
+| Muốn sửa | Ở đâu (tệp `lich-trinh/lich-trinh.json`) |
 |---|---|
-| Các bước chỉ đường bằng chữ | `cacBuoc` |
-| Xe dẫn đoàn | `xeDanDoan.taiXe`, `bienSo`, `soDienThoai` → hiện nút *Gọi xe dẫn đoàn* |
-| Nhóm Zalo đoàn xe | `nhomZalo` (link `https://zalo.me/g/…`) |
-| Danh sách xe, điểm chờ nhau, quy tắc | `danhSachXe`, `diemChoNhau`, `quyTac` |
+| **Ghim nhà trai / nhà gái** (dùng chung cho lịch, điểm đầu lượt đi, điểm cuối lượt về) | `diaDiemChung.nhaTrai.toaDo`, `diaDiemChung.nhaGai.toaDo` — viết `"vĩ độ,kinh độ"`. Ghi chú ghim: `ghiChuGhim` (đang là “Ghim khu Phố Văn…”). **Sau khi đổi toạ độ**: chạy `python3 tools/lo-trinh/tao_lo_trinh.py` (vẽ lại đường + GPX), mở trang xem đoạn nối từ ghim ra QL5. Chưa chạy lại thì trang tự hiện lời nhắc dưới bản đồ. |
+| **Liên hệ đoàn xe** | `loTrinh.lienHeDoanXe`: `nguoiPhuTrach` (ưu tiên người ngồi cạnh tài xế), `vaiTro`, `soDienThoai`, `bienSoXeDanDoan`, `nhomZalo` (`https://zalo.me/g/…`), `diemHenKhiTachDoan`. Ô trống thì trang ẩn. |
+| Nhãn nút, 6 điểm khoá | `loTrinh.luot[].nutGoogle`, `loTrinh.luot[].quaDiem` — chỉ đổi khi đã biết điện thoại dẫn sai ở nhánh nào |
+| Các chỗ rẽ bằng chữ, quy tắc đi đoàn | `loTrinh.luot[].cacBuoc`, `loTrinh.quyTac` |
+| Đổi cung đường vẽ | điểm đi qua trong `tools/lo-trinh/tao_lo_trinh.py`, rồi chạy lại script |
 
 - Giữ nguyên dấu `"…"` và dấu phẩy. Nếu lỡ sửa sai định dạng, trang báo lỗi và tạm hiện bản người xem đã mở lần trước — mở trang ngay sau khi sửa để kiểm tra.
 - Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
