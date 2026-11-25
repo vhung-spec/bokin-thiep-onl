@@ -1,0 +1,152 @@
+{
+  "_huongDan": [
+    "LỊCH TRÌNH NGÀY ĐÓN DÂU — gia đình chỉ cần sửa tệp này, trang lich-trinh/ tự hiển thị theo.",
+    "Giữ nguyên dấu ngoặc kép \"...\" và dấu phẩy giữa các dòng. Giờ viết dạng \"05:00\" (24 giờ).",
+    "batDau / ketThuc: giờ bắt đầu và giờ kết thúc (chỉ ghi ketThuc khi là một khoảng, ví dụ 08:30 → 08:45).",
+    "nhanGio: chữ hiện thay cho giờ; để trống \"\" thì tự hiện theo batDau–ketThuc. Chưa có giờ thì ghi khiNao (ví dụ \"Sau khi đoàn về\").",
+    "diaDiem.daXacNhan: đổi thành true khi địa chỉ và link bản đồ đã chắc chắn đúng — lúc đó mới hiện nút Chỉ đường.",
+    "dauMoi.soDienThoai: điền số đầy đủ (ví dụ \"0912 345 678\") thì hiện nút Gọi đầu mối.",
+    "Thứ tự các mốc trên trang là thứ tự trong tệp này. Ngày “Cập nhật lần cuối” tự lấy từ lần sửa tệp gần nhất."
+  ],
+
+  "tieuDe": "Lịch trình ngày đón dâu",
+  "doiTen": "Văn Hùng & Tuyết Anh",
+  "ngay": "2026-11-29",
+  "ngayHienThi": "Chủ nhật, 29/11/2026",
+  "hanhTrinh": ["Nhà trai Hải Phòng", "Nhà gái Hà Nội", "Nhà trai Hải Phòng"],
+  "ghiChuNgay": "Chỉ dành cho Chủ nhật 29/11 — không phải tiệc nhà gái Thứ Bảy 28/11.",
+
+  "chang": [
+    {
+      "ten": "Chuẩn bị và xuất phát",
+      "suKien": [
+        {
+          "id": "trang-diem",
+          "batDau": "02:00",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "",
+          "viec": "Bắt đầu trang điểm",
+          "xeChay": false,
+          "diaDiem": { "ten": "", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "Địa điểm trang điểm: gia đình bổ sung" },
+          "nguoiCanXem": ["Cô dâu", "Thợ trang điểm"],
+          "canChuanBi": "Để sẵn váy cưới, phụ kiện tóc, trang sức và giày tại phòng trang điểm.",
+          "ghiChuGio": "",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        },
+        {
+          "id": "roi-nha-trai",
+          "batDau": "05:00",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "",
+          "viec": "Đoàn nhà trai xuất phát đi đón dâu",
+          "nhacNhanh": "Rời nhà trai",
+          "xeChay": true,
+          "diaDiem": { "ten": "Điểm tập trung bên nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "nguoiCanXem": ["Người đi đón dâu", "Người phụ trách đoàn", "Tài xế"],
+          "canChuanBi": "Có mặt và lên đúng xe trước 05:00. Người phụ trách kiểm tra đủ người và đồ cần mang trước khi đoàn đi.",
+          "ghiChuGio": "05:00 là giờ xe chạy, không phải giờ tập trung.",
+          "gioCoMat": "",
+          "gioCoMatKhiTrong": "Giờ có mặt: gia đình sẽ báo sau",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        }
+      ]
+    },
+    {
+      "ten": "Tại nhà gái, Hà Nội",
+      "suKien": [
+        {
+          "id": "den-nha-gai",
+          "batDau": "07:00",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "",
+          "viec": "Đoàn đến nhà gái",
+          "xeChay": false,
+          "diaDiem": { "ten": "Nhà gái, Hà Nội", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "", "luuY": "Địa chỉ đón dâu đang chờ gia đình xác nhận (khác nơi tổ chức tiệc ngày 28/11)." },
+          "nguoiCanXem": ["Đoàn đón dâu", "Người đón tiếp bên nhà gái"],
+          "canChuanBi": "Nhà gái sẵn sàng đón đoàn. Khi tới nơi, người phụ trách đoàn liên hệ đầu mối nhà gái.",
+          "ghiChuGio": "Từ lúc đoàn đến cho tới khi đoàn rời đi là thời gian ở nhà gái.",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "nghiThuc": [],
+          "chiTiet": []
+        },
+        {
+          "id": "roi-nha-gai",
+          "batDau": "08:30",
+          "ketThuc": "08:45",
+          "nhanGio": "",
+          "khiNao": "",
+          "viec": "Đoàn rời nhà gái, đưa dâu về Hải Phòng",
+          "nhacNhanh": "Rời nhà gái",
+          "xeChay": true,
+          "diaDiem": { "ten": "Nhà gái, Hà Nội", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "nguoiCanXem": ["Cô dâu chú rể", "Người đi đưa dâu", "Đoàn nhà trai", "Tài xế"],
+          "canChuanBi": "Trước 08:30, kiểm tra đồ cá nhân của cô dâu, tập trung mọi người và xác nhận xe về.",
+          "ghiChuGio": "08:30–08:45 là khoảng giờ dự kiến xe xuất phát, không phải thời gian đi đường.",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        }
+      ]
+    },
+    {
+      "ten": "Về nhà trai, Hải Phòng",
+      "suKien": [
+        {
+          "id": "ve-nha-trai",
+          "batDau": "10:30",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "",
+          "viec": "Đoàn về đến nhà trai",
+          "xeChay": false,
+          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "nguoiCanXem": ["Đoàn đưa dâu", "Người đón tiếp bên nhà trai", "Người phụ trách nghi lễ"],
+          "canChuanBi": "Đầu mối nhà trai sẵn sàng đón đoàn và hướng dẫn hai bên gia đình vào vị trí.",
+          "ghiChuGio": "10:30 là giờ đoàn về đến nơi, chưa phải giờ khai tiệc.",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        },
+        {
+          "id": "nghi-le",
+          "batDau": "",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "Sau khi đoàn về",
+          "viec": "Tiến hành nghi lễ tại nhà trai",
+          "xeChay": false,
+          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "nguoiCanXem": [],
+          "canChuanBi": "Người phụ trách nghi lễ mời cô dâu chú rể và đại diện hai gia đình vào vị trí.",
+          "ghiChuGio": "",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        },
+        {
+          "id": "khai-tiec",
+          "batDau": "",
+          "ketThuc": "",
+          "nhanGio": "",
+          "khiNao": "Sau nghi lễ",
+          "viec": "Khai tiệc",
+          "xeChay": false,
+          "diaDiem": { "ten": "", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "nguoiCanXem": [],
+          "canChuanBi": "Người phụ trách tiệc nhận tín hiệu từ gia đình rồi mời khách vào bàn.",
+          "ghiChuGio": "",
+          "gioCoMat": "",
+          "dauMoi": { "ten": "", "soDienThoai": "" },
+          "chiTiet": []
+        }
+      ]
+    }
+  ]
+}

@@ -136,6 +136,29 @@ Link riêng có dạng `…/xanh-pastel/?to=Tên khách&ben=trai&nhac=yt:mã-vid
 
 Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` → `music` (link YouTube hoặc file mp3). Nên dùng nhạc bạn có quyền sử dụng.
 
+### Lịch trình ngày đón dâu 29/11 (`lich-trinh/`)
+
+Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở nhà chuẩn bị tiệc** — không phải cho mọi khách mời, nên **không** đặt trên thiệp; nút *Xem lịch trình đón dâu · 29/11* nằm ở đầu trang tạo link.
+
+- Link gửi Zalo: **https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/** (mở thẳng lịch, không phong bì, không nhạc). Trên trang có nút *Chia sẻ lịch trình*.
+- Link giữ nguyên qua mọi lần sửa: ai mở lại tin nhắn cũ cũng thấy bản mới nhất. Dòng *Cập nhật lần cuối* tự lấy từ lần sửa tệp gần nhất.
+
+**Sửa lịch: chỉ sửa `lich-trinh/lich-trinh.json`** (trên điện thoại: mở tệp trên GitHub → bút chì ✏️ → sửa → *Commit changes*; khoảng 1–2 phút sau trang đổi). Các mốc xếp theo 3 chặng (`chang`), thứ tự trên trang là thứ tự trong tệp. Trong mỗi mốc:
+
+| Muốn sửa | Trường |
+|---|---|
+| Giờ | `batDau` (ví dụ `"11:15"`), `ketThuc` khi là một khoảng (`"08:45"`). Nghi lễ / khai tiệc đang để `""` → trang hiện *Sau khi đoàn về / Sau nghi lễ* và *Giờ cụ thể: chờ gia đình cập nhật*; điền `batDau` là tự hiện giờ |
+| Giờ có mặt (khác giờ xe chạy 05:00) | `gioCoMat`, ví dụ `"04:40"` |
+| Địa chỉ | `diaDiem.ten`, `diaDiem.diaChi`, `diaDiem.banDo` (link Google Maps) — nút **Chỉ đường** chỉ hiện khi đổi `diaDiem.daXacNhan` thành `true` |
+| Đầu mối | `dauMoi.ten`, `dauMoi.soDienThoai` (số đủ 10 chữ số) → hiện nút **Gọi …** |
+| Thứ tự nghi thức ở nhà gái | `nghiThuc` của mốc 07:00, ví dụ `["Thắp hương", "Trao lễ"]` (nằm trong *Xem chi tiết*) |
+| Số xe, hướng dẫn tập trung… | `chiTiet`, ví dụ `["Xe 1: 15A-123.45 — anh Tuấn"]` (nằm trong *Xem chi tiết*) |
+| Lời nhắc | `canChuanBi`; người liên quan: `nguoiCanXem` |
+
+- Giữ nguyên dấu `"…"` và dấu phẩy. Nếu lỡ sửa sai định dạng, trang báo lỗi và tạm hiện bản người xem đã mở lần trước — mở trang ngay sau khi sửa để kiểm tra.
+- **Địa chỉ nhà gái đón dâu sáng 29/11 chưa xác nhận** — đừng dùng địa chỉ nhà văn hoá Ngọc Trục (nơi tiệc 28/11) nếu không đúng.
+- Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.
+
 ### Link ngắn có tên khách (Facebook, Zalo hiện “Thân gửi …”)
 
 Facebook / Zalo chỉ đọc lời xem trước của đúng trang được gửi, nên link `?to=Tên` dài và không hiện tên khách. Bật **Dùng link ngắn** ở mục **3. Khách mời** của trang tạo link:
@@ -223,6 +246,7 @@ xanh-pastel/               mẫu xanh pastel
   thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
 m/                                trang nhỏ của link ngắn (trang tạo link tự ghi lên GitHub)
 nha-trai/index.html               cửa vào bản nhà trai (ảnh, lời xem trước 29.11)
+lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
   assets/anh/              ảnh cưới của mẫu xanh pastel
