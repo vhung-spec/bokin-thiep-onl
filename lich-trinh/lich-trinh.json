@@ -19,9 +19,8 @@
   "loTrinh": {
     "_huongDan": [
       "LỘ TRÌNH CHO LÁI XE. Đường kẻ cố định trên bản đồ lấy từ tệp lo-trinh-co-dinh.geojson (tạo bằng tools/lo-trinh/tao_lo_trinh.py) — muốn đổi cung đường thì sửa và chạy lại script đó.",
-      "Google Maps: mỗi lượt chia thành các đoạn trong doanGoogle. Mỗi đoạn một nút có điểm đi cố định (toaDoDi của lượt, hoặc den của đoạn trước) và dir_action=navigate: điện thoại ở gần điểm đi thì vào dẫn đường, ở nơi khác thì chỉ xem trước; bắt buộc qua đúng 3 điểm quaDiem (giới hạn của link Google Maps trên điện thoại) rồi tới den. Toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy.",
-      "Nút Xem trước toàn tuyến: điểm đi cố định toaDoDi, qua tất cả các điểm — mở ở đâu cũng thấy đúng một tuyến, dùng để kiểm tra trước.",
-      "Đã thử trên Google Maps ngày 25/11/2026 (cả khi điện thoại đang ở Hải Dương): lượt đi đoạn 1 41,4 km (QL5 tới Gia Lâm), đoạn 2 25,5 km (cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Chu Văn An – Ngọc Trục); lượt về đoạn 1 25,4 km (Vạn Phúc – Quang Trung – Nguyễn Trãi – Vành đai 3 trên cao – cầu Thanh Trì – QL5), đoạn 2 40,8 km (QL5 về Phố Văn). Hai điểm Linh Đàm và Yên Sở giữ xe trên đường trên cao, không cho Google rẽ xuống Tam Trinh – Nguyễn Khoái. Đổi điểm thì thử lại.",
+      "Google Maps: mỗi lượt một nút (doanGoogle chỉ có 1 đoạn), điểm đi cố định toaDoDi, qua đúng thứ tự các điểm trong quaDiem (tối đa 9 điểm — ứng dụng Google Maps nhận đủ; trình duyệt điện thoại chỉ nhận 3 nên nút mở thẳng ứng dụng trên Android). Điện thoại ở gần điểm đi thì vào dẫn đường, ở nơi khác thì chỉ xem trước. Toạ độ lấy đúng trên đường kẻ, đúng chiều xe chạy.",
+      "Đã thử trên Google Maps ngày 25/11/2026 (cả khi điện thoại đang ở Hải Dương): lượt đi 66,9 km (QL5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Chu Văn An – Ngọc Trục); lượt về 66,1 km (Vạn Phúc – Quang Trung – Nguyễn Trãi – Vành đai 3 trên cao – cầu Thanh Trì – QL5 – Phố Văn). Hai điểm Linh Đàm và Yên Sở giữ xe trên đường trên cao. Đổi điểm thì thử lại.",
       "xeDanDoan.soDienThoai điền đủ số thì hiện nút Gọi xe dẫn đoàn; nhomZalo dán link nhóm Zalo thì hiện nút vào nhóm."
     ],
     "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc (không đi Tố Hữu). Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
@@ -31,7 +30,7 @@
     "diemChoNhau": [],
     "quyTac": [
       "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
-      "Người ngồi cạnh tài xế bấm các nút trên điện thoại (dẫn đường, chuyển sang đoạn 2); tài xế không thao tác điện thoại khi xe đang chạy.",
+      "Người ngồi cạnh tài xế bấm các nút trên điện thoại (mở dẫn đường); tài xế không thao tác điện thoại khi xe đang chạy.",
       "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
       "Tuyến có trạm thu phí (Google Maps báo): kiểm tra thẻ thu phí không dừng (ETC) của xe còn tiền trước ngày đi.",
       "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi xe dẫn đoàn để hẹn chỗ chờ."
@@ -47,19 +46,13 @@
         "tenDiemDen": "Nhà gái — Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ",
         "doanGoogle": [
           {
-            "ten": "Đoạn 1: Nhà trai → Quốc lộ 5 ở Gia Lâm",
+            "ten": "Nhà trai → Nhà gái",
             "batDau": "khi xe đang ở nhà trai (Phố Văn)",
-            "den": { "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)", "toaDo": "21.01742,105.94375" },
-            "quaDiem": [
-              { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93231,106.06177" },
-              { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98604,105.97867" }
-            ]
-          },
-          {
-            "ten": "Đoạn 2: Gia Lâm → Nhà gái",
-            "batDau": "khi Google Maps báo đã đến Quốc lộ 5 ở Gia Lâm (sắp tới nút giao Vành đai 3)",
             "den": { "ten": "Nhà gái — STEN", "toaDo": "20.9882994,105.7731068" },
             "quaDiem": [
+              { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93231,106.06177" },
+              { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98604,105.97867" },
+              { "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)", "toaDo": "21.01742,105.94375" },
               { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96994,105.87921" },
               { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97173,105.82201" },
               { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97809,105.78498" }
@@ -73,8 +66,7 @@
           "Đi thẳng khoảng 5,7 km, qua cầu Thanh Trì rồi lên Vành đai 3 trên cao.",
           "Đi Vành đai 3 trên cao khoảng 10,5 km (Pháp Vân – Linh Đàm – Nguyễn Xiển), xuống ở lối xuống Nguyễn Trãi.",
           "Đi Nguyễn Xiển khoảng 300 m, rẽ trái vào Nguyễn Trãi, đi thẳng sang Trần Phú (khoảng 2,5 km, không rẽ vào Tố Hữu).",
-          "Hết Trần Phú sang Quang Trung một đoạn ngắn, rẽ phải vào Chu Văn An, đi thẳng Vạn Phúc – Đại Mỗ (qua ngã tư Tố Hữu), rẽ phải vào Phố Ngọc Trục, tới STEN.",
-          "Trên Google Maps: vừa vào Quốc lộ 5 ở Gia Lâm, Google báo đã đến cuối đoạn 1 — người ngồi cạnh bấm nút Đoạn 2 để dẫn tiếp."
+          "Hết Trần Phú sang Quang Trung một đoạn ngắn, rẽ phải vào Chu Văn An, đi thẳng Vạn Phúc – Đại Mỗ (qua ngã tư Tố Hữu), rẽ phải vào Phố Ngọc Trục, tới STEN."
         ]
       },
       {
@@ -88,20 +80,13 @@
         "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
         "doanGoogle": [
           {
-            "ten": "Đoạn 1: Nhà gái → vào Quốc lộ 5 ở Gia Lâm",
+            "ten": "Nhà gái → Nhà trai",
             "batDau": "khi xe đang ở nhà gái (STEN)",
-            "den": { "ten": "Quốc lộ 5, đoạn Gia Lâm (Nguyễn Đức Thuận)", "toaDo": "21.01398,105.94818" },
+            "den": { "ten": "Nhà trai — Phố Văn", "toaDo": "20.9577131,106.2765173" },
             "quaDiem": [
               { "ten": "Trần Phú, đoạn Mộ Lao", "toaDo": "20.97787,105.78517" },
               { "ten": "Vành đai 3 trên cao, đoạn Linh Đàm", "toaDo": "20.97157,105.82196" },
-              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96985,105.87935" }
-            ]
-          },
-          {
-            "ten": "Đoạn 2: Quốc lộ 5 → Nhà trai",
-            "batDau": "khi Google Maps báo đã đến Quốc lộ 5 ở Gia Lâm (vừa qua cầu Thanh Trì, rẽ vào QL5)",
-            "den": { "ten": "Nhà trai — Phố Văn", "toaDo": "20.9577131,106.2765173" },
-            "quaDiem": [
+              { "ten": "Vành đai 3 trên cao, đoạn Yên Sở", "toaDo": "20.96985,105.87935" },
               { "ten": "Quốc lộ 5, qua Như Quỳnh", "toaDo": "20.98598,105.97860" },
               { "ten": "Quốc lộ 5, đoạn Mỹ Hào", "toaDo": "20.93219,106.06173" },
               { "ten": "Quốc lộ 5, đoạn Lai Cách", "toaDo": "20.93461,106.24634" }
@@ -113,8 +98,7 @@
           "Rẽ trái vào Quang Trung, đi thẳng Trần Phú – Nguyễn Trãi khoảng 2 km (hướng Thanh Xuân).",
           "Tới ngã tư Nguyễn Trãi – Khuất Duy Tiến, rẽ phải vào Nguyễn Xiển rồi theo lối lên Vành đai 3 trên cao, hướng Pháp Vân – cầu Thanh Trì.",
           "Đi Vành đai 3 trên cao khoảng 10,5 km, qua cầu Thanh Trì, đi tiếp khoảng 5,6 km tới nút giao Quốc lộ 5, vào QL5 hướng Hải Phòng.",
-          "Đi thẳng Quốc lộ 5 khoảng 35 km qua Như Quỳnh, Mỹ Hào, Lai Cách; rẽ trái rời QL5 về Phố Văn (khoảng 3 km).",
-          "Trên Google Maps: vừa vào Quốc lộ 5 ở Gia Lâm, Google báo đã đến cuối đoạn 1 — người ngồi cạnh bấm nút Đoạn 2 để dẫn tiếp."
+          "Đi thẳng Quốc lộ 5 khoảng 35 km qua Như Quỳnh, Mỹ Hào, Lai Cách; rẽ trái rời QL5 về Phố Văn (khoảng 3 km)."
         ]
       }
     ]

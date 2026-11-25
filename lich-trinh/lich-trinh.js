@@ -124,13 +124,19 @@
     return [{ ten: '', batDau: '', den: { ten: str(l.tenDiemDen) || str(l.diemDen), toaDo: str(l.toaDoDen) || str(l.diemDen) }, qua: (l.quaDiem || []).map(viaPoint) }];
   }
   function segHref(seg, origin) {
-    var via = seg.qua.map(function (v) { return v.toaDo || v.ten; }).filter(Boolean).slice(0, 3);
+    var via = seg.qua.map(function (v) { return v.toaDo || v.ten; }).filter(Boolean).slice(0, 9);
     // Điểm đi cố định + dir_action=navigate: điện thoại đang ở gần điểm đi thì Google vào chế độ dẫn đường;
     // ở nơi khác (ví dụ mở thử ở nhà) thì chỉ xem trước — luôn là cùng một tuyến, không vẽ thêm đường từ chỗ mình đang đứng.
     return 'https://www.google.com/maps/dir/?api=1&travelmode=driving' +
       (origin ? '&origin=' + encodeURIComponent(origin) : '') +
       '&destination=' + encodeURIComponent(seg.den.toaDo || seg.den.ten) +
       (via.length ? '&waypoints=' + via.map(encodeURIComponent).join('%7C') : '') + '&dir_action=navigate';
+  }
+  // Android: mở thẳng ứng dụng Google Maps (trình duyệt / Zalo chỉ nhận 3 điểm khoá, ứng dụng nhận đủ 9).
+  // Máy không có ứng dụng thì tự quay về link web.
+  function appHref(url) {
+    if (!/Android/i.test(navigator.userAgent)) return url;
+    return 'intent://' + url.replace(/^https:\/\//, '') + '#Intent;scheme=https;package=com.google.android.apps.maps;S.browser_fallback_url=' + encodeURIComponent(url) + ';end';
   }
   // Xem trước: điểm đi cố định + tất cả các điểm, mở ở đâu cũng ra đúng một tuyến
   function previewHref(l, segs) {
@@ -167,13 +173,13 @@
       if (segs.length) {
         html += '<div class="gmaps"><h4>' + ICON.map + 'Dẫn đường bằng Google Maps</h4>';
         segs.forEach(function (sg, i) {
-          var label = segs.length > 1 ? (sg.ten || 'Đoạn ' + (i + 1)) : 'Bắt đầu dẫn đường';
-          html += '<div class="seg"><a class="btn' + (i ? ' ghost' : '') + '" href="' + esc(segHref(sg, i ? segs[i - 1].den.toaDo : str(l.toaDoDi))) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' +
+          var label = segs.length > 1 ? (sg.ten || 'Đoạn ' + (i + 1)) : 'Mở dẫn đường trên Google Maps';
+          html += '<div class="seg"><a class="btn' + (i ? ' ghost' : '') + '" href="' + esc(appHref(segHref(sg, i ? segs[i - 1].den.toaDo : str(l.toaDoDi)))) + '" target="_blank" rel="noopener">' + esc(label) + '</a>' +
             (sg.batDau ? '<p class="seg-when">Bấm ' + esc(sg.batDau) + '.</p>' : '') + '</div>';
         });
-        var pv = previewHref(l, segs);
+        var pv = segs.length > 1 ? previewHref(l, segs) : ''; // một đoạn: chính nút trên đã có điểm đi cố định
         if (pv) html += '<p class="leg-note"><a href="' + esc(pv) + '" target="_blank" rel="noopener">Xem trước toàn tuyến trên Google Maps</a> — mở ở đâu cũng thấy đúng một tuyến; dùng để kiểm tra trước, không dùng để dẫn đường.</p>';
-        html += '<p class="leg-note">Mỗi nút có điểm đi cố định: bấm khi xe đang ở điểm xuất phát của đoạn đó thì Google vào chế độ dẫn đường; mở thử ở nơi khác thì Google chỉ hiện xem trước, vẫn đúng tuyến của đoàn. Nếu Google chỉ hiện “Xem trước” khi đã ở đúng chỗ, đổi ô điểm đi thành “Vị trí của bạn”. Gặp tắc mà Google gợi ý đường khác thì đi theo đường kẻ trên bản đồ và xe dẫn đoàn.</p></div>';
+        html += '<p class="leg-note">Nút có điểm đi cố định: bấm khi xe đang ở điểm xuất phát thì Google vào chế độ dẫn đường; mở thử ở nơi khác thì Google chỉ hiện xem trước, vẫn đúng tuyến của đoàn. Cần mở bằng <b>ứng dụng Google Maps</b> (giữ đủ các điểm khoá); nếu bản đồ hiện trong Zalo hoặc trình duyệt, bấm ⋮ / ⋯ chọn mở bằng trình duyệt hoặc ứng dụng Google Maps. Nếu Google chỉ hiện “Xem trước” khi đã ở đúng chỗ, đổi ô điểm đi thành “Vị trí của bạn”. Gặp tắc mà Google gợi ý đường khác thì đi theo đường kẻ trên bản đồ và xe dẫn đoàn.</p></div>';
       } else if (str(l.khiThieuDiemDen)) html += '<p class="leg-note warn">' + esc(l.khiThieuDiemDen) + '</p>';
       html += '<p class="leg-note"><a href="' + esc(l.id) + '.gpx" download>Tải file lộ trình (GPX)</a> cho ứng dụng dẫn đường theo file như OsmAnd, Vietmap.</p>';
       html += '</article>';
