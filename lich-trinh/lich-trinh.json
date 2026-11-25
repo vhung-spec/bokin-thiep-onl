@@ -18,10 +18,10 @@
     "Nhà gái Hà Nội",
     "Nhà trai Hải Phòng"
   ],
-  "ghiChuNgay": "Chỉ dành cho Chủ nhật 29/11 — không phải tiệc nhà gái Thứ Bảy 28/11.",
+  "ghiChuNgay": "Lịch ngày 29/11, khác tiệc nhà gái 28/11.",
   "diaDiemChung": {
     "_huongDan": [
-      "GHIM NHÀ TRAI / NHÀ GÁI: chỉ sửa ở đây. Các mốc trong lịch (diaDiem có \"ref\"), điểm đầu lượt đi và điểm cuối lượt về đều lấy toạ độ từ mục này.",
+      "GHIM: chỉ sửa ở đây. Lịch (diaDiem có \"ref\"), điểm đầu lượt đi (nhaTrai) và điểm cuối lượt về (tiecNhaTrai) đều lấy toạ độ từ mục này.",
       "toaDo viết \"vĩ độ,kinh độ\" (lấy trong Google Maps: nhấn giữ đúng chỗ → chép số hiện ra).",
       "SAU KHI ĐỔI toaDo: người quản trị chạy lại  python3 tools/lo-trinh/tao_lo_trinh.py  để vẽ lại đường cố định và 2 file GPX, rồi xem đoạn nối từ ghim ra Quốc lộ 5 trên bản đồ. Khi chưa chạy lại, trang tự hiện lời nhắc dưới bản đồ."
     ],
@@ -29,13 +29,20 @@
       "ten": "Nhà trai, Hải Phòng",
       "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
       "toaDo": "20.9577131,106.2765173",
-      "ghiChuGhim": "Ghim khu Phố Văn, chưa phải cổng nhà. Gia đình sẽ cập nhật điểm lên xe chính xác.",
+      "ghiChuGhim": "Ghim khu Phố Văn, chưa phải cổng nhà.",
       "daXacNhan": true
     },
     "nhaGai": {
       "ten": "Nhà gái, Hà Nội",
       "diaChi": "Trung tâm ngoại ngữ STEN, Khu giãn dân/14 P. Ngọc Trục, tổ dân phố 2, Đại Mỗ, Hà Nội",
       "toaDo": "20.9882994,105.7731068",
+      "ghiChuGhim": "",
+      "daXacNhan": true
+    },
+    "tiecNhaTrai": {
+      "ten": "Tổ hợp Thể thao Vũ Tuấn Mobile",
+      "diaChi": "Lôi Xá, Tuệ Tĩnh, Hải Phòng",
+      "toaDo": "20.9581597,106.2743602",
       "ghiChuGhim": "",
       "daXacNhan": true
     }
@@ -47,7 +54,7 @@
       "Đã thử trên Google Maps bản máy tính ngày 25/11/2026: lượt đi 66,9 km, lượt về 66,1 km, đúng các chỗ rẽ ở Gia Lâm, Vành đai 3 trên cao, lối Nguyễn Trãi/Nguyễn Xiển, Chu Văn An – Vạn Phúc. Chỉ thêm hoặc dời điểm khoá khi đã biết điện thoại dẫn sai ở nhánh nào.",
       "lienHeDoanXe: điền đủ số điện thoại thì hiện nút Gọi; dán link nhóm Zalo (https://zalo.me/g/…) thì hiện nút vào nhóm. Ô nào để trống thì trang ẩn đi."
     ],
-    "gioiThieu": "Cung đường cố định của cả đoàn, hai lượt đi về cùng một đường: Quốc lộ 5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc (không đi Tố Hữu). Đường kẻ trên bản đồ không đổi khi tắc đường. Google Maps có thể gợi ý đường khác: luôn đi theo đường kẻ và xe dẫn đoàn.",
+    "gioiThieu": "Hai lượt đi cùng một đường: QL5 – cầu Thanh Trì – Vành đai 3 trên cao – Nguyễn Trãi – Trần Phú – Vạn Phúc. Không đi Tố Hữu, không đi cao tốc CT04.",
     "lienHeDoanXe": {
       "nguoiPhuTrach": "",
       "vaiTro": "",
@@ -57,11 +64,11 @@
       "diemHenKhiTachDoan": ""
     },
     "quyTac": [
-      "Xe dẫn đoàn đi đầu; các xe giữ đúng thứ tự, không vượt xe dẫn đoàn.",
-      "Người ngồi cạnh tài xế bấm các nút trên điện thoại (mở dẫn đường); tài xế không thao tác điện thoại khi xe đang chạy.",
-      "Chú ý biển chỉ dẫn lối lên, lối xuống đường trên cao; chuyển sang làn phải sớm trước lối xuống.",
-      "Tuyến có trạm thu phí (Google Maps báo): kiểm tra thẻ thu phí không dừng (ETC) của xe còn tiền trước ngày đi.",
-      "Lạc đoàn: không quay đầu đi tìm. Bấm “Vị trí của tôi” trên bản đồ để quay về đúng đường kẻ, rồi gọi người phụ trách trong mục Liên hệ đoàn xe để hẹn chỗ chờ."
+      "Đi sau xe dẫn đoàn, giữ thứ tự, không vượt.",
+      "Người ngồi cạnh thao tác điện thoại, tài xế chỉ lái xe.",
+      "Đường trên cao: vào làn phải sớm trước lối xuống.",
+      "Kiểm tra thẻ thu phí không dừng (ETC) còn tiền.",
+      "Lạc đoàn: không quay đầu, gọi người phụ trách để hẹn chỗ chờ."
     ],
     "luot": [
       {
@@ -99,24 +106,23 @@
           }
         ],
         "cacBuoc": [
-          "Từ Phố Văn đi xuống Quốc lộ 5 (khoảng 3 km), rẽ phải vào QL5, đi hướng Hà Nội.",
-          "Đi thẳng Quốc lộ 5 khoảng 35 km: qua Mỹ Hào (đoạn tên Nguyễn Văn Linh), Như Quỳnh, vào Gia Lâm (đoạn Nguyễn Bình, Nguyễn Đức Thuận).",
-          "Tới nút giao Quốc lộ 5 – Vành đai 3: đi làn phải, lên cầu vượt hướng cầu Thanh Trì.",
-          "Đi thẳng khoảng 5,7 km, qua cầu Thanh Trì rồi lên Vành đai 3 trên cao.",
-          "Đi Vành đai 3 trên cao khoảng 10,5 km (Pháp Vân – Linh Đàm – Nguyễn Xiển), xuống ở lối xuống Nguyễn Trãi.",
-          "Đi Nguyễn Xiển khoảng 300 m, rẽ trái vào Nguyễn Trãi, đi thẳng sang Trần Phú (khoảng 2,5 km, không rẽ vào Tố Hữu).",
-          "Hết Trần Phú sang Quang Trung một đoạn ngắn, rẽ phải vào Chu Văn An, đi thẳng Vạn Phúc – Đại Mỗ (qua ngã tư Tố Hữu), rẽ phải vào Phố Ngọc Trục, tới STEN."
+          "Phố Văn ra Quốc lộ 5, rẽ phải hướng Hà Nội.",
+          "Đi thẳng QL5 khoảng 35 km qua Mỹ Hào, Như Quỳnh, Gia Lâm.",
+          "Nút giao QL5 – Vành đai 3: đi làn phải, lên cầu vượt hướng cầu Thanh Trì.",
+          "Qua cầu Thanh Trì, lên Vành đai 3 trên cao khoảng 10,5 km.",
+          "Xuống ở lối Nguyễn Trãi, rẽ trái Nguyễn Trãi, đi thẳng Trần Phú (không rẽ Tố Hữu).",
+          "Rẽ phải Chu Văn An, đi thẳng Vạn Phúc – Đại Mỗ, rẽ phải Phố Ngọc Trục tới STEN."
         ],
-        "tomTatMoRong": "Bản đồ, điểm đi qua, chỉ đường từng bước, GPX"
+        "tomTatMoRong": "Bản đồ, chỉ đường, GPX"
       },
       {
         "id": "lo-trinh-ve",
-        "ten": "Lượt về: Nhà gái → Nhà trai",
+        "ten": "Lượt về: Nhà gái → Tổ hợp Vũ Tuấn",
         "gio": "Xe chạy 08:30–08:45",
         "tu": "nhaGai",
-        "den": "nhaTrai",
-        "oTieuDe": "08:30–08:45 · Nhà gái → Nhà trai",
-        "nutGoogle": "Mở Google Maps về nhà trai",
+        "den": "tiecNhaTrai",
+        "oTieuDe": "08:30–08:45 · Nhà gái → Tổ hợp Vũ Tuấn",
+        "nutGoogle": "Mở Google Maps về Vũ Tuấn",
         "quaDiem": [
           {
             "ten": "Trần Phú, đoạn Mộ Lao",
@@ -144,13 +150,13 @@
           }
         ],
         "cacBuoc": [
-          "Từ STEN ra Phố Ngọc Trục, rẽ trái vào Đại Mỗ, đi thẳng Vạn Phúc qua ngã tư Tố Hữu (không rẽ vào Tố Hữu), sang Chu Văn An.",
-          "Rẽ trái vào Quang Trung, đi thẳng Trần Phú – Nguyễn Trãi khoảng 2 km (hướng Thanh Xuân).",
-          "Tới ngã tư Nguyễn Trãi – Khuất Duy Tiến, rẽ phải vào Nguyễn Xiển rồi theo lối lên Vành đai 3 trên cao, hướng Pháp Vân – cầu Thanh Trì.",
-          "Đi Vành đai 3 trên cao khoảng 10,5 km, qua cầu Thanh Trì, đi tiếp khoảng 5,6 km tới nút giao Quốc lộ 5, vào QL5 hướng Hải Phòng.",
-          "Đi thẳng Quốc lộ 5 khoảng 35 km qua Như Quỳnh, Mỹ Hào, Lai Cách; rẽ trái rời QL5 về Phố Văn (khoảng 3 km)."
+          "STEN ra Phố Ngọc Trục, rẽ trái Đại Mỗ, đi thẳng Vạn Phúc qua ngã tư Tố Hữu.",
+          "Rẽ trái Quang Trung, đi thẳng Trần Phú – Nguyễn Trãi khoảng 2 km.",
+          "Ngã tư Nguyễn Trãi – Khuất Duy Tiến: rẽ phải Nguyễn Xiển, lên Vành đai 3 trên cao hướng cầu Thanh Trì.",
+          "Qua cầu Thanh Trì, vào Quốc lộ 5 hướng Hải Phòng.",
+          "Đi thẳng QL5 khoảng 35 km qua Như Quỳnh, Mỹ Hào, Lai Cách; rẽ trái vào Tổ hợp Thể thao Vũ Tuấn."
         ],
-        "tomTatMoRong": "Bản đồ, điểm đi qua, chỉ đường từng bước, GPX"
+        "tomTatMoRong": "Bản đồ, chỉ đường, GPX"
       }
     ]
   },
@@ -204,7 +210,7 @@
             "Tài xế"
           ],
           "canChuanBi": "Có mặt và lên đúng xe trước 05:00. Người phụ trách kiểm tra đủ người và đồ cần mang trước khi đoàn đi.",
-          "ghiChuGio": "05:00 là giờ xe chạy, không phải giờ tập trung.",
+          "ghiChuGio": "Giờ xe chạy, không phải giờ tập trung.",
           "gioCoMat": "",
           "gioCoMatKhiTrong": "Giờ có mặt: gia đình sẽ báo sau",
           "dauMoi": {
@@ -235,7 +241,7 @@
             "Người đón tiếp bên nhà gái"
           ],
           "canChuanBi": "Nhà gái sẵn sàng đón đoàn. Khi tới nơi, người phụ trách đoàn liên hệ đầu mối nhà gái.",
-          "ghiChuGio": "Từ lúc đoàn đến cho tới khi đoàn rời đi là thời gian ở nhà gái.",
+          "ghiChuGio": "",
           "gioCoMat": "",
           "dauMoi": {
             "ten": "",
@@ -250,8 +256,8 @@
           "ketThuc": "08:45",
           "nhanGio": "",
           "khiNao": "",
-          "viec": "Đoàn rời nhà gái, đưa dâu về Hải Phòng",
-          "tomTat": "Rời nhà gái, đưa dâu về Hải Phòng",
+          "viec": "Đoàn rời nhà gái, đưa dâu về",
+          "tomTat": "Rời nhà gái, đưa dâu về",
           "nhacNhanh": "Rời nhà gái",
           "loTrinh": "lo-trinh-ve",
           "xeChay": true,
@@ -265,7 +271,7 @@
             "Tài xế"
           ],
           "canChuanBi": "Trước 08:30, kiểm tra đồ cá nhân của cô dâu, tập trung mọi người và xác nhận xe về.",
-          "ghiChuGio": "08:30–08:45 là khoảng giờ dự kiến xe xuất phát, không phải thời gian đi đường.",
+          "ghiChuGio": "Khoảng giờ dự kiến xe xuất phát.",
           "gioCoMat": "",
           "dauMoi": {
             "ten": "",
@@ -284,11 +290,11 @@
           "ketThuc": "",
           "nhanGio": "",
           "khiNao": "",
-          "viec": "Đoàn về đến nhà trai",
-          "tomTat": "Dự kiến về đến nhà trai",
+          "viec": "Đoàn về đến Tổ hợp Thể thao Vũ Tuấn",
+          "tomTat": "Dự kiến về đến Tổ hợp Vũ Tuấn",
           "xeChay": false,
           "diaDiem": {
-            "ref": "nhaTrai"
+            "ref": "tiecNhaTrai"
           },
           "nguoiCanXem": [
             "Đoàn đưa dâu",
@@ -296,7 +302,7 @@
             "Người phụ trách nghi lễ"
           ],
           "canChuanBi": "Đầu mối nhà trai sẵn sàng đón đoàn và hướng dẫn hai bên gia đình vào vị trí.",
-          "ghiChuGio": "10:30 là giờ đoàn về đến nơi, chưa phải giờ khai tiệc.",
+          "ghiChuGio": "Giờ đến nơi, chưa phải giờ khai tiệc.",
           "gioCoMat": "",
           "dauMoi": {
             "ten": "",
@@ -310,12 +316,15 @@
           "ketThuc": "",
           "nhanGio": "",
           "khiNao": "Sau khi đoàn về",
-          "viec": "Tiến hành nghi lễ tại nhà trai",
-          "tomTat": "Nghi lễ tại nhà trai",
+          "viec": "Tiến hành nghi lễ",
+          "tomTat": "Nghi lễ",
           "gioNgan": "Sau đó",
           "xeChay": false,
           "diaDiem": {
-            "ref": "nhaTrai"
+            "ten": "",
+            "diaChi": "",
+            "daXacNhan": false,
+            "khiTrong": "Địa điểm nghi lễ: chờ gia đình xác nhận"
           },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách nghi lễ mời cô dâu chú rể và đại diện hai gia đình vào vị trí.",
@@ -338,11 +347,7 @@
           "gioNgan": "Sau đó",
           "xeChay": false,
           "diaDiem": {
-            "ten": "",
-            "diaChi": "",
-            "banDo": "",
-            "daXacNhan": false,
-            "khiTrong": ""
+            "ref": "tiecNhaTrai"
           },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách tiệc nhận tín hiệu từ gia đình rồi mời khách vào bàn.",

@@ -26,6 +26,7 @@ def _ghim(key):
 
 NHA_TRAI = _ghim('nhaTrai')   # Phố Văn, Tuệ Tĩnh, Hải Phòng (đang là ghim khu, chờ điểm lên xe chính xác)
 NHA_GAI = _ghim('nhaGai')     # Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ
+TIEC_NHA_TRAI = _ghim('tiecNhaTrai')  # Tổ hợp Thể thao Vũ Tuấn Mobile: lượt về đi thẳng tới đây
 
 # Điểm bắt buộc đi qua: (vĩ độ, kinh độ, hướng đi độ, sai số độ)
 LUOT = {
@@ -43,7 +44,7 @@ LUOT = {
                     (20.97157, 105.82196, 120, 60),      # Vành đai 3 trên cao đoạn Linh Đàm
                     (20.9860400, 105.9786744, 135, 60),  # QL5 qua Như Quỳnh, hướng Hải Phòng
                     (20.9323078, 106.0617733, 100, 60),  # QL5 đoạn Mỹ Hào
-                    NHA_TRAI],
+                    TIEC_NHA_TRAI],
 }
 
 # Điểm mốc hiện trên bản đồ: tìm theo tên đoạn đường / kiểu rẽ trong kết quả OSRM
@@ -63,8 +64,8 @@ MOC = {
         ('onramp', 'Lên Vành đai 3 trên cao', 'Ở ngã tư Nguyễn Trãi – Khuất Duy Tiến, theo lối lên CT.37'),
         ('point:20.99456,105.90257', 'Cầu Thanh Trì', 'Qua cầu, đi tiếp tới nút giao QL5'),
         ('road:Đường Nguyễn Đức Thuận', 'Vào Quốc lộ 5', 'Đi QL5 hướng Hải Phòng'),
-        ('road_last:Quốc lộ 5', 'Rời Quốc lộ 5', 'Rẽ trái vào đường về Phố Văn'),
-        ('end', 'Nhà trai — Phố Văn', 'Đến nơi'),
+        ('road_last:Quốc lộ 5', 'Rời Quốc lộ 5', 'Rẽ vào Tổ hợp Thể thao Vũ Tuấn'),
+        ('end', 'Tổ hợp Thể thao Vũ Tuấn', 'Đến nơi'),
     ],
 }
 
@@ -150,7 +151,7 @@ def gpx(key, title, line, marks):
 def main():
     feats = []
     titles = {'lo-trinh-di': 'Lượt đi: Nhà trai → Nhà gái (QL5 · Vành đai 3 trên cao)',
-              'lo-trinh-ve': 'Lượt về: Nhà gái → Nhà trai (Vành đai 3 trên cao · QL5)'}
+              'lo-trinh-ve': 'Lượt về: Nhà gái → Tổ hợp Thể thao Vũ Tuấn (Vành đai 3 trên cao · QL5)'}
     for key, pts in LUOT.items():
         feat, marks, line, tren_cao = build(key, osrm(pts))
         feats += [feat, tren_cao] + marks

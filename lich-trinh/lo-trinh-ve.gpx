@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="thiep-cuoi lich-trinh" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Lượt về: Nhà gái → Nhà trai (Vành đai 3 trên cao · QL5)</name></metadata>
+  <metadata><name>Lượt về: Nhà gái → Tổ hợp Thể thao Vũ Tuấn (Vành đai 3 trên cao · QL5)</name></metadata>
   <wpt lat="20.98825" lon="105.77306"><name>1. Nhà gái — STEN</name><desc>Xuất phát</desc></wpt>
   <wpt lat="20.97434" lon="105.78063"><name>2. Vào Trần Phú</name><desc>Đi thẳng Vạn Phúc qua ngã tư Tố Hữu, ra Trần Phú – Nguyễn Trãi</desc></wpt>
   <wpt lat="20.98953" lon="105.80448"><name>3. Lên Vành đai 3 trên cao</name><desc>Ở ngã tư Nguyễn Trãi – Khuất Duy Tiến, theo lối lên CT.37</desc></wpt>
   <wpt lat="20.99328" lon="105.90153"><name>4. Cầu Thanh Trì</name><desc>Qua cầu, đi tiếp tới nút giao QL5</desc></wpt>
   <wpt lat="21.02221" lon="105.93502"><name>5. Vào Quốc lộ 5</name><desc>Đi QL5 hướng Hải Phòng</desc></wpt>
-  <wpt lat="20.93367" lon="106.26842"><name>6. Rời Quốc lộ 5</name><desc>Rẽ trái vào đường về Phố Văn</desc></wpt>
-  <wpt lat="20.95773" lon="106.27654"><name>7. Nhà trai — Phố Văn</name><desc>Đến nơi</desc></wpt>
-  <trk><name>Lượt về: Nhà gái → Nhà trai (Vành đai 3 trên cao · QL5)</name><trkseg>
+  <wpt lat="20.93367" lon="106.26842"><name>6. Rời Quốc lộ 5</name><desc>Rẽ vào Tổ hợp Thể thao Vũ Tuấn</desc></wpt>
+  <wpt lat="20.95815" lon="106.27437"><name>7. Tổ hợp Thể thao Vũ Tuấn</name><desc>Đến nơi</desc></wpt>
+  <trk><name>Lượt về: Nhà gái → Tổ hợp Thể thao Vũ Tuấn (Vành đai 3 trên cao · QL5)</name><trkseg>
       <trkpt lat="20.98825" lon="105.77306"/>
       <trkpt lat="20.98889" lon="105.7723"/>
       <trkpt lat="20.98867" lon="105.77111"/>
@@ -812,6 +812,8 @@
       <trkpt lat="20.95649" lon="106.27798"/>
       <trkpt lat="20.95653" lon="106.27799"/>
       <trkpt lat="20.95659" lon="106.27799"/>
-      <trkpt lat="20.95773" lon="106.27654"/>
+      <trkpt lat="20.95888" lon="106.27508"/>
+      <trkpt lat="20.95848" lon="106.27468"/>
+      <trkpt lat="20.95815" lon="106.27437"/>
   </trkseg></trk>
 </gpx>

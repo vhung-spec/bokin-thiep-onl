@@ -81,7 +81,7 @@
       (ev.xeChay ? '<span class="tag car">Giờ xe chạy</span>' : '') + '</span>' +
       '<span class="chev" aria-hidden="true"></span></summary><div class="r-body">';
     html += '<h3>' + esc(ev.viec) + '</h3>';
-    if (!hasTime) html += '<p class="time-note">' + esc(str(ev.khiNao) ? str(ev.khiNao) + '. ' : '') + 'Giờ cụ thể: chờ gia đình cập nhật.</p>';
+    if (!hasTime) html += '<p class="time-note">Giờ: chờ gia đình cập nhật.</p>';
     if (str(ev.ghiChuGio)) html += '<p class="time-note">' + esc(ev.ghiChuGio) + '</p>';
 
     html += '<div class="meta">';
@@ -162,24 +162,24 @@
   function tripCards(legs) {
     var html = '';
     legs.forEach(function (l) {
-      var to = PLACES[l.den] || {};
+      var to = PLACES[l.den] || {}, from = PLACES[l.tu] || {};
       html += '<div class="trip" data-luot="' + esc(l.id) + '"><p class="trip-t">' + tripTitle(str(l.oTieuDe) || str(l.ten)) + '</p>' +
         (LEG_URLS[l.id] ? mainButton(l) : '<p class="leg-note warn">Chưa đủ toạ độ để mở Google Maps.</p>') +
-        (str(to.ghiChuGhim) ? '<p class="pin-note">' + esc(to.ghiChuGhim) + '</p>' : '') + '</div>';
+        (str(to.ghiChuGhim || from.ghiChuGhim) ? '<p class="pin-note">' + esc(to.ghiChuGhim || from.ghiChuGhim) + '</p>' : '') + '</div>';
     });
     return html;
   }
   // Trợ giúp khi bản đồ mở trong Zalo: chỉ hiện khi chạm
   function zaloHelp(legs, key) {
     var copies = legs.filter(function (l) { return LEG_URLS[l.id]; }).map(function (l) {
-      return '<button class="btn ghost small" type="button" data-copy="' + esc(l.id) + '">Sao chép link Google Maps' +
+      return '<button class="btn ghost small" type="button" data-copy="' + esc(l.id) + '">Sao chép link' +
         (legs.length > 1 ? ' · ' + esc(/ve$/.test(l.id) ? 'lượt về' : 'lượt đi') : '') + '</button>';
     }).join('');
     return '<details class="zalo-help"><summary>Nếu bản đồ mở trong Zalo</summary><div class="zh-body">' +
-      '<ol><li>Bấm <b>⋯</b> hoặc <b>⋮</b> ở góc trên Zalo, chọn mở bằng trình duyệt (<b>Safari</b> trên iPhone, <b>Chrome</b> trên Android).</li>' +
-      '<li>Trong trình duyệt, bấm lại nút “… – Mở Google Maps”. Nếu máy hỏi, chọn mở bằng ứng dụng <b>Google Maps</b>.</li>' +
-      '<li>Vẫn không được: bấm nút sao chép dưới đây, dán link vào Ghi chú hoặc tin nhắn Zalo gửi chính mình, rồi chạm vào link đó.</li></ol>' +
-      '<p class="zh-note">Bản đồ hiện trong Zalo hoặc trình duyệt chỉ giữ được 3 điểm khoá, ứng dụng Google Maps giữ đủ 6 điểm của đoàn.</p>' +
+      '<ol><li>Bấm <b>⋯</b> góc trên Zalo, chọn mở bằng <b>Safari</b> (iPhone) hoặc <b>Chrome</b> (Android).</li>' +
+      '<li>Bấm lại nút Google Maps, chọn ứng dụng <b>Google Maps</b>.</li>' +
+      '<li>Hoặc sao chép link, dán vào Ghi chú rồi chạm vào.</li></ol>' +
+      '<p class="zh-note">Mở trong Zalo chỉ giữ 3 trên 6 điểm khoá của đoàn.</p>' +
       '<div class="acts">' + copies + '</div><p class="share-msg" id="copyMsg-' + esc(key) + '" role="status" aria-live="polite"></p></div></details>';
   }
   function renderRoute(r) {
@@ -199,7 +199,7 @@
         '<div class="acts map-acts"><button class="btn" type="button" data-gps="' + esc(l.id) + '">' + ICON.pin + 'Vị trí của tôi</button>' +
         '<button class="btn ghost" type="button" data-full="' + esc(l.id) + '">Phóng to bản đồ</button></div>' +
         '<p class="gps-msg" id="gps-' + esc(l.id) + '" role="status" aria-live="polite"></p>' +
-        '<p class="gps-elev" id="elev-' + esc(l.id) + '" hidden>GPS có thể hiển thị gần tuyến dù xe đang ở đường dưới. Người ngồi cạnh kiểm tra biển chỉ dẫn và lối ra.</p>';
+        '<p class="gps-elev" id="elev-' + esc(l.id) + '" hidden>Gần Vành đai 3, GPS dễ lẫn đường trên cao và đường dưới — xem biển chỉ dẫn.</p>';
       // Điểm đi – qua – đến
       html += '<h4 class="steps-h">Các điểm đi qua</h4><ol class="stops">';
       html += '<li><span class="lbl">Đi từ</span>' + esc(str(from.ten) + (str(from.diaChi) ? ' — ' + str(from.diaChi) : '')) +
@@ -213,7 +213,7 @@
       // GPX
       html += '<h4 class="steps-h">Dành cho xe dẫn đoàn</h4><div class="gpx-body">' +
         '<p><a class="btn ghost small" href="' + esc(l.id) + '.gpx" download>Tải file GPX ' + esc(/ve$/.test(l.id) ? 'lượt về' : 'lượt đi') + '</a></p>' +
-        '<p class="leg-note">Đường vẽ cố định của lượt này, dùng cho ứng dụng dẫn đường theo file như OsmAnd (chọn “Theo dõi tuyến”, bật “Gắn vào đường”).</p></div>';
+        '<p class="leg-note">Dùng cho OsmAnd: chọn “Theo dõi tuyến”.</p></div>';
       html += '</div></details>';
     });
 
@@ -226,9 +226,9 @@
     if (tel) acts += '<a class="btn" href="' + esc(tel) + '">' + ICON.phone + 'Gọi ' + esc(str(c.nguoiPhuTrach) || 'người phụ trách') + ' · <span class="num">' + esc(c.soDienThoai) + '</span></a>';
     if (/^https:\/\/zalo\.me\//i.test(str(c.nhomZalo))) acts += '<a class="btn ghost" href="' + esc(c.nhomZalo) + '" target="_blank" rel="noopener">' + ICON.zalo + 'Vào nhóm Zalo đoàn xe</a>';
     if (acts) box += '<div class="acts">' + acts + '</div>';
-    if (!box) box = '<p class="muted">Gia đình đang cập nhật người phụ trách điện thoại, biển số xe dẫn đoàn, nhóm Zalo và điểm hẹn khi tách đoàn.</p>';
+    if (!box) box = '<p class="muted">Gia đình đang cập nhật.</p>';
     html += '<div class="convoy" id="lien-he"><h3>Liên hệ đoàn xe</h3>' + box +
-      '<p class="muted small-t">Ưu tiên gọi người ngồi cạnh tài xế để tài xế tập trung lái xe.</p></div>';
+      '<p class="muted small-t">Ưu tiên gọi người ngồi cạnh tài xế.</p></div>';
 
     var rules = (r.quyTac || []).map(str).filter(Boolean);
     if (rules.length) html += '<div class="convoy"><h3>Đi theo đoàn</h3><ul class="rules">' + rules.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div>';
@@ -396,8 +396,7 @@
       $('elev-' + id).hidden = !nearElev;
     }, function (err) {
       msg.className = 'gps-msg off';
-      msg.textContent = (err.code === 1 ? 'Chưa được phép dùng vị trí. Muốn dùng thì vào cài đặt trình duyệt / Zalo, cho phép Vị trí rồi bấm lại.' : 'Chưa lấy được vị trí, thử lại sau vài giây.') +
-        ' Bản đồ và nút Google Maps vẫn dùng bình thường.';
+      msg.textContent = err.code === 1 ? 'Chưa cho phép dùng vị trí. Bản đồ và nút Google Maps vẫn dùng được.' : 'Chưa lấy được vị trí, thử lại sau.';
     }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 });
   }
 
@@ -418,9 +417,9 @@
 
     var html = note ? '<p class="alert">' + esc(note) + '</p>' : '';
     html += '<section class="sched" aria-labelledby="sched-h"><h2 id="sched-h">Lịch cả buổi sáng</h2>' +
-      '<p class="sched-hint">Chạm vào từng dòng để xem địa điểm, người tham gia và việc cần chuẩn bị.</p><ol class="rows">';
+      '<p class="sched-hint">Chạm từng dòng để xem chi tiết.</p><ol class="rows">';
     (data.chang || []).forEach(function (st, i) {
-      html += '<li class="stage-lbl"><span>Chặng ' + (i + 1) + '</span> ' + esc(st.ten) + '</li>';
+      html += '<li class="stage-lbl">' + esc(st.ten) + '</li>';
       (st.suKien || []).forEach(function (ev) { html += renderEvent(ev); });
     });
     html += '</ol></section>';
@@ -432,7 +431,7 @@
     // Đầu trang: hai ô đi / về, mỗi ô một nút Google Maps
     var top = tripCards(LEGS);
     $('quick').innerHTML = top ? top +
-      '<p class="gm-remind">Google Maps có thể tự đổi đường khi tắc. Đối chiếu với bản đồ tuyến của đoàn ở mục từng lượt bên dưới và đi theo xe dẫn đoàn.</p>' +
+      '<p class="gm-remind">Google Maps có thể đổi đường khi tắc — đi theo xe dẫn đoàn.</p>' +
       zaloHelp(LEGS.filter(function (l) { return LEG_URLS[l.id]; }), 'top') : '';
     $('quick').hidden = !top;
     document.title = (str(data.tieuDe) || 'Lịch trình ngày đón dâu') + ' · ' + (str(data.doiTen) || '');
