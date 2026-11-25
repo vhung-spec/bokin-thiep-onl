@@ -139,9 +139,7 @@ window.WEDDING = {
   editions: {
     'nguoi-nha': {
       label: 'Người nhà (nhà trai)', // tên hiện ở trang tạo link
-      side: 'trai',                  // lấy địa điểm, ảnh xem trước… của bản nhà trai
-      date: '2026-11-28T10:00',      // bữa đầu tiên: ngày giờ lớn trên thiệp và đếm ngược theo giờ này
-      ogImage: 'og-image.jpg',       // ảnh xem trước Zalo / Facebook (ghi 28.11)
+      side: 'trai',                  // lấy ngày chính (29/11 10:30), địa điểm, ảnh xem trước của bản nhà trai
       invitation: { line: 'tới ăn cỗ và chung vui cùng gia đình chúng tôi' },
       timeline: {
         items: [
