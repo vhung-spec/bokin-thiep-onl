@@ -267,7 +267,7 @@
         const m = p >= 1 ? 'none' : `linear-gradient(100deg, #000 ${e}%, transparent ${e + 45}%)`;
         inS.el.style.webkitMaskImage = m;
         inS.el.style.maskImage = m;
-        if (outS) outS.inner.style.transform = `translateX(${px(-40 * sine(p))})`;
+        if (outS) outS.inner.style.transform = `translateX(${px(-18 * sine(p))})`;
         return null;
       }
       case 'arch': {
