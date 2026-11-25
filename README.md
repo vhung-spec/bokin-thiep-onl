@@ -159,7 +159,7 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 
 | Muốn sửa | Trường trong `loTrinh` |
 |---|---|
-| Địa chỉ nhà trai cho lượt về | `luot[1].diemDen` — để trống thì nút bản đồ lượt về tạm ẩn |
+| Địa chỉ nhà trai cho lượt về | `luot[1].diemDen` (đang là Phố Văn, Tuệ Tĩnh) — để trống thì nút bản đồ lượt về tạm ẩn |
 | Đổi đường đi | `quaDiem` (tối đa 3 điểm) và các bước chữ `cacBuoc` |
 | Xe dẫn đoàn | `xeDanDoan.taiXe`, `bienSo`, `soDienThoai` → hiện nút *Gọi xe dẫn đoàn* |
 | Nhóm Zalo đoàn xe | `nhomZalo` (link `https://zalo.me/g/…`) |

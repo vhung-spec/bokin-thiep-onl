@@ -55,15 +55,15 @@
         "ten": "Lượt về: Nhà gái → Nhà trai",
         "gio": "Xe chạy 08:30–08:45",
         "diemDi": "Trung tâm ngoại ngữ STEN, Ngọc Trục, Đại Mỗ, Hà Nội",
-        "diemDen": "",
-        "tenDiemDen": "Nhà trai, Hải Phòng",
+        "diemDen": "Phố Văn, Tuệ Tĩnh, Hải Phòng",
+        "tenDiemDen": "Nhà trai — Phố Văn, Tuệ Tĩnh, Hải Phòng",
         "khiThieuDiemDen": "Nút bản đồ lượt về sẽ hiện khi gia đình điền địa chỉ nhà trai.",
         "quaDiem": ["Cầu Thanh Trì, Hà Nội", "Quốc lộ 5, Như Quỳnh, Hưng Yên"],
         "cacBuoc": [
           "Từ Ngọc Trục ra Đại lộ Thăng Long, đi hướng trung tâm Hà Nội.",
           "Lên Vành đai 3 trên cao, đi hướng Pháp Vân – cầu Thanh Trì.",
           "Qua cầu Thanh Trì, theo Vành đai 3 tới nút giao Quốc lộ 5 thì rẽ đi hướng Hải Phòng.",
-          "Đi Quốc lộ 5 về nhà trai, Hải Phòng."
+          "Đi Quốc lộ 5 về Tuệ Tĩnh, vào Phố Văn — nhà trai."
         ]
       }
     ]
@@ -81,7 +81,7 @@
           "khiNao": "",
           "viec": "Bắt đầu trang điểm",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
           "nguoiCanXem": ["Cô dâu", "Thợ trang điểm"],
           "canChuanBi": "Để sẵn váy cưới, phụ kiện tóc, trang sức và giày tại phòng trang điểm.",
           "ghiChuGio": "",
@@ -161,7 +161,7 @@
           "khiNao": "",
           "viec": "Đoàn về đến nhà trai",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
           "nguoiCanXem": ["Đoàn đưa dâu", "Người đón tiếp bên nhà trai", "Người phụ trách nghi lễ"],
           "canChuanBi": "Đầu mối nhà trai sẵn sàng đón đoàn và hướng dẫn hai bên gia đình vào vị trí.",
           "ghiChuGio": "10:30 là giờ đoàn về đến nơi, chưa phải giờ khai tiệc.",
@@ -177,7 +177,7 @@
           "khiNao": "Sau khi đoàn về",
           "viec": "Tiến hành nghi lễ tại nhà trai",
           "xeChay": false,
-          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "", "banDo": "", "daXacNhan": false, "khiTrong": "" },
+          "diaDiem": { "ten": "Nhà trai, Hải Phòng", "diaChi": "Phố Văn, Tuệ Tĩnh, Hải Phòng", "banDo": "https://maps.app.goo.gl/xCJTB4KjsVNQFusZ9", "daXacNhan": true, "khiTrong": "" },
           "nguoiCanXem": [],
           "canChuanBi": "Người phụ trách nghi lễ mời cô dâu chú rể và đại diện hai gia đình vào vị trí.",
           "ghiChuGio": "",
