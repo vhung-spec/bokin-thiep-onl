@@ -146,6 +146,8 @@ Nhạc mặc định cho mọi link có thể đặt luôn trong `config.js` →
 
 ### Lịch trình ngày đón dâu 29/11 (`lich-trinh/`)
 
+Mốc chính: 05:00 xe rời nhà trai (Phố Văn) · 07:00 dự kiến tới nhà gái (STEN) · 08:30–08:45 rời nhà gái · 10:30 dự kiến về đến Tổ hợp Thể thao Vũ Tuấn · 10:45 nghi lễ và 11:00 khai tiệc tại Tổ hợp Vũ Tuấn. Liên hệ đoàn xe: chú rể Văn Hùng.
+
 Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở nhà chuẩn bị tiệc** — không phải cho mọi khách mời, nên **không** đặt trên thiệp; nút *Xem lịch trình đón dâu · 29/11* nằm ở đầu trang tạo link.
 
 - Link gửi Zalo: **https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/** (mở thẳng lịch, không phong bì, không nhạc). Trên trang có nút *Chia sẻ lịch trình*.
