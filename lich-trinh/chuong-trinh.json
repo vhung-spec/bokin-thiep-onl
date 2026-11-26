@@ -1,7 +1,7 @@
 {
   "_huongDan": [
     "CHƯƠNG TRÌNH LỄ CƯỚI — trang lich-trinh/ đọc tệp này để hiện hai thẻ “Chương trình nhà gái”, “Chương trình nhà trai” và mục Checklist.",
-    "Sửa chữ, thời lượng (thoiLuongPhut = số phút), người phụ trách ngay trong tệp này; không cần sửa mã. Tổng thời lượng nhà trai tự cộng từ thoiLuongPhut.",
+    "Sửa chữ, thời lượng (thoiLuongPhut = số phút), người phụ trách ngay trong tệp này; không cần sửa mã. Tổng thời lượng hai phần tự cộng từ thoiLuongPhut; ghiChuThoiLuong là lời nhắc đi kèm. Thời lượng chỉ là dự kiến.",
     "loiDan: mỗi phần tử là một đoạn văn; đoạn trong ngoặc như \"(Sau khi trao tay)\" là ghi chú cho người đọc. noiBat: true để làm nổi bật phân cảnh quan trọng.",
     "Không có giờ bắt đầu cho từng phân cảnh (chưa có thông tin chính xác). Giờ nghi lễ, khai tiệc chung nằm trong lich-trinh.json."
   ],
@@ -11,7 +11,6 @@
   "nhaGai": {
     "tieuDe": "Chương trình đón dâu tại nhà gái",
     "dieuHanh": "Chú Thấu – Trưởng đoàn nhà trai (chú của chú rể)",
-    "tongThoiLuong": "30–40 phút (dự kiến), điều chỉnh theo lịch trình di chuyển thực tế",
     "ghiChu": "Đây là lần đón dâu thứ hai: các nghi lễ cưới hỏi truyền thống đã tổ chức từ tháng 6, không thực hiện lại.",
     "buoc": [
       {
@@ -65,37 +64,78 @@
       },
       {
         "so": 4,
-        "ten": "Mời cô dâu ra chào hai họ",
-        "phuTrach": "Chú Thấu",
+        "ten": "Chú rể lên đón cô dâu",
+        "thoiLuongPhut": 5,
+        "phuTrach": "Chú Thấu mời · Chú rể Văn Hùng",
         "tomTat": [
-          "Xin phép nhà gái cho cô dâu Tuyết Anh ra gặp chú rể và chào hai họ."
+          "Chú rể Văn Hùng trực tiếp lên đón cô dâu Tuyết Anh.",
+          "Chú rể trao hoa cưới cho cô dâu.",
+          "Cô dâu, chú rể cùng xuống chào hai bên gia đình."
         ],
         "nhanLoi": "Lời dẫn của chú Thấu",
         "loiDan": [
           "Xin trân trọng cảm ơn những lời phát biểu chân tình của vị đại diện nhà gái.",
-          "Trong không khí vui tươi, đầm ấm của buổi sáng ngày hôm nay, xin phép gia đình nhà gái cho cháu Tuyết Anh ra gặp mặt cùng cháu Văn Hùng và chào hỏi các cụ, các ông, các bà, cô bác, anh chị em hai bên gia đình.",
-          "Xin mời hai cháu!"
+          "Kính thưa các cụ, các ông, các bà cùng toàn thể gia đình hai bên! Giây phút mà tất cả chúng ta cùng chờ đợi đã đến. Được sự đồng ý của gia đình nhà gái, xin phép cho cháu Văn Hùng được lên đón cô dâu Tuyết Anh.",
+          "Xin mời cháu Văn Hùng!",
+          "(Chú rể lên đón và trao hoa cưới cho cô dâu)",
+          "Bó hoa cưới hôm nay là lời yêu thương và cũng là lời hứa của Văn Hùng: luôn trân trọng, yêu thương và che chở cho Tuyết Anh trên suốt chặng đường phía trước. Xin cả nhà dành cho hai cháu một tràng pháo tay thật ấm áp!",
+          "Xin mời hai cháu cùng xuống chào hai bên gia đình."
         ],
-        "thoiLuongPhut": 5
+        "huongDan": [
+          "Chuẩn bị sẵn hoa cưới, đưa cho chú rể trước khi lên đón.",
+          "Chú rể lên đón, trao hoa; cô dâu khoác tay chú rể cùng xuống.",
+          "Chụp ảnh, quay phim khoảnh khắc trao hoa."
+        ]
       },
       {
         "so": 5,
-        "ten": "Hai bên gia đình trò chuyện và chụp ảnh",
-        "phuTrach": "Hai bên gia đình",
+        "ten": "Cô dâu, chú rể chào hai họ",
+        "thoiLuongPhut": 5,
+        "phuTrach": "Cô dâu, chú rể · Chú Thấu dẫn",
         "tomTat": [
-          "Cô dâu, chú rể chào hỏi hai họ.",
-          "Hai bên gia đình uống nước, trò chuyện.",
-          "Chụp ảnh lưu niệm.",
-          "Chuẩn bị phương tiện và hành lý trước giờ xuất phát."
+          "Cô dâu, chú rể kính chào ông bà, cha mẹ, cô bác và anh chị em hai bên.",
+          "Hai bên gia đình dùng chén nước, trò chuyện."
         ],
-        "thoiLuongPhut": 10,
         "nhanLoi": "Lời dẫn của chú Thấu",
         "loiDan": [
-          "Xin kính mời toàn thể gia đình hai bên cùng dùng chén nước, trò chuyện và chụp ảnh lưu niệm với hai cháu."
+          "Kính thưa các cụ, các ông, các bà! Sau đây, cô dâu Tuyết Anh và chú rể Văn Hùng xin được kính chào ông bà, cha mẹ, cô dì chú bác cùng toàn thể anh chị em hai bên gia đình.",
+          "Hai cháu xin cảm ơn công ơn sinh thành, dưỡng dục của ông bà, cha mẹ, cùng tình thương yêu và sự quan tâm mà họ hàng hai bên đã dành cho các cháu.",
+          "Xin mời hai cháu!",
+          "(Sau khi chào)",
+          "Xin kính mời gia đình hai bên cùng dùng chén nước, trò chuyện cho thêm phần ấm cúng."
+        ],
+        "huongDan": [
+          "Chào ông bà, bố mẹ hai bên trước, sau đó đến cô bác, anh chị em.",
+          "Không thực hiện lại các nghi lễ cưới hỏi truyền thống đã làm từ tháng 6."
         ]
       },
       {
         "so": 6,
+        "ten": "Trao quà và chúc phúc cho cô dâu, chú rể",
+        "thoiLuongPhut": 10,
+        "phuTrach": "Chú Thấu mời · Ông bà, cha mẹ, cô bác, anh chị em",
+        "tomTat": [
+          "Ông bà, cha mẹ, cô bác và anh chị em có quà mừng trực tiếp trao quà cho hai cháu.",
+          "Gửi lời chúc phúc và chụp ảnh lưu niệm cùng cô dâu, chú rể."
+        ],
+        "nhanLoi": "Lời dẫn của chú Thấu",
+        "loiDan": [
+          "Kính thưa các cụ, các ông, các bà cùng toàn thể gia đình hai bên!",
+          "Trong niềm vui chung của ngày hôm nay, ông bà, cha mẹ, cô dì chú bác và anh chị em đều có những món quà, những lời chúc muốn gửi tới hai cháu Văn Hùng và Tuyết Anh.",
+          "Xin trân trọng kính mời ông bà, cha mẹ, cô bác và anh chị em có quà mừng lần lượt trao quà, gửi lời chúc phúc và chụp ảnh lưu niệm cùng hai cháu.",
+          "(Sau phần trao quà)",
+          "Thay mặt hai cháu, xin chân thành cảm ơn những món quà và những lời chúc phúc thật ý nghĩa mà gia đình đã dành cho các cháu. Đây sẽ là hành trang quý giá để hai cháu bắt đầu cuộc sống gia đình."
+        ],
+        "huongDan": [
+          "Mời theo thứ tự: ông bà, bố mẹ, cô bác, anh chị em.",
+          "Cô dâu, chú rể đứng cạnh nhau, nhận quà bằng hai tay và cảm ơn.",
+          "Bố trí một người nhận và giữ quà cho hai cháu.",
+          "Thợ ảnh chụp từng nhóm trao quà.",
+          "Nếu đông người, chú Thấu nhắc gọn để kịp giờ xuất phát."
+        ]
+      },
+      {
+        "so": 7,
         "ten": "Trưởng đoàn phát biểu xin phép ra về",
         "phuTrach": "Chú Thấu – Trưởng đoàn nhà trai",
         "tomTat": [
@@ -114,7 +154,7 @@
         "thoiLuongPhut": 5
       },
       {
-        "so": 7,
+        "so": 8,
         "ten": "Mời hai đoàn lên xe",
         "phuTrach": "Chú Thấu – Trưởng đoàn nhà trai",
         "tomTat": [
@@ -131,7 +171,8 @@
       }
     ],
     "tieuNgan": "Đón dâu tại nhà gái",
-    "tenDoc": "Kịch bản chú Thấu – Nhà gái"
+    "tenDoc": "Kịch bản chú Thấu – Nhà gái",
+    "ghiChuThoiLuong": "dự kiến, linh hoạt theo tình hình thực tế và lịch trình di chuyển"
   },
   "nhaTrai": {
     "tieuDe": "Chương trình lễ cưới tại nhà trai",
@@ -310,6 +351,31 @@
       },
       {
         "so": 9,
+        "ten": "Trao quà và chúc phúc cho cô dâu, chú rể",
+        "thoiLuongPhut": 3,
+        "phuTrach": "MC · Gia đình, người thân hai bên",
+        "tomTat": [
+          "MC mời ông bà, cha mẹ và người thân có quà mừng lên trao quà cho cô dâu, chú rể.",
+          "Gửi lời chúc phúc, chụp ảnh cùng hai bạn trên sân khấu."
+        ],
+        "amNhac": "Nhẹ nhàng, vui tươi.",
+        "nhanLoi": "Lời dẫn của MC",
+        "loiDan": [
+          "Kính thưa quý vị!",
+          "Hạnh phúc của đôi bạn trẻ hôm nay còn được vun đắp bởi tình thương và sự quan tâm của ông bà, cha mẹ cùng những người thân yêu nhất.",
+          "Xin trân trọng kính mời ông bà, cha mẹ, cô dì chú bác và anh chị em hai bên gia đình có quà mừng lên sân khấu, trao quà và gửi lời chúc phúc tới cô dâu Tuyết Anh và chú rể Văn Hùng.",
+          "(Sau phần trao quà)",
+          "Xin chân thành cảm ơn những món quà và những lời chúc phúc đầy yêu thương. Chúc cô dâu và chú rể luôn mang theo tình cảm ấy trên hành trình xây dựng tổ ấm của mình. Xin quý vị một tràng pháo tay chúc mừng hai bạn!"
+        ],
+        "huongDan": [
+          "Bố trí một người nhận và giữ quà phía sau sân khấu.",
+          "Mời lên theo từng nhóm để không mất thời gian.",
+          "MC nhắc gọn nếu đông người, giữ nhịp chương trình.",
+          "Chụp ảnh từng nhóm trao quà."
+        ]
+      },
+      {
+        "so": 10,
         "ten": "Chụp ảnh gia đình",
         "thoiLuongPhut": 2,
         "phuTrach": "MC · Chụp ảnh",
@@ -324,7 +390,7 @@
         ]
       },
       {
-        "so": 10,
+        "so": 11,
         "ten": "Nâng ly chúc mừng và khai tiệc",
         "thoiLuongPhut": 2,
         "phuTrach": "MC",
@@ -344,7 +410,8 @@
       }
     ],
     "tieuNgan": "Lễ cưới tại nhà trai",
-    "tenDoc": "Kịch bản MC – Nhà trai"
+    "tenDoc": "Kịch bản MC – Nhà trai",
+    "ghiChuThoiLuong": "dự kiến, linh hoạt theo tình hình thực tế"
   },
   "checklist": [
     "Thống nhất kịch bản với MC.",
@@ -363,6 +430,8 @@
     "Thống nhất góc quay với đội quay phim, chụp ảnh.",
     "Kiểm tra lối đi của cô dâu.",
     "Bố trí người điều phối phía sau sân khấu.",
-    "Kiểm tra vị trí ngồi của bố mẹ hai bên."
+    "Kiểm tra vị trí ngồi của bố mẹ hai bên.",
+    "Chuẩn bị hoa cưới để chú rể trao cô dâu tại nhà gái.",
+    "Bố trí người nhận và giữ quà mừng (tại nhà gái và trên sân khấu nhà trai)."
   ]
 }

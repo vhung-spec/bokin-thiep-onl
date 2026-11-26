@@ -190,7 +190,7 @@ Nội dung nằm trong **`lich-trinh/chuong-trinh.json`** (tách riêng khỏi l
 
 | Muốn sửa | Ở đâu (tệp `lich-trinh/chuong-trinh.json`) |
 |---|---|
-| Thời lượng từng bước / phân cảnh | `buoc[].thoiLuongPhut` (số phút). Tổng nhà trai tự cộng; tổng nhà gái ghi ở `nhaGai.tongThoiLuong` |
+| Thời lượng từng bước / phân cảnh | `buoc[].thoiLuongPhut` (số phút). Tổng của cả hai phần tự cộng; lời nhắc “dự kiến, linh hoạt…” ở `ghiChuThoiLuong`. Thêm/bớt bước thì đánh lại `so` cho liền nhau |
 | Lời dẫn | `buoc[].loiDan` — mỗi phần tử một đoạn; đoạn trong ngoặc như `"(Sau khi trao tay)"` là ghi chú cho người đọc, hiện chữ nghiêng |
 | Người phụ trách, tóm tắt, hướng dẫn, âm nhạc | `phuTrach`, `tomTat`, `huongDan`, `amNhac` |
 | Phân cảnh quan trọng (viền đậm bên trái) | `noiBat: true` |

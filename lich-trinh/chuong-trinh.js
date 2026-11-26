@@ -92,10 +92,12 @@
     t += 'Tổng thời lượng: ' + totalText(p) + '\n\n';
     return t + (p.buoc || []).map(function (st) { return stepText(st, part); }).join('\n');
   }
+  // Tổng thời lượng tự cộng từ thoiLuongPhut của các bước; ghiChuThoiLuong là lời nhắc kèm theo
+  function sumMin(p) { return (p.buoc || []).reduce(function (a, b) { return a + (Number(b.thoiLuongPhut) || 0); }, 0); }
   function totalText(p) {
     if (str(p.tongThoiLuong)) return str(p.tongThoiLuong);
-    var sum = (p.buoc || []).reduce(function (a, b) { return a + (Number(b.thoiLuongPhut) || 0); }, 0);
-    return sum ? 'khoảng ' + sum + ' phút' : '';
+    var n = sumMin(p);
+    return n ? 'khoảng ' + n + ' phút' + (str(p.ghiChuThoiLuong) ? ' (' + str(p.ghiChuThoiLuong) + ')' : '') : '';
   }
 
   /* ---------- Vẽ một chương trình (bố cục theo mẫu: thẻ giới thiệu, thanh công cụ, thẻ từng bước) ---------- */
@@ -152,11 +154,11 @@
       (str(p.moDau) ? '<p class="ct-note">' + esc(p.moDau) + '</p>' : '') + '</div>';
     html += toolbar();
     if (part === 'trai') {
-      html += '<details class="ct-table card"><summary>Bảng tổng quan 10 phân cảnh</summary><table><thead><tr><th>STT</th><th>Nội dung</th><th>Phút</th></tr></thead><tbody>' +
+      html += '<details class="ct-table card"><summary>Bảng tổng quan ' + steps.length + ' phân cảnh</summary><table><thead><tr><th>STT</th><th>Nội dung</th><th>Phút</th></tr></thead><tbody>' +
         steps.map(function (st) {
           return '<tr' + (st.noiBat ? ' class="hl"' : '') + '><td class="num">' + two(st.so) + '</td><td><a href="#ct-trai-' + st.so + '" data-jump>' + esc(st.ten) + '</a></td><td class="num">' + esc(st.thoiLuongPhut || '') + '</td></tr>';
         }).join('') +
-        '</tbody><tfoot><tr><td></td><td>Tổng</td><td class="num">' + esc(totalText(p).replace('khoảng ', '')) + '</td></tr></tfoot></table></details>';
+        '</tbody><tfoot><tr><td></td><td>Tổng</td><td class="num">' + esc(sumMin(p) + ' phút') + '</td></tr></tfoot></table></details>';
     }
     html += '<ol class="ct-steps">' + steps.map(function (st) { return renderStep(st, part); }).join('') + '</ol>';
     if (part === 'trai') html += renderChecklist();
