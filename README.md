@@ -184,6 +184,20 @@ Trang riêng cho **gia đình, đội xe, người đi đón dâu, người ở 
 - Nơi đón dâu sáng 29/11 (đã xác nhận): **Trung tâm ngoại ngữ STEN**, Khu giãn dân/14 P. Ngọc Trục, Đại Mỗ — khác nhà văn hoá Tổ 1 Ngọc Trục (nơi tiệc 28/11). Trang điểm tại nhà trai.
 - Đổi ngày / giờ chính thì sửa thêm lời xem trước (`og:`) trong `lich-trinh/index.html`; ảnh xem trước là `lich-trinh/og-lich-trinh.jpg`.
 
+#### Chương trình lễ cưới (thẻ **Nhà gái** / **Nhà trai** trên cùng trang)
+
+Nội dung nằm trong **`lich-trinh/chuong-trinh.json`** (tách riêng khỏi lịch trình); `chuong-trinh.js` chỉ vẽ giao diện. Link thẳng: `lich-trinh/#chuong-trinh-nha-gai`, `lich-trinh/#chuong-trinh-nha-trai`, `lich-trinh/#checklist`.
+
+| Muốn sửa | Ở đâu (tệp `lich-trinh/chuong-trinh.json`) |
+|---|---|
+| Thời lượng từng bước / phân cảnh | `buoc[].thoiLuongPhut` (số phút). Tổng nhà trai tự cộng; tổng nhà gái ghi ở `nhaGai.tongThoiLuong` |
+| Lời dẫn | `buoc[].loiDan` — mỗi phần tử một đoạn; đoạn trong ngoặc như `"(Sau khi trao tay)"` là ghi chú cho người đọc, hiện chữ nghiêng |
+| Người phụ trách, tóm tắt, hướng dẫn, âm nhạc | `phuTrach`, `tomTat`, `huongDan`, `amNhac` |
+| Phân cảnh quan trọng (viền đậm bên trái) | `noiBat: true` |
+| Checklist ban tổ chức | `checklist` (dấu tích lưu trên từng điện thoại) |
+
+Không ghi giờ bắt đầu nghi lễ trong tệp này; giờ chính vẫn ở `lich-trinh.json`. Nút **Đọc kịch bản** mở màn hình đọc chữ lớn (A− / A+, giữ màn hình sáng nếu máy hỗ trợ).
+
 ### Link rút gọn is.gd (không cần mã GitHub)
 
 Ở mục **3. Khách mời** của trang tạo link, ô **Rút gọn link bằng is.gd** bật sẵn: trang tự rút gọn link của từng khách (chạy nền, mỗi khách khoảng 1 giây), không cần tài khoản hay mã GitHub.
@@ -281,7 +295,7 @@ xanh-pastel/               mẫu xanh pastel
   thong-ke.html, js/thong-ke.js  trang thống kê khách tham dự (cần mật khẩu MAT_KHAU)
 m/                                trang nhỏ của link ngắn (trang tạo link tự ghi lên GitHub)
 nha-trai/index.html               cửa vào bản nhà trai (ảnh, lời xem trước 29.11)
-lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json; lộ trình xe cố định lo-trinh-co-dinh.geojson
+lich-trinh/                       lịch trình ngày đón dâu 29/11 — sửa lich-trinh.json; chương trình lễ cưới: chuong-trinh.json; lộ trình xe cố định lo-trinh-co-dinh.geojson
 tools/lo-trinh/tao_lo_trinh.py    tạo lại cung đường cố định + file GPX
   assets/bia/              ảnh bìa, dấu sáp, trang trong, giấy kem (từ ảnh của chủ thiệp)
   assets/nhac/             (tuỳ chọn) file nhạc nền mp3
