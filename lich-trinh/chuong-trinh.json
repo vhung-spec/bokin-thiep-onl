@@ -300,6 +300,34 @@
       },
       {
         "so": 7,
+        "ten": "Nghi thức trao nhẫn cưới",
+        "thoiLuongPhut": 3,
+        "phuTrach": "MC · Cô dâu, chú rể · Người giữ nhẫn",
+        "noiBat": true,
+        "tomTat": [
+          "Cô dâu, chú rể trao nhẫn cưới cho nhau trước sự chứng kiến của hai bên gia đình và quan khách."
+        ],
+        "nhanLoi": "Lời dẫn của MC",
+        "loiDan": [
+          "Kính thưa quý vị!",
+          "Chiếc nhẫn cưới là một vòng tròn không có điểm bắt đầu và cũng không có điểm kết thúc, giống như tình yêu và sự gắn bó trọn vẹn mà hai người dành cho nhau.",
+          "Sau đây, xin mời cô dâu Tuyết Anh và chú rể Văn Hùng cùng thực hiện nghi thức trao nhẫn cưới.",
+          "Xin mời chú rể Văn Hùng trao nhẫn cho cô dâu Tuyết Anh.",
+          "(Chú rể đeo nhẫn cho cô dâu)",
+          "Và xin mời cô dâu Tuyết Anh trao nhẫn cho chú rể Văn Hùng.",
+          "(Cô dâu đeo nhẫn cho chú rể)",
+          "Từ giây phút này, đôi nhẫn sẽ luôn nhắc hai bạn về lời hứa thủy chung, về sự yêu thương, tôn trọng và đồng hành cùng nhau trong suốt cuộc đời. Xin quý vị dành một tràng pháo tay thật nồng nhiệt chúc mừng cô dâu và chú rể!"
+        ],
+        "huongDan": [
+          "Người giữ nhẫn mang khay nhẫn lên sân khấu khi MC mời.",
+          "Chú rể đeo nhẫn vào ngón áp út tay trái cô dâu, sau đó cô dâu đeo nhẫn cho chú rể.",
+          "MC ngừng lời trong lúc đeo nhẫn.",
+          "Chụp ảnh cận cảnh đôi tay và khoảnh khắc trao nhẫn."
+        ],
+        "amNhac": "Piano lãng mạn, nhẹ nhàng."
+      },
+      {
+        "so": 8,
         "ten": "Nghi thức tưới cây hạnh phúc",
         "thoiLuongPhut": 2,
         "phuTrach": "MC · Cô dâu, chú rể",
@@ -326,7 +354,7 @@
         "amNhac": "Piano acoustic nhẹ nhàng, ấm áp."
       },
       {
-        "so": 8,
+        "so": 9,
         "ten": "Nghi thức cắt bánh cưới",
         "thoiLuongPhut": 2,
         "phuTrach": "MC · Cô dâu, chú rể",
@@ -350,7 +378,7 @@
         "amNhac": "Lãng mạn, vui tươi."
       },
       {
-        "so": 9,
+        "so": 10,
         "ten": "Trao quà và chúc phúc cho cô dâu, chú rể",
         "thoiLuongPhut": 6,
         "phuTrach": "MC · Gia đình, người thân hai bên",
@@ -375,7 +403,7 @@
         ]
       },
       {
-        "so": 10,
+        "so": 11,
         "ten": "Chụp ảnh gia đình",
         "thoiLuongPhut": 2,
         "phuTrach": "MC · Chụp ảnh",
@@ -390,7 +418,7 @@
         ]
       },
       {
-        "so": 11,
+        "so": 12,
         "ten": "Nâng ly chúc mừng và khai tiệc",
         "thoiLuongPhut": 2,
         "phuTrach": "MC",
@@ -432,6 +460,7 @@
     "Bố trí người điều phối phía sau sân khấu.",
     "Kiểm tra vị trí ngồi của bố mẹ hai bên.",
     "Chuẩn bị hoa cưới để chú rể trao cô dâu tại nhà gái.",
-    "Bố trí người nhận và giữ quà mừng (tại nhà gái và trên sân khấu nhà trai)."
+    "Bố trí người nhận và giữ quà mừng (tại nhà gái và trên sân khấu nhà trai).",
+    "Chuẩn bị nhẫn cưới, khay nhẫn và người giữ nhẫn."
   ]
 }
