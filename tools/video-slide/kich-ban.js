@@ -125,6 +125,12 @@
     const i = el('img', L.blurBg ? 'lift' : '', d);
     i.decoding = 'sync';
     i.src = S.photoUrl(L.img);
+    if (L.opacity != null) {
+      // ảnh làm nền mờ nhạt: nằm trên lớp trắng bên dưới, không có màu nền riêng
+      i.style.opacity = L.opacity;
+      d.style.background = 'transparent';
+    }
+    if (L.filter) i.style.filter = L.filter;
     if (L.feather) {
       const f = `${L.feather * 100}%`;
       const m = `linear-gradient(90deg, transparent 0, #000 ${f}, #000 calc(100% - ${f}), transparent 100%)`;
@@ -149,7 +155,53 @@
     };
   }
 
+  // Ảnh trong khung viền trắng, bóng đổ (kiểu slide ProShow): trôi, nghiêng, xoay 3D, phóng nhẹ, phản chiếu
+  function buildFrame(shot, L, parent) {
+    const m = S.meta[L.img];
+    const span = shot.showUntil - shot.at;
+    let h = (L.h ?? 0.84) * S.H;
+    let w = (h * m.w) / m.h;
+    const maxW = (L.maxW ?? 0.72) * S.W;
+    if (w > maxW) {
+      w = maxW;
+      h = (w * m.h) / m.w;
+    }
+    const b = L.border ?? Math.max(4, Math.round(h * 0.014));
+    const d = el('div', 'frame', parent);
+    const [cx, cy] = L.at || [0.5, 0.5];
+    Object.assign(d.style, { left: px(cx * S.W - w / 2 - b), top: px(cy * S.H - h / 2 - b), width: px(w + 2 * b), height: px(h + 2 * b), padding: px(b) });
+    if (L.shadow === false) d.style.boxShadow = 'none';
+    if (L.shadow === 'soft') d.style.boxShadow = '0 6px 18px rgba(0, 0, 0, .22)';
+    if (L.reflect) d.style.webkitBoxReflect = `below ${px(10)} linear-gradient(transparent 58%, rgba(255, 255, 255, .34))`;
+    const i = el('img', '', d);
+    i.decoding = 'sync';
+    i.src = S.photoUrl(L.img);
+    const f = [L.blur ? `blur(${L.blur}px)` : '', L.gray ? 'grayscale(1)' : '', L.dim ? `brightness(${L.dim})` : ''].join(' ').trim();
+    if (f) d.style.filter = f;
+    if (L.opacity != null) d.style.opacity = L.opacity;
+    shot.waits.push(i.decode().catch(() => {}));
+    const lin = (v, l) => (Array.isArray(v) ? lerp(v[0], v[1], clamp(l / span)) : v || 0);
+    return (l) => {
+      let x = 0;
+      let y = 0;
+      if (L.drift) {
+        x = (L.drift.dx || 0) * S.W * clamp(l / span);
+        y = (L.drift.dy || 0) * S.H * clamp(l / span);
+      }
+      let op = L.opacity ?? 1;
+      if (L.enter) {
+        const p = outCubic(prog(l, L.enter.at || 0, L.enter.d ?? 1));
+        x += (L.enter.dx || 0) * S.W * (1 - p);
+        y += (L.enter.dy || 0) * S.H * (1 - p);
+        op *= p;
+      }
+      d.style.opacity = op;
+      d.style.transform = `translate(${px(x)}, ${px(y)}) rotate(${lin(L.rotate, l).toFixed(3)}deg) rotateY(${lin(L.rotY, l).toFixed(3)}deg) scale(${lin(L.zoom || 1, l).toFixed(5)})`;
+    };
+  }
+
   function buildLayer(shot, L, parent) {
+    if (L.kind === 'frame') return buildFrame(shot, L, parent);
     if (L.img) return buildPhoto(shot, L, parent);
     if (L.kind === 'paper') {
       const d = el('div', 'paper', parent);
@@ -188,6 +240,15 @@
         i.style.transform = tr;
       };
     }
+    if (L.kind === 'spot') {
+      el('div', 'spot', parent);
+      return null;
+    }
+    if (L.kind === 'white') {
+      el('div', 'whitebg', parent);
+      return null;
+    }
+    if (L.kind === 'frame') return buildFrame(shot, L, parent);
     if (L.kind === 'shade') {
       const d = el('div', 'shade', parent);
       return null;
@@ -297,6 +358,32 @@
         }
         return null;
       }
+      case 'white': {
+        // loá trắng: hai cảnh hoà vào nhau dưới một lớp sáng trắng
+        inS.el.style.opacity = sine(clamp((p - 0.3) / 0.4));
+        S.whiteFx = Math.max(S.whiteFx, 0.92 * Math.sin(Math.PI * p));
+        return null;
+      }
+      case 'flip': {
+        // lật 3D như lật một tấm ảnh: cảnh cũ quay đi, cảnh mới quay vào
+        const q = cubic(p);
+        if (outS) {
+          outS.inner.style.transformOrigin = '50% 50%';
+          outS.inner.style.transform = `rotateY(${(-80 * clamp(q * 2)).toFixed(3)}deg) scale(${lerp(1, 0.86, clamp(q * 2)).toFixed(4)})`;
+          outS.el.style.opacity = q < 0.5 ? 1 : 0;
+        }
+        inS.inner.style.transformOrigin = '50% 50%';
+        inS.inner.style.transform = `rotateY(${(80 * (1 - clamp(q * 2 - 1))).toFixed(3)}deg) scale(${lerp(0.86, 1, clamp(q * 2 - 1)).toFixed(4)})`;
+        inS.el.style.opacity = q < 0.5 ? 0 : 1;
+        return null;
+      }
+      case 'slide': {
+        // trượt ngang: cảnh mới đẩy cảnh cũ sang trái
+        const q = cubic(p);
+        inS.inner.style.transform = `translateX(${px((1 - q) * S.W)})`;
+        if (outS) outS.inner.style.transform = `translateX(${px(-q * S.W * 0.6)})`;
+        return null;
+      }
       case 'bloom': {
         // tiến vào vùng sáng: cảnh ra phóng về tâm sáng và loá dần, cảnh vào hiện ra từ ánh sáng
         if (outS) {
@@ -357,11 +444,13 @@
     Object.assign(S.leak.style, { zIndex: 9001, mixBlendMode: 'screen', opacity: 0 });
     S.black = el('div', '', S.stage);
     S.black.id = 'black';
+    S.white = el('div', 'fx', S.stage);
+    Object.assign(S.white.style, { zIndex: 9998, background: '#fff', opacity: 0 });
     S.shots = cfg.shots.map((s, i) => ({ ...s, i }));
     S.shots.forEach((s, i) => {
       const next = S.shots[i + 1];
       s.end = next ? next.at : S.total;
-      s.showUntil = s.end + (next && next.in && next.in.type !== 'black' ? next.in.d : 0);
+      s.showUntil = s.end + (next && next.in && !['black', 'from-white'].includes(next.in.type) ? next.in.d : 0);
     });
     const sample = 'Văn Hùng & Tuyết Anh — Hải Phòng ắềỗữ 0123456789';
     await Promise.all([
@@ -395,6 +484,7 @@
     let black = 0;
     let leak = null;
     let dust = 0;
+    S.whiteFx = 0;
     for (const s of live) {
       s.el.style.visibility = 'visible';
       resetFx(s);
@@ -403,15 +493,17 @@
       const l = t - s.at;
       for (const u of s.ups) u(l);
       if (s.in && s.in.type === 'black') black = Math.max(black, 1 - sine(prog(l, 0, s.in.d)));
+      if (s.in && s.in.type === 'from-white') S.whiteFx = Math.max(S.whiteFx, 1 - sine(prog(l, 0, s.in.d)));
+      if (s.outWhite) S.whiteFx = Math.max(S.whiteFx, sine(prog(t, S.total - s.outWhite, s.outWhite)));
       let vis = 1;
-      if (s.in && s.in.type !== 'black' && l < s.in.d) {
+      if (s.in && s.in.type !== 'black' && s.in.type !== 'from-white' && l < s.in.d) {
         const p = l / s.in.d;
         const prev = S.shots[s.i - 1];
         leak = transition(s, prev && prev.el ? prev : null, p) || leak;
         vis = sine(p);
       }
       const next = S.shots[s.i + 1];
-      if (next && t >= next.at && next.in && next.in.type !== 'black') vis *= 1 - sine(prog(t, next.at, next.in.d));
+      if (next && t >= next.at && next.in && !['black', 'from-white'].includes(next.in.type)) vis *= 1 - sine(prog(t, next.at, next.in.d));
       dust = Math.max(dust, (s.dust || 0) * vis);
     }
     if (!leak) {
@@ -430,5 +522,6 @@
     } else S.leak.style.opacity = 0;
     drawDust(t, dust);
     S.black.style.opacity = black;
+    S.white.style.opacity = S.whiteFx;
   };
 })();

@@ -45,6 +45,7 @@ Mỗi phút video mất khoảng **2–3 phút** để dựng. Thư mục `ra/` 
 | Bản | Kiểu | Lệnh dựng lại | File ra |
 |---|---|---|---|
 | **Bản đầu tiên** | 56 ảnh in viền giấy trên nền giấy xô thơm, ghép đôi theo bối cảnh, chữ viết tay | `node tools/video-slide/lam-video.mjs --cau-hinh tools/video-slide/cau-hinh-ban-dau-tien.mjs` | `ra/Van_Hung_Tuyet_Anh_Ban_Dau_Tien_16x9.mp4` |
+| **Slide ảnh khung** (kiểu slide ProShow) | 38 ảnh trong khung viền trắng, nền sáng, bản nhỏ mờ hai bên, nền ảnh mờ nhạt, lật 3D, loá trắng; đầu và cuối là màu trắng để chiếu lặp | `node tools/video-slide/dung-kich-ban.mjs --kich-ban tools/video-slide/kich-ban/slide-anh-khung.mjs` | `ra/Van_Hung_Tuyet_Anh_Slide_16x9.mp4` |
 | **Qua những ô cửa** | 34 ảnh, dải ảnh, lia và zoom, chuyển cảnh ô cửa vòm, vệt sáng, cắt theo phách nhạc | `node tools/video-slide/dung-kich-ban.mjs` | `ra/Van_Hung_Tuyet_Anh_Le_Cuoi_16x9.mp4` |
 
 ## Dựng theo kịch bản (video "Qua những ô cửa")
