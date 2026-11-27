@@ -75,8 +75,9 @@
     var dd = resolvePlace(ev.diaDiem);
     var hasTime = !!(str(ev.batDau) || str(ev.nhanGio));
     var timeTxt = hasTime ? t.text : (str(ev.gioNgan) || t.text);
-    var html = '<li class="row' + (ev.xeChay ? ' xe' : '') + '"><details class="ev" id="ev-' + esc(ev.id || '') + '">' +
-      '<summary><span class="r-time' + (hasTime ? '' : ' rel') + '">' + esc(timeTxt) + '</span>' +
+    var chieu = ev.xeChay && EV_CHIEU[ev.id] ? ' chieu-' + EV_CHIEU[ev.id] : '';
+    var html = '<li class="row' + (ev.xeChay ? ' xe' : '') + chieu + '"><details class="ev" id="ev-' + esc(ev.id || '') + '">' +
+      '<summary' + (!hasTime || /–/.test(timeTxt) ? ' class="stack"' : '') + '><span class="r-time' + (hasTime ? '' : ' rel') + '">' + esc(timeTxt) + '</span>' +
       '<span class="r-what">' + esc(str(ev.tomTat) || str(ev.viec)) +
       (ev.xeChay ? '<span class="tag car">Giờ xe chạy</span>' : '') + '</span>' +
       '<span class="chev" aria-hidden="true"></span></summary><div class="r-body">';
@@ -159,13 +160,28 @@
     if (i < 0) return esc(t);
     return '<span class="thead"><b class="tt">' + esc(t.slice(0, i)) + '</b> ·</span> <span class="tdir">' + esc(t.slice(i + 3)) + '</span>';
   }
+  // Hai thẻ đầu trang: nhãn chiều / giờ / rời đâu / dự kiến đến / nút — giờ và nơi lấy từ lịch và ghim chung
+  function cap(t) { return t ? t.charAt(0).toUpperCase() + t.slice(1) : ''; }
+  function evTime(id) { var ev = EVENTS[id]; return ev ? timeLabel(ev).text : ''; }
   function tripCards(legs) {
     var html = '';
     legs.forEach(function (l) {
-      var to = PLACES[l.den] || {}, from = PLACES[l.tu] || {};
-      html += '<div class="trip" data-luot="' + esc(l.id) + '"><p class="trip-t">' + tripTitle(str(l.oTieuDe) || str(l.ten)) + '</p>' +
+      var from = PLACES[l.tu] || {}, to = PLACES[l.den] || {};
+      var chieu = /^(di|ve)$/.test(l.chieu) ? l.chieu : 'di';
+      var leave = 'Rời ' + (str(from.goiNgan) || str(from.ten)) + (str(from.viTriNgan) ? ' · ' + str(from.viTriNgan) : '');
+      var arriveT = evTime(l.suKienDen);
+      // Giữ giờ và tên nơi đến trên một dòng (không ngắt "Vũ / Tuấn")
+      var arrive = arriveT ? esc(str(l.dongDen) || 'Dự kiến {gio} đến {noi}')
+        .replace('{gio}', '<span class="nw">' + esc(arriveT) + '</span>')
+        .replace('{noi}', '<span class="nw">' + esc(str(to.goiNgan) || str(to.ten)) + '</span>') : '';
+      html += '<div class="trip chieu-' + chieu + '" data-luot="' + esc(l.id) + '">' +
+        '<p class="trip-k">' + esc(str(l.nhanChieu)) + '</p>' +
+        '<p class="trip-tt">' + esc(evTime(l.suKienDi)) + '</p>' +
+        '<p class="trip-l">' + esc(leave) + '</p>' +
+        (arrive ? '<p class="trip-l">' + arrive + '</p>' : '') +
         (LEG_URLS[l.id] ? mainButton(l) : '<p class="leg-note warn">Chưa đủ toạ độ để mở Google Maps.</p>') +
-        (str(to.ghiChuGhim || from.ghiChuGhim) ? '<p class="pin-note">' + esc(to.ghiChuGhim || from.ghiChuGhim) + '</p>' : '') + '</div>';
+        // Lưu ý ghim nhà trai (màu hổ phách) — nằm ở lượt có dùng ghim Phố Văn
+        (str(from.ghiChuGhim || to.ghiChuGhim) ? '<p class="pin-note">' + esc(from.ghiChuGhim || to.ghiChuGhim) + '</p>' : '') + '</div>';
     });
     return html;
   }
@@ -189,8 +205,9 @@
 
     (r.luot || []).forEach(function (l) {
       var from = PLACES[l.tu] || {}, to = PLACES[l.den] || {};
-      html += '<details class="leg" id="' + esc(l.id || '') + '" data-luot="' + esc(l.id) + '"><summary>' +
-        '<span class="leg-s1">' + tripTitle(str(l.oTieuDe) || str(l.ten)) + '</span>' +
+      html += '<details class="leg chieu-' + esc(/^(di|ve)$/.test(l.chieu) ? l.chieu : 'di') + '" id="' + esc(l.id || '') + '" data-luot="' + esc(l.id) + '"><summary>' +
+        '<span class="leg-k">' + esc(str(l.nhanChieu)) + '</span>' +
+        '<span class="leg-s1"><b class="tt">' + esc(evTime(l.suKienDi)) + '</b> · ' + esc(cap(str(from.goiNgan))) + ' → <span class="nw">' + esc(cap(str(to.goiNgan))) + '</span>' + '</span>' +
         '<span class="leg-s2">' + esc(str(l.tomTatMoRong) || 'Bản đồ, chỉ đường, GPX') + '</span><span class="chev" aria-hidden="true"></span></summary><div class="leg-body">';
       // Bản đồ cung đường cố định (vẽ khi mở mục, để Leaflet đo đúng kích thước)
       html += '<div class="map-wrap" data-luot="' + esc(l.id) + '"><div class="map" id="map-' + esc(l.id) + '" role="img" aria-label="Bản đồ cung đường ' + esc(l.ten) + '"></div>' +
@@ -399,8 +416,11 @@
     }, { enableHighAccuracy: true, maximumAge: 5000, timeout: 20000 });
   }
 
-  var LEGS = [];
+  var LEGS = [], EVENTS = {}, EV_CHIEU = {};
   function render(data, note) {
+    EVENTS = {}; EV_CHIEU = {};
+    (data.chang || []).forEach(function (st) { (st.suKien || []).forEach(function (ev) { if (ev.id) EVENTS[ev.id] = ev; }); });
+    (((data.loTrinh || {}).luot) || []).forEach(function (l) { if (l.suKienDi && /^(di|ve)$/.test(l.chieu)) EV_CHIEU[l.suKienDi] = l.chieu; });
     PLACES = {};
     var dc = data.diaDiemChung || {};
     Object.keys(dc).forEach(function (k) { if (k.charAt(0) !== '_' && dc[k] && typeof dc[k] === 'object') PLACES[k] = dc[k]; });
@@ -416,7 +436,7 @@
 
     var html = note ? '<p class="alert">' + esc(note) + '</p>' : '';
     html += '<section class="sched" aria-labelledby="sched-h"><h2 id="sched-h">Lịch cả buổi sáng</h2>' +
-      '<p class="sched-hint">Chạm từng dòng để xem chi tiết.</p><ol class="rows">';
+      '<p class="sched-hint">Chạm vào từng mốc để xem việc cần chuẩn bị.</p><ol class="rows">';
     (data.chang || []).forEach(function (st, i) {
       html += '<li class="stage-lbl">' + esc(st.ten) + '</li>';
       (st.suKien || []).forEach(function (ev) { html += renderEvent(ev); });

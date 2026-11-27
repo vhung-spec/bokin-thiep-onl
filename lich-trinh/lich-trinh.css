@@ -235,3 +235,174 @@ details.leg > summary .chev { grid-column: 2; grid-row: 1 / span 2; }
 
 #lien-he .btn { width: 100%; justify-content: center; flex-wrap: wrap; min-height: 56px; padding: 8px 16px; font-size: 17px; text-align: center; }
 #lien-he .acts { margin-top: 6px; }
+
+/* =========================================================
+   Quy ước màu hai chiều xe (dùng xuyên suốt: thẻ đầu trang, mốc xe chạy, mục từng lượt)
+   Đi đón dâu: nền #EAF2F6, giờ + nút #20485A · Đưa dâu về: nền #EEF2E8, giờ + nút #405A3E
+   Màu hổ phách chỉ dùng cho lưu ý ghim Phố Văn (.pin-note)
+   ========================================================= */
+:root { --di-bg: #EAF2F6; --di-ink: #20485A; --ve-bg: #EEF2E8; --ve-ink: #405A3E; }
+.chieu-di { --c-bg: var(--di-bg); --c-ink: var(--di-ink); }
+.chieu-ve { --c-bg: var(--ve-bg); --c-ink: var(--ve-ink); }
+
+/* Hai thẻ đầu trang */
+.quick { gap: 12px; }
+.trip { border: 0; border-left: 4px solid var(--c-ink); border-radius: 12px; background: var(--c-bg); padding: 12px 14px 14px; text-align: left; }
+.trip-k { font: 700 14.5px/1.3 var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--c-ink); }
+.trip-tt { margin-top: 2px; font: 700 31px/1.15 var(--ui); font-variant-numeric: tabular-nums; white-space: nowrap; letter-spacing: -.01em; color: var(--c-ink); }
+.trip-l { margin-top: 3px; font: 500 17.5px/1.4 var(--ui); color: var(--ink); }
+.trip .btn.gm-main, .quick .trip a.btn.gm-main { margin-top: 12px; min-height: 54px; background: var(--c-ink); color: #fff; font: 700 17px/1.25 var(--ui); padding: 10px 14px; border-radius: 12px; }
+.trip .btn.gm-main:active { filter: brightness(.88); }
+.trip .pin-note { margin-top: 8px; font-size: 15.5px; }
+
+/* Bỏ màu hổ phách ở các lưu ý khác: dùng xanh mực trên nền sương */
+.alert, .gps-elev { background: #EDF1F3; color: var(--ink); border-color: var(--mist); }
+.tag.wait { background: #EDF1F3; color: var(--ink); }
+.leg-note.warn, .meta .warn { color: var(--ink); font-weight: 600; }
+.gps-msg.ok, .gps-msg.off { color: var(--ink); }
+
+/* Lịch: hai mốc xe chạy theo màu chiều, các mốc khác nền sáng */
+.sched-hint { font-size: 16px; }
+.row.xe { background: transparent; }
+.row.xe.chieu-di, .row.xe.chieu-ve { background: var(--c-bg); border-left: 4px solid var(--c-ink); border-radius: 10px; }
+.row.chieu-di .r-time, .row.chieu-ve .r-time { color: var(--c-ink); }
+.row.chieu-di .tag.car, .row.chieu-ve .tag.car { background: var(--c-ink); }
+.row.chieu-di .r-body .prep, .row.chieu-ve .r-body .prep { border-left-color: var(--c-ink); }
+.r-what { font-size: 18px; }
+.r-time.rel { font-size: 16.5px; }
+/* Nhãn thời gian dài ("Sau khi đoàn về"): nằm trên tên việc ở màn hình hẹp */
+@media (max-width: 480px) {
+  .ev > summary.stack { grid-template-columns: 1fr 22px; row-gap: 2px; }
+  .ev > summary.stack .r-time { grid-column: 1; grid-row: 1; min-width: 0; }
+  .ev > summary.stack .r-what { grid-column: 1; grid-row: 2; }
+  .ev > summary.stack .chev { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+/* Mục từng lượt */
+details.leg.chieu-di, details.leg.chieu-ve { border: 0; border-left: 4px solid var(--c-ink); background: var(--flat); box-shadow: inset 0 0 0 1.5px var(--mist); }
+details.leg > summary { grid-template-columns: 1fr 22px; }
+details.leg.chieu-di > summary, details.leg.chieu-ve > summary { background: var(--c-bg); border-radius: 0 12px 12px 0; }
+details.leg[open] > summary { border-radius: 0 12px 0 0; }
+.leg-k { grid-column: 1; font: 700 13.5px/1.3 var(--ui); letter-spacing: .08em; text-transform: uppercase; color: var(--c-ink); }
+.leg-s1 .tt { color: var(--c-ink); }
+.leg-body { padding-top: 12px; }
+details.leg > summary .chev { grid-row: 1 / span 3; }
+.nw { white-space: nowrap; }
+.trip .btn.gm-main, .quick .trip a.btn.gm-main { font-size: 16.5px; gap: 6px; padding: 10px 10px; }
+.trip .btn.gm-main svg { width: 19px; height: 19px; }
+@media (max-width: 480px) { .ev > summary.stack .r-time:not(.rel) { font-size: 21px; } }
+
+/* =========================================================
+   BA THẺ: Lộ trình di chuyển / Chương trình nhà gái / Chương trình nhà trai
+   ========================================================= */
+:root { --gai: #2E5B3A; --gai-bg: #EDF4EC; --trai: #7A2737; --trai-bg: #F8EDEE; }
+.top { padding-bottom: 8px; }
+.top2 { padding-top: 4px; }
+.tabs {
+  position: sticky; top: 0; z-index: 900; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px;
+  max-width: 560px; margin: 0 auto; padding: 8px 12px; background: var(--paper); border-bottom: 1.5px solid var(--mist);
+}
+.tab {
+  display: grid; place-items: center; min-height: 48px; padding: 6px 4px; border-radius: 12px; text-align: center; text-decoration: none;
+  font: 700 16.5px/1.25 var(--ui); color: var(--ink); background: #fff; border: 2px solid var(--mist);
+}
+.tab.t-gai { color: var(--gai); }
+.tab.t-trai { color: var(--trai); }
+.tab[aria-current="page"] { color: #fff; background: var(--ink); border-color: var(--ink); }
+.tab.t-gai[aria-current="page"] { background: var(--gai); border-color: var(--gai); }
+.tab.t-trai[aria-current="page"] { background: var(--trai); border-color: var(--trai); }
+.map-wrap.full { z-index: 1000; }
+
+/* =========================================================
+   CHƯƠNG TRÌNH LỄ CƯỚI — bố cục theo mẫu: thẻ giới thiệu, thanh công cụ, thẻ từng bước
+   ========================================================= */
+.ct { --c: var(--gai); --c-bg: var(--gai-bg); scroll-margin-top: 72px; max-width: 560px; margin: 0 auto; padding: 12px 16px 40px; font-size: 17.5px; line-height: 1.55; color: #253025; }
+.ct-trai { --c: var(--trai); --c-bg: var(--trai-bg); }
+.ct .loading { text-align: center; }
+.ct-intro { padding: 16px; border-radius: 14px; background: var(--c-bg); }
+.ct-k { font: 700 13px/1.3 var(--ui); letter-spacing: .14em; text-transform: uppercase; color: var(--c); }
+.ct-intro h2 { margin-top: 4px; font: 600 25px/1.3 var(--serif); color: var(--c); text-wrap: balance; }
+.ct-who, .ct-dur { margin-top: 6px; font-size: 17.5px; }
+.ct-who b { color: var(--c); }
+.ct-note { margin-top: 8px; font-size: 17px; color: #394838; }
+
+.ct-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 4px; }
+.ct-tools .btn { justify-content: center; text-align: center; min-height: 50px; padding: 6px 10px; border-radius: 10px; font-size: 16.5px; line-height: 1.25; }
+.ct-tools .btn.ghost { color: var(--c); border: 1.5px solid #B9C0B2; background: #fff; }
+.ct-tools .btn.primary { background: var(--c); border: 1.5px solid var(--c); color: #fff; }
+.ct-tools .copy-msg { grid-column: 1 / -1; }
+.copy-msg { margin-top: 6px; font-weight: 600; font-size: 16px; color: var(--c); }
+
+.card, .st { border: 1px solid #D9DDD1; border-radius: 14px; background: #fff; box-shadow: 0 2px 5px rgba(34, 51, 34, .04); }
+.ct-table { margin-top: 12px; overflow: hidden; }
+.ct-table summary, .checklist summary { padding: 14px 16px; font-weight: 700; font-size: 17.5px; color: var(--c); cursor: pointer; }
+.ct-table table { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+.ct-table th, .ct-table td { padding: 8px 10px; border-top: 1px solid #E5E8DF; text-align: left; vertical-align: top; }
+.ct-table th { font-size: 14px; text-transform: uppercase; letter-spacing: .04em; color: #52634E; }
+.ct-table td.num, .ct-table th:last-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.ct-table td a { color: #253025; text-decoration: none; }
+.ct-table tr.hl td { background: var(--c-bg); font-weight: 700; }
+.ct-table tfoot td { font-weight: 700; color: var(--c); }
+
+/* Thẻ từng bước */
+.ct-steps { display: grid; gap: 12px; margin-top: 12px; }
+.st { padding: 16px; scroll-margin-top: 80px; }
+.st-head { display: flex; gap: 12px; align-items: flex-start; }
+.st-no { flex: none; display: grid; place-items: center; min-width: 42px; height: 42px; border-radius: 10px; background: var(--c); color: #fff; font: 700 18px/1 var(--ui); font-variant-numeric: tabular-nums; }
+.st-title { min-width: 0; }
+.st h3 { font: 700 20px/1.3 var(--ui); color: #1F2A1F; text-wrap: pretty; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.st-meta { margin-top: 3px; font-size: 16px; color: #52634E; }
+.st-note { margin-top: 12px; color: #394838; }
+ul.st-note { padding-left: 20px; list-style: disc; display: grid; gap: 3px; }
+.st-music { margin-top: 8px; font-size: 16.5px; color: #394838; }
+.st-more { margin-top: 10px; border-top: 1px solid #E5E8DF; }
+.st-more > summary { display: flex; align-items: center; gap: 8px; min-height: 48px; padding: 8px 0 0; cursor: pointer; list-style: none; font: 700 17px/1.3 var(--ui); color: var(--c); }
+.st-more > summary::-webkit-details-marker { display: none; }
+.st-more > summary::after { content: '▾'; font-size: 15px; }
+.st-more[open] > summary::after { content: '▴'; }
+.st-more > summary .when-open, .st-more[open] > summary .when-closed { display: none; }
+.st-more[open] > summary .when-open { display: inline; }
+.st-body { padding-top: 6px; }
+.ld-k { margin-top: 6px; font: 700 14px/1.3 var(--ui); letter-spacing: .05em; text-transform: uppercase; color: var(--c); }
+.loi-dan { margin-top: 6px; padding: 12px 0; border-top: 1px solid #E5E8DF; font-size: 19px; line-height: 1.7; color: #1F2A1F; }
+.loi-dan p + p { margin-top: 10px; }
+.cue { font-style: italic; color: #52634E; font-size: .9em; }
+.st-guide { margin-top: 6px; padding-left: 20px; list-style: disc; display: grid; gap: 3px; }
+.st-body .btn.small { min-height: 46px; border: 1.5px solid #B9C0B2; color: var(--c); background: #fff; }
+.st-body .collapse { width: 100%; justify-content: center; margin-top: 12px; }
+
+/* Phân cảnh quan trọng: viền trái đậm */
+.st.noi-bat { border-left: 5px solid var(--c); }
+.st-flag { font: 700 14px/1.3 var(--ui); color: var(--c); letter-spacing: .02em; margin-bottom: 2px; }
+
+/* Checklist */
+.checklist { margin-top: 12px; scroll-margin-top: 80px; }
+.ck-count { margin-left: 6px; padding: 1px 9px; border-radius: 999px; background: var(--c); color: #fff; font-size: 14.5px; font-variant-numeric: tabular-nums; }
+.checklist ul { padding: 0 16px 6px; }
+.checklist label { display: flex; gap: 12px; align-items: flex-start; padding: 12px 0; font-size: 17.5px; border-top: 1px solid #E5E8DF; cursor: pointer; }
+.checklist input { flex: none; width: 24px; height: 24px; margin-top: 2px; accent-color: var(--c); }
+.ck-note { padding: 0 16px 14px; font-size: 15px; color: #52634E; }
+
+/* Chế độ đọc kịch bản: toàn màn hình */
+html.reading, html.reading body { overflow: hidden; }
+.reader { --c: var(--gai); position: fixed; inset: 0; z-index: 2000; overflow-y: auto; -webkit-overflow-scrolling: touch; background: #FFFDF5; color: #1F2A1F; }
+.reader.r-trai { --c: var(--trai); }
+.r-bar { position: sticky; top: 0; z-index: 1; display: flex; gap: 6px; align-items: center; padding: 8px 12px; padding-top: max(8px, env(safe-area-inset-top)); background: #FFFDF5; border-bottom: 1px solid #E5E8DF; }
+.r-bar button { min-height: 46px; padding: 6px 12px; border-radius: 10px; border: 1.5px solid #B9C0B2; background: #fff; color: var(--c); font: 700 16.5px/1 var(--ui); cursor: pointer; }
+.r-bar #readerClose { background: var(--c); border-color: var(--c); color: #fff; }
+.r-bar [data-r-copy] { margin-left: auto; }
+.r-size { min-width: 38px; text-align: center; font-size: 13px; color: #52634E; font-variant-numeric: tabular-nums; }
+.r-msg { padding: 0 16px; }
+.r-inner { max-width: 720px; margin: 0 auto; padding: 12px 16px 60px; }
+.r-inner h2 { font: 600 24px/1.3 var(--serif); color: var(--c); }
+.r-step { margin-top: 22px; padding-top: 14px; border-top: 1px solid #E5E8DF; }
+.r-step.noi-bat { padding-left: 12px; border-left: 5px solid var(--c); }
+.r-step h3 { font: 700 calc(var(--doc, 24px) * .85)/1.3 var(--ui); color: var(--c); }
+.r-meta { margin-top: 2px; font-size: 15px; color: #52634E; }
+.r-speech, .r-sum { margin-top: 8px; font-size: var(--doc, 24px); line-height: 1.6; }
+.r-speech p + p { margin-top: .6em; }
+.r-sum { padding-left: 1.1em; list-style: disc; font-size: calc(var(--doc, 24px) * .85); }
+.r-end { margin-top: 30px; text-align: center; color: #52634E; }
+@media (max-width: 380px) { .r-bar button { padding: 6px 9px; } .r-size { display: none; } }
+@media print { .tabs, .ct-tools, .st-more > summary, .st-body .btn, .reader { display: none !important; } .st-more > .st-body { display: block; } .st { break-inside: avoid; } }

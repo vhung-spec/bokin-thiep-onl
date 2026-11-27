@@ -7,11 +7,11 @@
   <!-- Trang lịch trình đón dâu Chủ nhật 29/11/2026, dành cho gia đình, đội xe, người đi đón dâu.
        NỘI DUNG LỊCH nằm trong lich-trinh.json (cùng thư mục) — sửa tệp đó, không cần sửa trang này.
        Lời xem trước khi gửi qua Zalo / Messenger: các thẻ og: dưới đây. -->
-  <meta name="description" content="Lịch trình ngày đón dâu Văn Hùng & Tuyết Anh, Chủ nhật 29/11/2026: 05:00 xe nhà trai xuất phát, 08:30–08:45 rời nhà gái, 10:30 về Tổ hợp Thể thao Vũ Tuấn.">
+  <meta name="description" content="Lịch trình ngày đón dâu Văn Hùng & Tuyết Anh, Chủ nhật 29/11/2026: 05:00 xe nhà trai xuất phát, 08:30–08:45 rời nhà gái, 10:30 về Tổ hợp Thể thao Vũ Tuấn, 10:45 nghi lễ, 11:00 khai tiệc.">
   <meta name="robots" content="noindex, nofollow">
   <meta property="og:type" content="website">
   <meta property="og:title" content="Lịch trình ngày đón dâu · Văn Hùng & Tuyết Anh">
-  <meta property="og:description" content="Chủ nhật 29/11/2026 · 05:00 xe nhà trai xuất phát · 08:30–08:45 rời nhà gái · 10:30 về Tổ hợp Thể thao Vũ Tuấn.">
+  <meta property="og:description" content="Chủ nhật 29/11/2026 · 05:00 xe nhà trai xuất phát · 08:30–08:45 rời nhà gái · 10:30 về Tổ hợp Thể thao Vũ Tuấn · 11:00 khai tiệc.">
   <meta property="og:url" content="https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/">
   <meta property="og:image" content="https://vhung-spec.github.io/bokin-thiep-onl/lich-trinh/og-lich-trinh.jpg">
   <meta property="og:image:width" content="1200">
@@ -48,13 +48,23 @@
     <h1 id="title">Lịch trình ngày đón dâu</h1>
     <p class="date" id="date">Chủ nhật, 29/11/2026</p>
     <p class="route" id="route" hidden>Nhà trai Hải Phòng → Nhà gái Hà Nội → Nhà trai Hải Phòng</p>
+  </header>
 
+  <!-- Ba thẻ chuyển nhanh: lộ trình (lich-trinh.json) và chương trình lễ cưới (chuong-trinh.json) -->
+  <nav class="tabs" id="tabs" aria-label="Chuyển nội dung">
+    <a class="tab" href="#lo-trinh-di-chuyen" data-tab="lo-trinh" aria-current="page">Lộ trình</a>
+    <a class="tab t-gai" href="#chuong-trinh-nha-gai" data-tab="nha-gai">Nhà gái</a>
+    <a class="tab t-trai" href="#chuong-trinh-nha-trai" data-tab="nha-trai">Nhà trai</a>
+  </nav>
+
+  <div class="view" data-view="lo-trinh">
+  <div class="top top2">
     <!-- Hai ô xếp dọc: 05:00 Nhà trai → Nhà gái, 08:30–08:45 Nhà gái → Nhà trai, mỗi ô một nút Google Maps — tạo từ lich-trinh.json -->
     <nav class="quick" id="quick" aria-label="Mở Google Maps cho hai lượt xe"></nav>
 
     <p class="day-note" id="dayNote"></p>
     <p class="top-links" id="routeLink" hidden><a href="#lo-trinh">Bản đồ tuyến của đoàn ↓</a><a href="#lien-he">Liên hệ đoàn xe ↓</a></p>
-  </header>
+  </div>
 
   <main id="main" aria-live="polite">
     <p class="loading" id="loading">Đang tải lịch trình…</p>
@@ -69,8 +79,18 @@
     <p class="updated" id="updated" hidden></p>
     <p class="link-note">Link giữ nguyên, mở lại là thấy bản mới nhất.</p>
   </footer>
+  </div>
+
+  <!-- CHƯƠNG TRÌNH LỄ CƯỚI: nội dung trong chuong-trinh.json, vẽ bằng chuong-trinh.js -->
+  <section class="view ct ct-gai" data-view="nha-gai" id="chuong-trinh-nha-gai" hidden aria-label="Chương trình đón dâu tại nhà gái">
+    <p class="loading">Đang tải chương trình…</p>
+  </section>
+  <section class="view ct ct-trai" data-view="nha-trai" id="chuong-trinh-nha-trai" hidden aria-label="Chương trình lễ cưới tại nhà trai">
+    <p class="loading">Đang tải chương trình…</p>
+  </section>
 
   <noscript><p class="loading">Trình duyệt đang tắt JavaScript nên chưa hiện được lịch. Hãy mở link bằng Chrome hoặc Safari.</p></noscript>
   <script src="lich-trinh.js"></script>
+  <script src="chuong-trinh.js"></script>
 </body>
 </html>
