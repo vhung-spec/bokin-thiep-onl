@@ -437,7 +437,7 @@
         (edOf(g) ? '<span class="chip ' + g.side + '">' + esc(edShort(edOf(g))) + '</span>' : g.side ? '<span class="chip ' + g.side + '">' + SIDE[g.side] + '</span>' : '') +
         (g.music ? '<span class="chip music">Nhạc riêng</span>' : '') +
         (g.sent ? '<span class="chip done">Đã gửi</span>' : '') +
-        (SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : ISGD && ISGD.pending(g) ? '<span class="chip pending">Đang rút gọn…</span>' : '') + '</div>' +
+        (url !== longLink(g) ? '' : SHORT && SHORT.state(g) === 'wait' ? '<span class="chip pending">Đang tạo link ngắn…</span>' : ISGD && ISGD.pending(g) ? '<span class="chip pending">Đang rút gọn…</span>' : '') + '</div>' +
         '<a class="g-link" href="' + esc(url) + '" target="_blank" rel="noopener">' + linkHtml(url) + '</a>' +
         (SHORT && SHORT.state(g) === 'live' ? '<p class="g-og">Facebook, Zalo hiện: <b>' + esc(SHORT.title(g)) + '</b></p>' : '') +
         '<div class="g-actions">' +
@@ -469,6 +469,7 @@
 
   // link ngắn của khách chưa chạy: hỏi có gửi luôn link dài không (Facebook sẽ không hiện tên)
   function ready(g) {
+    if (linkFor(g) !== longLink(g)) return true; // đã có link gọn (link ngắn GitHub hoặc is.gd)
     if (SHORT && SHORT.state(g) === 'wait')
       return window.confirm('Link ngắn có tên “' + g.name + '” đang được tạo (khoảng 1–2 phút). Facebook, Zalo chỉ hiện tên khách với link ngắn.\n\nVẫn gửi ngay bằng link dài?');
     if (ISGD && ISGD.pending(g))
@@ -774,7 +775,7 @@
     var files = null;   // file trong thư mục m/ trên GitHub: tên → blob sha (null = chưa tải danh sách)
     var live = {};      // mã → trang nhỏ đã mở được
     var waiting = {};   // mã → vừa ghi lên GitHub, chờ GitHub Pages cập nhật
-    var busy = false, deploying = false, timer = null, outdated = [], err = '', tried = false;
+    var busy = false, deploying = false, timer = null, outdated = [], err = '', tried = false, blocked = false;
     var stEl = $('#shortStatus');
     function on() { return !!(S.short && GH.repo); }
     function pad3(n) { return ('00' + n.toString(36)).slice(-3); }
@@ -796,9 +797,11 @@
       var c = code(g);
       if (!c) return '';
       if (live[c]) return 'live';
-      if (waiting[c] || (on() && files && !files[c + '.html'])) return 'wait';
+      if (waiting[c] || (canPublish() && files && !files[c + '.html'])) return 'wait';
       return '';
     }
+    // máy này ghi được trang nhỏ lên GitHub: đã bật, có mã GitHub, GitHub chưa từ chối mã
+    function canPublish() { return on() && !!getToken() && !blocked; }
     function attr(v) { return String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function page(g) {
       var ev = eventOf(g.side, g.ban), root = siteRoot(), e = edOf(g);
@@ -904,10 +907,10 @@
         });
       }).catch(function (e) {
         var c = e && e.status;
-        if (c === 401) { setToken(''); ghToken.value = ''; err = 'Mã GitHub không đúng hoặc đã hết hạn. Nhập mã mới bên dưới.'; }
-        else if (c === 403 || c === 404) { err = 'Mã GitHub chưa có quyền ghi vào repo ' + GH.repo + ' (cần Contents: Read and write).'; }
-        else { err = 'Chưa tạo được link ngắn (' + (c || 'lỗi mạng') + '). Sẽ thử lại sau ít phút.'; timer = setTimeout(publish, 60000); }
-      }).then(function () { busy = false; renderList(); show(); });
+        if (c === 401) { setToken(''); ghToken.value = ''; blocked = true; err = 'Mã GitHub không đúng hoặc đã hết hạn: khách mới dùng link is.gd. Muốn link hiện tên thì nhập mã mới bên dưới.'; }
+        else if (c === 403 || c === 404) { blocked = true; err = 'Mã GitHub chưa có quyền ghi vào repo ' + GH.repo + ' (cần Contents: Read and write): khách mới dùng link is.gd.'; }
+        else { err = 'Chưa tạo được link ngắn (' + (c || 'lỗi mạng') + '). Sẽ thử lại sau ít phút; trong lúc chờ dùng link is.gd.'; timer = setTimeout(publish, 60000); }
+      }).then(function () { busy = false; renderList(); show(); if (ISGD) ISGD.kick(); });
     }
     function kick(ms) {
       if (!on() || files === null) { show(); return; }
@@ -932,7 +935,7 @@
       var box = $('#ghShort');
       if (!GH.repo) { box.hidden = true; return; }
       box.hidden = false;
-      if (on()) box.open = true;
+      if (canPublish()) box.open = true;
       $('#shortOn').checked = on();
       var tok = !!getToken();
       $('#shortTokenBox').hidden = !on() || tok;
@@ -941,7 +944,7 @@
       $('#shortNow').hidden = !(on() && tok && outdated.length && !busy && !deploying);
       $('#shortNow').textContent = 'Cập nhật ' + outdated.length + ' link ngắn';
       var text = msg || err || (!on() ? (n ? n + ' khách đã có link ngắn.' : '') :
-        !tok ? 'Nhập mã GitHub để tạo link ngắn.' :
+        !tok ? 'Máy này chưa có mã GitHub nên khách mới dùng link is.gd. Muốn link hiện tên khách thì nhập mã bên dưới.' :
           files === null ? 'Đang kiểm tra link ngắn…' :
             w ? 'Đang tạo link ngắn cho ' + w + ' khách (khoảng 1–2 phút)…' :
               outdated.length ? outdated.length + ' link ngắn chưa theo kịp thay đổi (tên, bên, nhạc).' :
@@ -977,7 +980,7 @@
       if (!/^(github_pat_|ghp_)/.test(v)) { toast('Mã GitHub bắt đầu bằng github_pat_'); return; }
       setToken(v, $('#shortRemember').checked); ghToken.value = v; $('#shortToken').value = '';
       $('#tokenToggle').hidden = false; tokenBox.hidden = true;
-      err = ''; kick(300);
+      err = ''; blocked = false; kick(300);
     });
     $('#shortNow').addEventListener('click', function () { queue(outdated); outdated = []; kick(300); });
     function known() { return tried; } // đã hỏi GitHub xong (được hay không)
@@ -997,7 +1000,7 @@
     // khách cần rút gọn: chưa có link ngắn trên GitHub (hoặc đang chờ trang đó), chưa có link is.gd cho link dài hiện tại
     function wants(g) {
       if (!on() || !g || !g.id) return false;
-      if (SHORT && (SHORT.linkFor(g) || SHORT.state(g) === 'wait')) return false;
+      if (SHORT && SHORT.linkFor(g)) return false;
       var L = longLink(g);
       return !S.isgd[L] && !failed[L];
     }
@@ -1020,7 +1023,8 @@
       if (SHORT && !SHORT.known()) { kick(1500); return; } // chờ biết khách nào đã có link ngắn trên GitHub
       var wait = pauseUntil - Date.now();
       if (wait > 0) { kick(wait); return; }
-      var g = S.guests.filter(wants)[0];
+      var need = S.guests.filter(wants);
+      var g = need.filter(function (x) { return !x.sent; })[0] || need[0]; // khách chưa gửi trước
       if (!g) { prune(); show(); return; }
       busy = true;
       var long = longLink(g);
